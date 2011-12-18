@@ -65,6 +65,7 @@ public class SuperFelix {
 			logger.setLevel(Level.ALL);
 		}
 		
+		// Locale.setDefault(new Locale("en", "EN"));
 		Locale.setDefault(new Locale("de", "DE"));
 
 		Controller.getInstance();
