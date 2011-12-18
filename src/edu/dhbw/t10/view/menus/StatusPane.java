@@ -75,7 +75,7 @@ public class StatusPane extends JPanel {
 	public void enqueueMessage(String message, byte pos) {
 		switch (pos) {
 			case LEFT:
-				logger.info("StatusPane: " + message);
+				logger.info("StatusPane: " + message); //$NON-NLS-1$
 				statusBarL.enqueueMessage(message);
 				break;
 			case RIGHT:

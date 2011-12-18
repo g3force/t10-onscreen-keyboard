@@ -34,7 +34,7 @@ public class Config {
 	// --------------------------------------------------------------------------
 	private static final Logger	logger		= Logger.getLogger(Config.class);
 	private static Properties		conf;
-	private static String			configFile	= "t10keyboard.conf";
+	private static String			configFile	= "t10keyboard.conf"; //$NON-NLS-1$
 	
 	
 	// --------------------------------------------------------------------------
@@ -54,21 +54,21 @@ public class Config {
 		FileInputStream fis;
 		try {
 			// reading the config file
-			fis = new FileInputStream(datapath + "/" + configFile);
+			fis = new FileInputStream(datapath + "/" + configFile); //$NON-NLS-1$
 			conf.load(fis);
-			logger.info("Config file read");
+			logger.info("Config file read"); //$NON-NLS-1$
 		} catch (IOException err) {
-			logger.warn("Could not read the config file");
+			logger.warn("Could not read the config file"); //$NON-NLS-1$
 			// config file not found, set the config values to default
 		}
-		if (!conf.containsKey("ActiveProfile")) {
-			logger.debug("ActiveProfile was not in the config file");
-			conf.setProperty("ActiveProfile", "default");
+		if (!conf.containsKey("ActiveProfile")) { //$NON-NLS-1$
+			logger.debug("ActiveProfile was not in the config file"); //$NON-NLS-1$
+			conf.setProperty("ActiveProfile", "default"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
-		if (!conf.containsKey("PROFILE_PATH"))
-			conf.setProperty("PROFILE_PATH", "");
-		if (!conf.contains("defaultAllowedChars"))
-			conf.setProperty("defaultAllowedChars","A-Za-z\u00E4\u00F6\u00FC\u00C4\u00D6\u00DC");
+		if (!conf.containsKey("PROFILE_PATH")) //$NON-NLS-1$
+			conf.setProperty("PROFILE_PATH", ""); //$NON-NLS-1$ //$NON-NLS-2$
+		if (!conf.contains("defaultAllowedChars")) //$NON-NLS-1$
+			conf.setProperty("defaultAllowedChars","A-Za-z\u00E4\u00F6\u00FC\u00C4\u00D6\u00DC"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 	
 	
@@ -79,11 +79,11 @@ public class Config {
 	 */
 	public static void saveConfig(String datapath) {
 		try {
-			FileOutputStream fos = new FileOutputStream(datapath + "/" + configFile);
-			conf.store(fos, "Stored by closing the program");
-			logger.debug("config file saved to" + datapath + "/" + configFile);
+			FileOutputStream fos = new FileOutputStream(datapath + "/" + configFile); //$NON-NLS-1$
+			conf.store(fos, "Stored by closing the program"); //$NON-NLS-1$
+			logger.debug("config file saved to" + datapath + "/" + configFile); //$NON-NLS-1$ //$NON-NLS-2$
 		} catch (IOException err) {
-			logger.error("Could not store the properties at " + datapath + " / " + configFile);
+			logger.error("Could not store the properties at " + datapath + " / " + configFile); //$NON-NLS-1$ //$NON-NLS-2$
 			err.printStackTrace();
 		}
 	}

@@ -60,25 +60,25 @@ public class ProfileChooser extends JFileChooser {
 
 			// import
 			case iImport:
-				this.setFileFilter(buildFilter(".zip"));
+				this.setFileFilter(buildFilter(".zip")); //$NON-NLS-1$
 				setDialogType(JFileChooser.OPEN_DIALOG);
 				break;
 			
 			// export
 			case iExport:
-				this.setFileFilter(buildFilter(".zip"));
+				this.setFileFilter(buildFilter(".zip")); //$NON-NLS-1$
 				setDialogType(JFileChooser.SAVE_DIALOG);
 				break;
 
 			// Extend Dictionary From File
 			case iF2D:
-				this.setFileFilter(this.buildFilter(".tree"));
+				this.setFileFilter(this.buildFilter(".tree")); //$NON-NLS-1$
 				setDialogType(JFileChooser.OPEN_DIALOG);
 				break;
 			
 			// Export Dictionary To File
 			case iD2F:
-				this.setFileFilter(this.buildFilter(".tree"));
+				this.setFileFilter(this.buildFilter(".tree")); //$NON-NLS-1$
 				setDialogType(JFileChooser.SAVE_DIALOG);
 				break;
 		}
@@ -113,7 +113,7 @@ public class ProfileChooser extends JFileChooser {
 
 			@Override
 			public String getDescription() {
-				return type.concat(" Files");
+				return type.concat(" Files"); //$NON-NLS-1$
 			}
 		};
 	}

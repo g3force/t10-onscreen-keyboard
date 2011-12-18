@@ -82,62 +82,62 @@ public class KeyboardLayoutSaver {
 	 * @author DirkK
 	 */
 	public static void save(KeyboardLayout kbdLayout, String filePath) {
-		logger.info("Starting to save the KeyboardLayout to XML");
+		logger.info("Starting to save the KeyboardLayout to XML"); //$NON-NLS-1$
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		try {
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 			Document doc = dBuilder.newDocument();
-			Element layout = doc.createElement("layout");
+			Element layout = doc.createElement("layout"); //$NON-NLS-1$
 			doc.appendChild(layout);
 			// ---------------HEADER-----------------
-			Element sizex = doc.createElement("sizex");
-			Text text = doc.createTextNode(kbdLayout.getOrigSize_x() + "");
+			Element sizex = doc.createElement("sizex"); //$NON-NLS-1$
+			Text text = doc.createTextNode(kbdLayout.getOrigSize_x() + ""); //$NON-NLS-1$
 			sizex.appendChild(text);
 			layout.appendChild(sizex);
 			
-			Element sizey = doc.createElement("sizey");
-			text = doc.createTextNode(kbdLayout.getOrigSize_y() + "");
+			Element sizey = doc.createElement("sizey"); //$NON-NLS-1$
+			text = doc.createTextNode(kbdLayout.getOrigSize_y() + ""); //$NON-NLS-1$
 			sizey.appendChild(text);
 			layout.appendChild(sizey);
 			
-			Element scalex = doc.createElement("scalex");
-			text = doc.createTextNode(kbdLayout.getScale_x() + "");
+			Element scalex = doc.createElement("scalex"); //$NON-NLS-1$
+			text = doc.createTextNode(kbdLayout.getScale_x() + ""); //$NON-NLS-1$
 			scalex.appendChild(text);
 			layout.appendChild(scalex);
 			
-			Element scaley = doc.createElement("scaley");
-			text = doc.createTextNode(kbdLayout.getScale_y() + "");
+			Element scaley = doc.createElement("scaley"); //$NON-NLS-1$
+			text = doc.createTextNode(kbdLayout.getScale_y() + ""); //$NON-NLS-1$
 			scaley.appendChild(text);
 			layout.appendChild(scaley);
 			
-			Element scale_font = doc.createElement("scale_font");
-			text = doc.createTextNode(kbdLayout.getScale_font() + "");
+			Element scale_font = doc.createElement("scale_font"); //$NON-NLS-1$
+			text = doc.createTextNode(kbdLayout.getScale_font() + ""); //$NON-NLS-1$
 			scale_font.appendChild(text);
 			layout.appendChild(scale_font);
 			
-			Element font = doc.createElement("font");
+			Element font = doc.createElement("font"); //$NON-NLS-1$
 			layout.appendChild(font);
 			
-			Element name = doc.createElement("name");
-			text = doc.createTextNode(kbdLayout.getFont().getFontName() + "");
+			Element name = doc.createElement("name"); //$NON-NLS-1$
+			text = doc.createTextNode(kbdLayout.getFont().getFontName() + ""); //$NON-NLS-1$
 			name.appendChild(text);
 			font.appendChild(name);
 			
-			Element style = doc.createElement("style");
-			text = doc.createTextNode(kbdLayout.getFont().getStyle() + "");
+			Element style = doc.createElement("style"); //$NON-NLS-1$
+			text = doc.createTextNode(kbdLayout.getFont().getStyle() + ""); //$NON-NLS-1$
 			style.appendChild(text);
 			font.appendChild(style);
 			
-			Element size = doc.createElement("size");
-			text = doc.createTextNode(kbdLayout.getFont().getSize() + "");
+			Element size = doc.createElement("size"); //$NON-NLS-1$
+			text = doc.createTextNode(kbdLayout.getFont().getSize() + ""); //$NON-NLS-1$
 			size.appendChild(text);
 			font.appendChild(size);
 			
 			// -----------------IMAGES------------------
 			
 			for (Image image : kbdLayout.getImages()) {
-				Element imageEl = doc.createElement("image");
-				imageEl.setAttribute("src", image.getSrc());
+				Element imageEl = doc.createElement("image"); //$NON-NLS-1$
+				imageEl.setAttribute("src", image.getSrc()); //$NON-NLS-1$
 				setSizeOfElement(imageEl, image);
 				// imageEl.setAttribute("size_x", ((int) image.getOrigSize().getWidth()) + "");
 				// imageEl.setAttribute("size_y", ((int) image.getOrigSize().getHeight()) + "");
@@ -147,8 +147,8 @@ public class KeyboardLayoutSaver {
 			}
 			// ---------------DROPDOWN-----------------
 			for (DropDownList dd : kbdLayout.getDdls()) {
-				Element dropdown = doc.createElement("dropdown");
-				dropdown.setAttribute("type", dd.getTypeAsString());
+				Element dropdown = doc.createElement("dropdown"); //$NON-NLS-1$
+				dropdown.setAttribute("type", dd.getTypeAsString()); //$NON-NLS-1$
 				setSizeOfElement(dropdown, dd);
 				// dropdown.setAttribute("size_x", ((int) dd.getOrigSize().getWidth()) + "");
 				// dropdown.setAttribute("size_y", ((int) dd.getOrigSize().getHeight()) + "");
@@ -158,33 +158,33 @@ public class KeyboardLayoutSaver {
 			}
 			// ---------------MUTEBUTTONS-----------------
 			for (MuteButton muteButton : kbdLayout.getMuteButtons()) {
-				Element muteButtonEl = doc.createElement("mutebutton");
+				Element muteButtonEl = doc.createElement("mutebutton"); //$NON-NLS-1$
 				setSizeOfElement(muteButtonEl, muteButton);
 				switch (muteButton.getType()) {
 					case MuteButton.AUTO_COMPLETING:
-						muteButtonEl.setAttribute("type", "auto_completing");
+						muteButtonEl.setAttribute("type", "auto_completing"); //$NON-NLS-1$ //$NON-NLS-2$
 						break;
 					case MuteButton.AUTO_PROFILE_CHANGE:
-						muteButtonEl.setAttribute("type", "auto_profile_change");
+						muteButtonEl.setAttribute("type", "auto_profile_change"); //$NON-NLS-1$ //$NON-NLS-2$
 						break;
 					case MuteButton.TREE_EXPANDING:
-						muteButtonEl.setAttribute("type", "tree_expanding");
+						muteButtonEl.setAttribute("type", "tree_expanding"); //$NON-NLS-1$ //$NON-NLS-2$
 						break;
 					default:
-						muteButtonEl.setAttribute("type", "unknown");
+						muteButtonEl.setAttribute("type", "unknown"); //$NON-NLS-1$ //$NON-NLS-2$
 				}
 				// muteButtonEl.setAttribute("type", muteButton.getType());
 				// ON
-				Element on = doc.createElement("on");
-				on.setAttribute("color", muteButton.getModeOn().getColorString());
-				on.setAttribute("tooltip", muteButton.getModeOn().getTooltip());
+				Element on = doc.createElement("on"); //$NON-NLS-1$
+				on.setAttribute("color", muteButton.getModeOn().getColorString()); //$NON-NLS-1$
+				on.setAttribute("tooltip", muteButton.getModeOn().getTooltip()); //$NON-NLS-1$
 				text = doc.createTextNode(muteButton.getModeOn().getName());
 				on.appendChild(text);
 				muteButtonEl.appendChild(on);
 				// OFF
-				Element off = doc.createElement("off");
-				off.setAttribute("color", muteButton.getModeOff().getColorString());
-				off.setAttribute("tooltip", muteButton.getModeOff().getTooltip());
+				Element off = doc.createElement("off"); //$NON-NLS-1$
+				off.setAttribute("color", muteButton.getModeOff().getColorString()); //$NON-NLS-1$
+				off.setAttribute("tooltip", muteButton.getModeOff().getTooltip()); //$NON-NLS-1$
 				text = doc.createTextNode(muteButton.getModeOff().getName());
 				off.appendChild(text);
 				muteButtonEl.appendChild(off);
@@ -193,22 +193,22 @@ public class KeyboardLayoutSaver {
 			}
 			// ---------------BUTTONS-----------------
 			for (Button button : kbdLayout.getButtons()) {
-				Element buttonEl = doc.createElement("button");
+				Element buttonEl = doc.createElement("button"); //$NON-NLS-1$
 				setSizeOfElement(buttonEl, button);
 				
-				Element key = doc.createElement("key");
-				text = doc.createTextNode(button.getKey().getId() + "");
+				Element key = doc.createElement("key"); //$NON-NLS-1$
+				text = doc.createTextNode(button.getKey().getId() + ""); //$NON-NLS-1$
 				key.appendChild(text);
 				buttonEl.appendChild(key);
 				
 				if (button.getKey().isAccept()) {
-					key.setAttribute("accept", "true");
+					key.setAttribute("accept", "true"); //$NON-NLS-1$ //$NON-NLS-2$
 				}
 				
 				for (Entry<ModeKey, Key> entry : button.getModes().entrySet()) {
-					Element modeEl = doc.createElement("mode");
-					modeEl.setAttribute("modename", entry.getKey().getId() + "");
-					text = doc.createTextNode(entry.getValue().getId() + "");
+					Element modeEl = doc.createElement("mode"); //$NON-NLS-1$
+					modeEl.setAttribute("modename", entry.getKey().getId() + ""); //$NON-NLS-1$ //$NON-NLS-2$
+					text = doc.createTextNode(entry.getValue().getId() + ""); //$NON-NLS-1$
 					modeEl.appendChild(text);
 					buttonEl.appendChild(modeEl);
 				}
@@ -216,11 +216,11 @@ public class KeyboardLayoutSaver {
 			}
 			// ---------------MODEBUTTONS-----------------
 			for (ModeButton modeButton : kbdLayout.getModeButtons()) {
-				Element modeButtonEl = doc.createElement("modebutton");
+				Element modeButtonEl = doc.createElement("modebutton"); //$NON-NLS-1$
 				setSizeOfElement(modeButtonEl, modeButton);
 				
-				Element key = doc.createElement("key");
-				text = doc.createTextNode(modeButton.getModeKey().getId() + "");
+				Element key = doc.createElement("key"); //$NON-NLS-1$
+				text = doc.createTextNode(modeButton.getModeKey().getId() + ""); //$NON-NLS-1$
 				key.appendChild(text);
 				modeButtonEl.appendChild(key);
 				
@@ -231,10 +231,10 @@ public class KeyboardLayoutSaver {
 			printToPath(xml, filePath);
 			
 		} catch (ParserConfigurationException err) {
-			logger.error("Could not initialize dBuilder");
+			logger.error("Could not initialize dBuilder"); //$NON-NLS-1$
 			err.printStackTrace();
 		}
-		logger.info("The KeyboardLayout is saved to XML");
+		logger.info("The KeyboardLayout is saved to XML"); //$NON-NLS-1$
 	}
 	
 	
@@ -252,13 +252,13 @@ public class KeyboardLayoutSaver {
 		try {
 			trans = transfac.newTransformer();
 		} catch (TransformerConfigurationException err1) {
-			logger.error("Failed to convert the keyboard XML-DOM to String (1)");
+			logger.error("Failed to convert the keyboard XML-DOM to String (1)"); //$NON-NLS-1$
 			trans = null;
 			err1.printStackTrace();
 		}
 		
-		trans.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
-		trans.setOutputProperty(OutputKeys.INDENT, "yes");
+		trans.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes"); //$NON-NLS-1$
+		trans.setOutputProperty(OutputKeys.INDENT, "yes"); //$NON-NLS-1$
 		
 		// create string from xml tree
 		StringWriter sw = new StringWriter();
@@ -267,7 +267,7 @@ public class KeyboardLayoutSaver {
 		try {
 			trans.transform(source, result);
 		} catch (TransformerException err) {
-			logger.error("Failed to convert the keyboard XML-DOM to String (2)");
+			logger.error("Failed to convert the keyboard XML-DOM to String (2)"); //$NON-NLS-1$
 			err.printStackTrace();
 		}
 		String xmlString = sw.toString();
@@ -289,7 +289,7 @@ public class KeyboardLayoutSaver {
 		try {
 			fw = new FileWriter(confFile);
 		} catch (IOException err1) {
-			logger.error("Failed to write the keyboard xml string to file (1)");
+			logger.error("Failed to write the keyboard xml string to file (1)"); //$NON-NLS-1$
 			fw = null;
 			err1.printStackTrace();
 		}
@@ -297,9 +297,9 @@ public class KeyboardLayoutSaver {
 		try {
 			bw.write(xmlString);
 			bw.close();
-			logger.debug("XML written to file " + file);
+			logger.debug("XML written to file " + file); //$NON-NLS-1$
 		} catch (IOException err) {
-			logger.error("Failed to write the keyboard xml string to file (2)");
+			logger.error("Failed to write the keyboard xml string to file (2)"); //$NON-NLS-1$
 			err.printStackTrace();
 		}
 	}
@@ -314,10 +314,10 @@ public class KeyboardLayoutSaver {
 	 * @author DirkK
 	 */
 	private static <T> void setSizeOfElement(Element el, ILayoutElement button) {
-		el.setAttribute("size_x", ((int) button.getOrigSize().getWidth()) + "");
-		el.setAttribute("size_y", ((int) button.getOrigSize().getHeight()) + "");
-		el.setAttribute("pos_x", button.getPos_x() + "");
-		el.setAttribute("pos_y", button.getPos_y() + "");
+		el.setAttribute("size_x", ((int) button.getOrigSize().getWidth()) + ""); //$NON-NLS-1$ //$NON-NLS-2$
+		el.setAttribute("size_y", ((int) button.getOrigSize().getHeight()) + ""); //$NON-NLS-1$ //$NON-NLS-2$
+		el.setAttribute("pos_x", button.getPos_x() + ""); //$NON-NLS-1$ //$NON-NLS-2$
+		el.setAttribute("pos_y", button.getPos_y() + ""); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 	
 	

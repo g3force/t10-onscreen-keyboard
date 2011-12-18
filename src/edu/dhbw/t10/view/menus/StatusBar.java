@@ -104,11 +104,11 @@ public class StatusBar extends JLabel implements Runnable {
 			try {
 				Thread.sleep(delay);
 			} catch (InterruptedException err) {
-				logger.warn("Can't wait for Statusbar...");
+				logger.warn("Can't wait for Statusbar..."); //$NON-NLS-1$
 			}
 		}
 		thread = null;
-		setMessage("");
+		setMessage(""); //$NON-NLS-1$
 		Thread.yield();
 	}
 	
@@ -124,6 +124,6 @@ public class StatusBar extends JLabel implements Runnable {
 	 * @author DanielAl
 	 */
 	private void setMessage(String message) {
-		setText(" " + message);
+		setText(" " + message); //$NON-NLS-1$
 	}
 }

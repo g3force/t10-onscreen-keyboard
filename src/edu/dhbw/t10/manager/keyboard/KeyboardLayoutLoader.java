@@ -79,7 +79,7 @@ public class KeyboardLayoutLoader {
 	 * @author NicolaiO
 	 */
 	public static KeyboardLayout load(InputStream filePath, HashMap<Integer, Key> _keymap) {
-		logger.debug("Loading KeyboardLayout...");
+		logger.debug("Loading KeyboardLayout..."); //$NON-NLS-1$
 		KeyboardLayout kbdLayout = new KeyboardLayout(0, 0, 1, 1, 1);
 		DocumentBuilder dBuilder;
 		keymap = _keymap;
@@ -90,15 +90,15 @@ public class KeyboardLayoutLoader {
 			doc = dBuilder.parse(filePath);
 			doc.getDocumentElement().normalize();
 		} catch (ParserConfigurationException err) {
-			logger.error("Could not initialize dBuilder");
+			logger.error("Could not initialize dBuilder"); //$NON-NLS-1$
 			err.printStackTrace();
 			return kbdLayout;
 		} catch (SAXException err) {
-			logger.error("Could not parse document");
+			logger.error("Could not parse document"); //$NON-NLS-1$
 			err.printStackTrace();
 			return kbdLayout;
 		} catch (IOException err) {
-			logger.error("Could not parse document");
+			logger.error("Could not parse document"); //$NON-NLS-1$
 			err.printStackTrace();
 			return kbdLayout;
 		}
@@ -115,7 +115,7 @@ public class KeyboardLayoutLoader {
 	 * @author NicolaiO
 	 */
 	public static KeyboardLayout load(File filePath, HashMap<Integer, Key> _keymap) {
-		logger.debug("Loading KeyboardLayout...");
+		logger.debug("Loading KeyboardLayout..."); //$NON-NLS-1$
 		KeyboardLayout kbdLayout = new KeyboardLayout(0, 0, 1, 1, 1);
 		DocumentBuilder dBuilder;
 		keymap = _keymap;
@@ -126,15 +126,15 @@ public class KeyboardLayoutLoader {
 			doc = dBuilder.parse(filePath);
 			doc.getDocumentElement().normalize();
 		} catch (ParserConfigurationException err) {
-			logger.error("Could not initialize dBuilder");
+			logger.error("Could not initialize dBuilder"); //$NON-NLS-1$
 			err.printStackTrace();
 			return kbdLayout;
 		} catch (SAXException err) {
-			logger.error("Could not parse document");
+			logger.error("Could not parse document"); //$NON-NLS-1$
 			err.printStackTrace();
 			return kbdLayout;
 		} catch (IOException err) {
-			logger.error("Could not parse document");
+			logger.error("Could not parse document"); //$NON-NLS-1$
 			err.printStackTrace();
 			return kbdLayout;
 		}
@@ -160,55 +160,55 @@ public class KeyboardLayoutLoader {
 		// ########################## read ModeButtons ########################
 		ArrayList<ModeKey> modeKeys = new ArrayList<ModeKey>();
 		ArrayList<ModeButton> modeButtons = getModeButtons(modeKeys);
-		logger.info("loaded " + modeButtons.size() + " ModeButtons.");
-		logger.info("loaded " + modeKeys.size() + " ModeKeys.");
+		logger.info("loaded " + modeButtons.size() + " ModeButtons."); //$NON-NLS-1$ //$NON-NLS-2$
+		logger.info("loaded " + modeKeys.size() + " ModeKeys."); //$NON-NLS-1$ //$NON-NLS-2$
 		// ########################## read Buttons ############################
 		ArrayList<Button> buttons = getButtons(modeKeys);
-		logger.info("loaded " + buttons.size() + " Buttons.");
+		logger.info("loaded " + buttons.size() + " Buttons."); //$NON-NLS-1$ //$NON-NLS-2$
 		// ########################## read MuteButtons ###########################
 		ArrayList<MuteButton> muteButtons = getMuteButtons();
-		logger.info("loaded " + muteButtons.size() + " MuteButtons.");
+		logger.info("loaded " + muteButtons.size() + " MuteButtons."); //$NON-NLS-1$ //$NON-NLS-2$
 		// ########################## read DDLs ###########################
 		ArrayList<DropDownList> ddls = getDdls();
-		logger.info("loaded " + ddls.size() + " DropDownLists.");
+		logger.info("loaded " + ddls.size() + " DropDownLists."); //$NON-NLS-1$ //$NON-NLS-2$
 		// ########################## read Images ###########################
 		ArrayList<Image> images = getImages();
-		logger.info("loaded " + images.size() + " Images.");
+		logger.info("loaded " + images.size() + " Images."); //$NON-NLS-1$ //$NON-NLS-2$
 		
 		
 		// read default sizes and scale of layout
 		int sizex = 0, sizey = 0;
 		float scalex = 1.0f, scaley = 1.0f, scale_font = 1.0f;
 		
-		sizex = getIntFromNode("sizex", 1010);
-		sizey = getIntFromNode("sizey", 335);
-		scalex = getFloatFromNode("scalex", 1f);
-		scaley = getFloatFromNode("scaley", 1f);
-		scale_font = getFloatFromNode("scale_font", 1f);
+		sizex = getIntFromNode("sizex", 1010); //$NON-NLS-1$
+		sizey = getIntFromNode("sizey", 335); //$NON-NLS-1$
+		scalex = getFloatFromNode("scalex", 1f); //$NON-NLS-1$
+		scaley = getFloatFromNode("scaley", 1f); //$NON-NLS-1$
+		scale_font = getFloatFromNode("scale_font", 1f); //$NON-NLS-1$
 		
 		kbdLayout = new KeyboardLayout(sizex, sizey, scalex, scaley, scale_font);
 		
 		// read font (especially for size!)
-		nList = doc.getElementsByTagName("font");
-		String fname = "";
+		nList = doc.getElementsByTagName("font"); //$NON-NLS-1$
+		String fname = ""; //$NON-NLS-1$
 		int fstyle = 0, fsize = 0;
 		if (nList.getLength() > 0) {
 			NodeList font = nList.item(0).getChildNodes();
 			for (int i = 0; i < font.getLength(); i++) {
 				Node n = font.item(i);
-				if (n.getNodeName() == "name") {
+				if (n.getNodeName() == "name") { //$NON-NLS-1$
 					fname = n.getTextContent();
-				} else if (n.getNodeName() == "style") {
+				} else if (n.getNodeName() == "style") { //$NON-NLS-1$
 					try {
 						fstyle = Integer.parseInt(n.getTextContent());
 					} catch (NumberFormatException e) {
-						logger.warn("Could not read global style value: " + n.getTextContent());
+						logger.warn("Could not read global style value: " + n.getTextContent()); //$NON-NLS-1$
 					}
-				} else if (n.getNodeName() == "size") {
+				} else if (n.getNodeName() == "size") { //$NON-NLS-1$
 					try {
 						fsize = Integer.parseInt(n.getTextContent());
 					} catch (NumberFormatException e) {
-						logger.warn("Could not read global size value");
+						logger.warn("Could not read global size value"); //$NON-NLS-1$
 					}
 				}
 			}
@@ -224,7 +224,7 @@ public class KeyboardLayoutLoader {
 		kbdLayout.setFont(new Font(fname, fstyle, fsize));
 		kbdLayout.rescale();
 		
-		logger.debug("keyboard Layout loaded.");
+		logger.debug("keyboard Layout loaded."); //$NON-NLS-1$
 		return kbdLayout;
 	}
 	
@@ -239,20 +239,20 @@ public class KeyboardLayoutLoader {
 	private static ArrayList<DropDownList> getDdls() {
 		ArrayList<DropDownList> ddls = new ArrayList<DropDownList>();
 		// read dropdown lists
-		NodeList nList = doc.getElementsByTagName("dropdown");
+		NodeList nList = doc.getElementsByTagName("dropdown"); //$NON-NLS-1$
 		for (int temp = 0; temp < nList.getLength(); temp++) {
 			Node nNode = nList.item(temp);
 			try {
 				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 					Element eElement = (Element) nNode;
 					NamedNodeMap attr = eElement.getAttributes();
-					DropDownList cb = new DropDownList(getAttribute(attr, "type"), getIntAttribute(attr, "size_x"),
-							getIntAttribute(attr, "size_y"), getIntAttribute(attr, "pos_x"), getIntAttribute(attr, "pos_y"));
+					DropDownList cb = new DropDownList(getAttribute(attr, "type"), getIntAttribute(attr, "size_x"), //$NON-NLS-1$ //$NON-NLS-2$
+							getIntAttribute(attr, "size_y"), getIntAttribute(attr, "pos_x"), getIntAttribute(attr, "pos_y")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 					ddls.add(cb);
 					cb.addActionListener(Controller.getInstance());
 				}
 			} catch (NullPointerException e) {
-				logger.warn("Dropdown-element found, but can not be read correctly! node nr " + temp + ": "
+				logger.warn("Dropdown-element found, but can not be read correctly! node nr " + temp + ": " //$NON-NLS-1$ //$NON-NLS-2$
 						+ nNode.toString());
 			}
 		}
@@ -269,19 +269,19 @@ public class KeyboardLayoutLoader {
 	private static ArrayList<Image> getImages() {
 		ArrayList<Image> images = new ArrayList<Image>();
 		// read image lists
-		NodeList nList = doc.getElementsByTagName("image");
+		NodeList nList = doc.getElementsByTagName("image"); //$NON-NLS-1$
 		for (int temp = 0; temp < nList.getLength(); temp++) {
 			Node nNode = nList.item(temp);
 			try {
 				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 					Element eElement = (Element) nNode;
 					NamedNodeMap attr = eElement.getAttributes();
-					Image cb = new Image(getAttribute(attr, "src"), getIntAttribute(attr, "size_x"),
-							getIntAttribute(attr, "size_y"), getIntAttribute(attr, "pos_x"), getIntAttribute(attr, "pos_y"));
+					Image cb = new Image(getAttribute(attr, "src"), getIntAttribute(attr, "size_x"), //$NON-NLS-1$ //$NON-NLS-2$
+							getIntAttribute(attr, "size_y"), getIntAttribute(attr, "pos_x"), getIntAttribute(attr, "pos_y")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 					images.add(cb);
 				}
 			} catch (NullPointerException e) {
-				logger.warn("Dropdown-element found, but can not be read correctly! node nr " + temp + ": "
+				logger.warn("Dropdown-element found, but can not be read correctly! node nr " + temp + ": " //$NON-NLS-1$ //$NON-NLS-2$
 						+ nNode.toString());
 			}
 		}
@@ -310,7 +310,7 @@ public class KeyboardLayoutLoader {
 	 */
 	private static ArrayList<Button> getButtons(ArrayList<ModeKey> modeKeys) {
 		ArrayList<Button> buttons = new ArrayList<Button>();
-		NodeList nList = doc.getElementsByTagName("button");
+		NodeList nList = doc.getElementsByTagName("button"); //$NON-NLS-1$
 		
 		// loop through buttons
 		for (int temp = 0; temp < nList.getLength(); temp++) {
@@ -318,7 +318,7 @@ public class KeyboardLayoutLoader {
 				Node nNode = nList.item(temp);
 				
 				if (nNode.getNodeType() != Node.ELEMENT_NODE) {
-					logger.warn("key-node is not an element-node");
+					logger.warn("key-node is not an element-node"); //$NON-NLS-1$
 					continue;
 				}
 				
@@ -327,26 +327,26 @@ public class KeyboardLayoutLoader {
 				Button button = new Button(b.size_x, b.size_y, b.pos_x, b.pos_y);
 				
 				// receive default key
-				NodeList defkey = eElement.getElementsByTagName("key");
+				NodeList defkey = eElement.getElementsByTagName("key"); //$NON-NLS-1$
 				if (defkey.getLength() == 1) {
 					try {
 						int id = Integer.parseInt(defkey.item(0).getTextContent());
 						Key key = keymap.get(id).clone();
 						if (key == null) {
-							logger.warn("key not found in keymap. temp=" + temp + " id=" + id);
+							logger.warn("key not found in keymap. temp=" + temp + " id=" + id); //$NON-NLS-1$ //$NON-NLS-2$
 							continue;
 						}
-						Node nAccept = defkey.item(0).getAttributes().getNamedItem("accept");
-						if (nAccept != null && nAccept.getTextContent().equals("true")) {
+						Node nAccept = defkey.item(0).getAttributes().getNamedItem("accept"); //$NON-NLS-1$
+						if (nAccept != null && nAccept.getTextContent().equals("true")) { //$NON-NLS-1$
 							key.setAccept(true);
 						}
 						button.setKey(key);
 					} catch (NumberFormatException e) {
-						logger.warn("key id could not be parsed to Integer. id=" + defkey.item(0).getTextContent());
+						logger.warn("key id could not be parsed to Integer. id=" + defkey.item(0).getTextContent()); //$NON-NLS-1$
 					}
 					
 				} else {
-					logger.warn("Number of key-elements is not 1: " + defkey.getLength());
+					logger.warn("Number of key-elements is not 1: " + defkey.getLength()); //$NON-NLS-1$
 					continue;
 				}
 				
@@ -354,29 +354,29 @@ public class KeyboardLayoutLoader {
 				buttons.add(button);
 				
 				// receive Modes
-				NodeList modes = eElement.getElementsByTagName("mode");
+				NodeList modes = eElement.getElementsByTagName("mode"); //$NON-NLS-1$
 				for (int i = 0; i < modes.getLength(); i++) {
 					Node item = modes.item(i);
 					if (item != null) {
 						int iModeName = 0;
 						boolean accept = false;
-						Node modeName = item.getAttributes().getNamedItem("modename");
-						Node nAccept = item.getAttributes().getNamedItem("accept");
+						Node modeName = item.getAttributes().getNamedItem("modename"); //$NON-NLS-1$
+						Node nAccept = item.getAttributes().getNamedItem("accept"); //$NON-NLS-1$
 						if (modeName != null) {
 							try {
 								iModeName = Integer.parseInt(modeName.getTextContent());
 							} catch (NumberFormatException e) {
-								logger.warn("modename could not be parsed to Integer. modename=" + modeName.getTextContent()
-										+ "i=" + i);
+								logger.warn("modename could not be parsed to Integer. modename=" + modeName.getTextContent() //$NON-NLS-1$
+										+ "i=" + i); //$NON-NLS-1$
 							}
 						}
-						if (nAccept != null && nAccept.getTextContent().equals("true")) {
+						if (nAccept != null && nAccept.getTextContent().equals("true")) { //$NON-NLS-1$
 							accept = true;
 						}
 						try {
 							Key key = keymap.get(Integer.parseInt(item.getTextContent()));
 							if (key == null) {
-								logger.warn("key not found in keymap. key content=" + item.getTextContent());
+								logger.warn("key not found in keymap. key content=" + item.getTextContent()); //$NON-NLS-1$
 							}
 							key.setAccept(accept);
 							for (ModeKey mb : modeKeys) {
@@ -385,19 +385,19 @@ public class KeyboardLayoutLoader {
 								}
 							}
 							if (button.getModes().size() == 0) {
-								logger.warn("A modeButton could not be found in keymap: " + iModeName + " i=" + i + "key="
+								logger.warn("A modeButton could not be found in keymap: " + iModeName + " i=" + i + "key=" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 										+ key.getName());
 							}
 							
 						} catch (NumberFormatException e) {
-							logger.warn("Could not parse key to Integer. i=" + i);
+							logger.warn("Could not parse key to Integer. i=" + i); //$NON-NLS-1$
 						}
 					}
 				}
 			} catch (NullPointerException e) {
-				logger.warn("A Button could not be read: NullPointerException");
+				logger.warn("A Button could not be read: NullPointerException"); //$NON-NLS-1$
 			} catch (NumberFormatException e) {
-				logger.warn("A Button could not be read: NumberFormatException");
+				logger.warn("A Button could not be read: NumberFormatException"); //$NON-NLS-1$
 			}
 		}
 		return buttons;
@@ -414,7 +414,7 @@ public class KeyboardLayoutLoader {
 	 */
 	private static ArrayList<ModeButton> getModeButtons(ArrayList<ModeKey> modeKeys) {
 		ArrayList<ModeButton> modeButtons = new ArrayList<ModeButton>();
-		NodeList nList = doc.getElementsByTagName("modebutton");
+		NodeList nList = doc.getElementsByTagName("modebutton"); //$NON-NLS-1$
 		
 		// loop through buttons
 		for (int temp = 0; temp < nList.getLength(); temp++) {
@@ -422,14 +422,14 @@ public class KeyboardLayoutLoader {
 				Node nNode = nList.item(temp);
 				
 				if (nNode.getNodeType() != Node.ELEMENT_NODE) {
-					logger.warn("key-node is not an element-node");
+					logger.warn("key-node is not an element-node"); //$NON-NLS-1$
 					continue;
 				}
 				
 				Element eElement = (Element) nNode;
 				ModeKey modeKey = null;
 				// receive default key
-				NodeList defkey = eElement.getElementsByTagName("key");
+				NodeList defkey = eElement.getElementsByTagName("key"); //$NON-NLS-1$
 				if (defkey.getLength() == 1) {
 					try {
 						Key tempModeKey = keymap.get(Integer.parseInt(defkey.item(0).getTextContent()));
@@ -444,17 +444,17 @@ public class KeyboardLayoutLoader {
 						if (!exists) {
 							modeKey = new ModeKey(tempModeKey);
 							modeKeys.add(modeKey);
-							logger.trace("New ModeKey found: " + modeKey.getName());
+							logger.trace("New ModeKey found: " + modeKey.getName()); //$NON-NLS-1$
 						}
 					} catch (NumberFormatException e) {
-						logger.warn("Could not parse key: " + defkey.item(0).getTextContent());
+						logger.warn("Could not parse key: " + defkey.item(0).getTextContent()); //$NON-NLS-1$
 					}
 					if (modeKey == null) {
-						logger.warn("Could not find key in keymap: " + defkey.item(0).getTextContent());
+						logger.warn("Could not find key in keymap: " + defkey.item(0).getTextContent()); //$NON-NLS-1$
 						continue;
 					}
 				} else {
-					logger.warn("Number of key-elements is not 1: " + defkey.getLength());
+					logger.warn("Number of key-elements is not 1: " + defkey.getLength()); //$NON-NLS-1$
 					continue;
 				}
 				Bounds b = getBounds(nNode);
@@ -462,7 +462,7 @@ public class KeyboardLayoutLoader {
 				modeButton.addActionListener(Controller.getInstance());
 				modeButtons.add(modeButton);
 			} catch (NullPointerException e) {
-				logger.warn("A ModeButton could not be read.");
+				logger.warn("A ModeButton could not be read."); //$NON-NLS-1$
 			}
 		}
 		return modeButtons;
@@ -477,7 +477,7 @@ public class KeyboardLayoutLoader {
 	 */
 	private static ArrayList<MuteButton> getMuteButtons() {
 		ArrayList<MuteButton> muteButtons = new ArrayList<MuteButton>();
-		NodeList nList = doc.getElementsByTagName("mutebutton");
+		NodeList nList = doc.getElementsByTagName("mutebutton"); //$NON-NLS-1$
 		
 		// loop through buttons
 		for (int temp = 0; temp < nList.getLength(); temp++) {
@@ -485,7 +485,7 @@ public class KeyboardLayoutLoader {
 				Node nNode = nList.item(temp);
 				
 				if (nNode.getNodeType() != Node.ELEMENT_NODE) {
-					logger.warn("key-node is not an element-node");
+					logger.warn("key-node is not an element-node"); //$NON-NLS-1$
 					continue;
 				}
 				
@@ -496,59 +496,59 @@ public class KeyboardLayoutLoader {
 				MuteButton button = new MuteButton(b.size_x, b.size_y, b.pos_x, b.pos_y);
 				
 				try {
-					String ttype = getAttribute(attr, "type");
-					if (ttype.equals("auto_completing")) {
+					String ttype = getAttribute(attr, "type"); //$NON-NLS-1$
+					if (ttype.equals("auto_completing")) { //$NON-NLS-1$
 						type = MuteButton.AUTO_COMPLETING;
-					} else if (ttype.equals("auto_profile_change")) {
+					} else if (ttype.equals("auto_profile_change")) { //$NON-NLS-1$
 						type = MuteButton.AUTO_PROFILE_CHANGE;
-					} else if (ttype.equals("tree_expanding")) {
+					} else if (ttype.equals("tree_expanding")) { //$NON-NLS-1$
 						type = MuteButton.TREE_EXPANDING;
 					} else {
 						type = MuteButton.UNKNOWN;
 					}
 					button.setType(type);
 				} catch (NullPointerException e) {
-					logger.warn("type-attribute not found/invalid in MuteButton. temp=" + temp);
+					logger.warn("type-attribute not found/invalid in MuteButton. temp=" + temp); //$NON-NLS-1$
 					continue;
 				}
 				
 				
 				// following blocks are nearly equal... Not very nice implemented, but working
-				NodeList on = eElement.getElementsByTagName("on");
+				NodeList on = eElement.getElementsByTagName("on"); //$NON-NLS-1$
 				if (on.getLength() == 1) {
 					String name = on.item(0).getTextContent();
 					if (name != null) {
 						button.getModeOn().setName(name);
 					}
 					try {
-						String color = on.item(0).getAttributes().getNamedItem("color").getTextContent();
+						String color = on.item(0).getAttributes().getNamedItem("color").getTextContent(); //$NON-NLS-1$
 						button.getModeOn().setColor(color);
-						String tooltip = on.item(0).getAttributes().getNamedItem("tooltip").getTextContent();
+						String tooltip = on.item(0).getAttributes().getNamedItem("tooltip").getTextContent(); //$NON-NLS-1$
 						button.getModeOn().setTooltip(tooltip);
 					} catch (NullPointerException e) {
-						logger.info("No color found/specified");
+						logger.info("No color found/specified"); //$NON-NLS-1$
 					}
 				} else {
-					logger.warn("Number of on-elements is not 1: " + on.getLength());
+					logger.warn("Number of on-elements is not 1: " + on.getLength()); //$NON-NLS-1$
 					continue;
 				}
 				
-				NodeList off = eElement.getElementsByTagName("off");
+				NodeList off = eElement.getElementsByTagName("off"); //$NON-NLS-1$
 				if (off.getLength() == 1) {
 					String name = off.item(0).getTextContent();
 					if (name != null) {
 						button.getModeOff().setName(name);
 					}
 					try {
-						String color = off.item(0).getAttributes().getNamedItem("color").getTextContent();
+						String color = off.item(0).getAttributes().getNamedItem("color").getTextContent(); //$NON-NLS-1$
 						button.getModeOff().setColor(color);
-						String tooltip = off.item(0).getAttributes().getNamedItem("tooltip").getTextContent();
+						String tooltip = off.item(0).getAttributes().getNamedItem("tooltip").getTextContent(); //$NON-NLS-1$
 						button.getModeOff().setTooltip(tooltip);
 					} catch (NullPointerException e) {
-						logger.info("No color found/specified");
+						logger.info("No color found/specified"); //$NON-NLS-1$
 					}
 				} else {
-					logger.warn("Number of on-elements is not 1: " + off.getLength());
+					logger.warn("Number of on-elements is not 1: " + off.getLength()); //$NON-NLS-1$
 					continue;
 				}
 				
@@ -556,7 +556,7 @@ public class KeyboardLayoutLoader {
 				button.release();
 				muteButtons.add(button);
 			} catch (NullPointerException e) {
-				logger.warn("A ModeButton could not be read.");
+				logger.warn("A ModeButton could not be read."); //$NON-NLS-1$
 			}
 		}
 		return muteButtons;
@@ -575,11 +575,11 @@ public class KeyboardLayoutLoader {
 			try {
 				Element eElement = (Element) node;
 				NamedNodeMap attr = eElement.getAttributes();
-				return new Bounds(getIntAttribute(attr, "size_x"), getIntAttribute(attr, "size_y"), getIntAttribute(attr,
-						"pos_x"), getIntAttribute(attr, "pos_y"));
+				return new Bounds(getIntAttribute(attr, "size_x"), getIntAttribute(attr, "size_y"), getIntAttribute(attr, //$NON-NLS-1$ //$NON-NLS-2$
+						"pos_x"), getIntAttribute(attr, "pos_y")); //$NON-NLS-1$ //$NON-NLS-2$
 				
 			} catch (NullPointerException e) {
-				logger.warn("Could not read bounds from given node. Node: " + node);
+				logger.warn("Could not read bounds from given node. Node: " + node); //$NON-NLS-1$
 			}
 		}
 		return new Bounds(0, 0, 0, 0);
@@ -600,7 +600,7 @@ public class KeyboardLayoutLoader {
 		if (node != null) {
 			return node.getTextContent();
 		}
-		return "";
+		return ""; //$NON-NLS-1$
 	}
 	
 	
@@ -638,7 +638,7 @@ public class KeyboardLayoutLoader {
 				return Integer.parseInt(nList.item(0).getTextContent());
 			}
 		} catch (NumberFormatException e) {
-			logger.warn("The number value of \"" + nodename + "\" could not be parsed.");
+			logger.warn("The number value of \"" + nodename + "\" could not be parsed."); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		return defaultValue;
 	}
@@ -659,7 +659,7 @@ public class KeyboardLayoutLoader {
 				return Float.parseFloat(nList.item(0).getTextContent());
 			}
 		} catch (NumberFormatException e) {
-			logger.warn("The number value of \"" + nodename + "\" could not be parsed.");
+			logger.warn("The number value of \"" + nodename + "\" could not be parsed."); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		return defaultValue;
 	}

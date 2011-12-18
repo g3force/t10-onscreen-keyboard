@@ -22,6 +22,7 @@ import java.util.Properties;
 
 import org.apache.log4j.Logger;
 
+import edu.dhbw.t10.helper.Messages;
 import edu.dhbw.t10.helper.StringHelper;
 import edu.dhbw.t10.manager.Controller;
 import edu.dhbw.t10.manager.keyboard.KeyboardLayoutLoader;
@@ -91,12 +92,12 @@ public class Profile_V2 implements Serializable {
 	
 	public Profile_V2(Properties prop, String datapath) {
 		properties = prop;
-		if (!properties.containsKey("name")) {
-			logger.error("Tried to load profile with invalid properties");
+		if (!properties.containsKey("name")) { //$NON-NLS-1$
+			logger.error("Tried to load profile with invalid properties"); //$NON-NLS-1$
 			throw new ExceptionInInitializerError();
 		} else {
 			// to prevent not set attributes
-			properties = createDefaultProperties(properties.getProperty("name"), datapath);
+			properties = createDefaultProperties(properties.getProperty("name"), datapath); //$NON-NLS-1$
 			for (Entry<Object, Object> p : prop.entrySet())
 				properties.setProperty(prop.getProperty((String) p.getKey()), (String) p.getValue());
 		}
@@ -111,26 +112,26 @@ public class Profile_V2 implements Serializable {
 	
 	public Properties createDefaultProperties(String pName, String datapath) {
 		Properties p = new Properties();
-		p.setProperty("name", pName);
-		p.setProperty("autoCompleting", "true");
-		p.setProperty("treeExpanding", "true");
-		p.setProperty("autoProfileChange", "true");
-		p.setProperty("chars", Config.getConf().getProperty("defaultAllowedChars"));
+		p.setProperty("name", pName); //$NON-NLS-1$
+		p.setProperty("autoCompleting", "true"); //$NON-NLS-1$ //$NON-NLS-2$
+		p.setProperty("treeExpanding", "true"); //$NON-NLS-1$ //$NON-NLS-2$
+		p.setProperty("autoProfileChange", "true"); //$NON-NLS-1$ //$NON-NLS-2$
+		p.setProperty("chars", Config.getConf().getProperty("defaultAllowedChars")); //$NON-NLS-1$ //$NON-NLS-2$
 		
-		String name = p.getProperty("name");
-		File file = new File(datapath + "/profiles");
+		String name = p.getProperty("name"); //$NON-NLS-1$
+		File file = new File(datapath + "/profiles"); //$NON-NLS-1$
 		if (!file.isDirectory()) {
 			file.mkdir();
 		}
-		File profileDir = new File(datapath + "/profiles/" + name);
+		File profileDir = new File(datapath + "/profiles/" + name); //$NON-NLS-1$
 		if (!profileDir.isDirectory()) {
 			profileDir.mkdir();
 		}
-		p.setProperty("layout", datapath + "/profiles/" + name + "/" + name + ".layout");
-		p.setProperty("profile", datapath + "/profiles/" + name + "/" + name + ".profile");
-		p.setProperty("tree", datapath + "/profiles/" + name + "/" + name + ".tree");
+		p.setProperty("layout", datapath + "/profiles/" + name + "/" + name + ".layout"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+		p.setProperty("profile", datapath + "/profiles/" + name + "/" + name + ".profile"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+		p.setProperty("tree", datapath + "/profiles/" + name + "/" + name + ".tree"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		
-		logger.debug("Profile " + name + " created");
+		logger.debug("Profile " + name + " created"); //$NON-NLS-1$ //$NON-NLS-2$
 		
 		return p;
 	}
@@ -174,10 +175,10 @@ public class Profile_V2 implements Serializable {
 	private void saveProfile() {
 		FileOutputStream fis;
 		try {
-			fis = new FileOutputStream(properties.getProperty("profile"));
-			properties.store(fis, "stored by saving the profile");
+			fis = new FileOutputStream(properties.getProperty("profile")); //$NON-NLS-1$
+			properties.store(fis, "stored by saving the profile"); //$NON-NLS-1$
 		} catch (IOException err) {
-			logger.info("Could not save the profile");
+			logger.info("Could not save the profile"); //$NON-NLS-1$
 		}
 	}
 	
@@ -189,16 +190,16 @@ public class Profile_V2 implements Serializable {
 	 */
 	private void saveLayout() {
 		if (kbdLayout != null) {
-			KeyboardLayoutSaver.save(kbdLayout, properties.getProperty("layout"));
+			KeyboardLayoutSaver.save(kbdLayout, properties.getProperty("layout")); //$NON-NLS-1$
 		}
 	}
 	
 	
 	private void loadDefaultPathes() {
-		defaultLayoutXML = getClass().getResourceAsStream("/res/default/layout_default.xml");
-		defaultKeymapXML = getClass().getResourceAsStream("/res/default/keymap_default.xml");
+		defaultLayoutXML = getClass().getResourceAsStream("/res/default/layout_default.xml"); //$NON-NLS-1$
+		defaultKeymapXML = getClass().getResourceAsStream("/res/default/keymap_default.xml"); //$NON-NLS-1$
 		if (defaultLayoutXML == null || defaultKeymapXML == null) {
-			logger.error("Could not load default layout file. Program will not run well...");
+			logger.error("Could not load default layout file. Program will not run well..."); //$NON-NLS-1$
 		}
 	}
 
@@ -209,23 +210,23 @@ public class Profile_V2 implements Serializable {
 	 * @author NicolaiO
 	 */
 	private void loadLayout() {
-		File file = new File(properties.getProperty("layout"));
+		File file = new File(properties.getProperty("layout")); //$NON-NLS-1$
 		if (file.exists()) {
 			kbdLayout = KeyboardLayoutLoader.load(file, KeymapLoader.load(defaultKeymapXML));
 		} else {
-			logger.info("Default Layout loaded");
+			logger.info("Default Layout loaded"); //$NON-NLS-1$
 			kbdLayout = KeyboardLayoutLoader.load(defaultLayoutXML, KeymapLoader.load(defaultKeymapXML));
 		}
 		for (MuteButton mb : kbdLayout.getMuteButtons()) {
 			switch (mb.getType()) {
 				case MuteButton.AUTO_COMPLETING:
-					mb.setActivated(properties.getProperty("autoCompleting").equals("true"));
+					mb.setActivated(properties.getProperty("autoCompleting").equals("true")); //$NON-NLS-1$ //$NON-NLS-2$
 					break;
 				case MuteButton.AUTO_PROFILE_CHANGE:
-					mb.setActivated(properties.getProperty("autoProfileChange").equals("true"));
+					mb.setActivated(properties.getProperty("autoProfileChange").equals("true")); //$NON-NLS-1$ //$NON-NLS-2$
 					break;
 				case MuteButton.TREE_EXPANDING:
-					mb.setActivated(properties.getProperty("treeExpanding").equals("true"));
+					mb.setActivated(properties.getProperty("treeExpanding").equals("true")); //$NON-NLS-1$ //$NON-NLS-2$
 					break;
 				default:
 					break;
@@ -241,22 +242,22 @@ public class Profile_V2 implements Serializable {
 	 */
 	private void loadTree() {
 		tree = new PriorityTree();
-		boolean successfullyCharsLoaded = tree.loadChars(properties.getProperty("chars"));
+		boolean successfullyCharsLoaded = tree.loadChars(properties.getProperty("chars")); //$NON-NLS-1$
 		if (!successfullyCharsLoaded) {
-			properties.setProperty("chars", Config.getConf().getProperty("defaultAllowedChars"));
-			tree.loadChars(Config.getConf().getProperty("defaultAllowedChars"));
+			properties.setProperty("chars", Config.getConf().getProperty("defaultAllowedChars")); //$NON-NLS-1$ //$NON-NLS-2$
+			tree.loadChars(Config.getConf().getProperty("defaultAllowedChars")); //$NON-NLS-1$
 		}
 		new Thread() {
 			public void run() {
 				try {
-					tree.importFromHashMap(ImportExportManager.importFromFile(properties.getProperty("tree"), true));
+					tree.importFromHashMap(ImportExportManager.importFromFile(properties.getProperty("tree"), true)); //$NON-NLS-1$
 				} catch (IOException err) {
-					logger.warn("Could not fetch the dictionary for the proifle " + properties.getProperty("name") + ", File: "
-							+ properties.getProperty("tree"));
+					logger.warn("Could not fetch the dictionary for the proifle " + properties.getProperty("name") + ", File: " //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+							+ properties.getProperty("tree")); //$NON-NLS-1$
 				}
-				logger.debug("Tree successfully loaded");
+				logger.debug("Tree successfully loaded"); //$NON-NLS-1$
 				dictionaryLoaded = true;
-				Controller.getInstance().showStatusMessage("Dictionary loaded");
+				Controller.getInstance().showStatusMessage(Messages.getString("Profile_V2.0")); //$NON-NLS-1$
 			}
 		}.start();
 	}
@@ -269,21 +270,21 @@ public class Profile_V2 implements Serializable {
 	 */
 	private void saveTree() {
 		if (tree != null && dictionaryLoaded) {
-			logger.debug("save tree to " + properties.getProperty("tree"));
+			logger.debug("save tree to " + properties.getProperty("tree")); //$NON-NLS-1$ //$NON-NLS-2$
 			final PriorityTree tempTree = tree.clone();
 			new Thread() {
 				public void run() {
 					try {
-						ImportExportManager.exportToFile(tempTree.exportToHashMap(), properties.getProperty("tree"));
+						ImportExportManager.exportToFile(tempTree.exportToHashMap(), properties.getProperty("tree")); //$NON-NLS-1$
 						} catch (IOException err) {
-							logger.error("Not able to save the tree for proifle " + properties.getProperty("name") + " to "
-									+ properties.getProperty("tree"));
+							logger.error("Not able to save the tree for proifle " + properties.getProperty("name") + " to " //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+									+ properties.getProperty("tree")); //$NON-NLS-1$
 						}
 				}
 			}.start();
-			logger.debug("save the allowed chars(" + properties.getProperty("chars") + ")");
+			logger.debug("save the allowed chars(" + properties.getProperty("chars") + ")"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		} else {
-			logger.debug("Tree not saved, because not existend");
+			logger.debug("Tree not saved, because not existend"); //$NON-NLS-1$
 		}
 	}
 	
@@ -298,8 +299,8 @@ public class Profile_V2 implements Serializable {
 	public String getWordSuggest(String givenChars) {
 		if (isAutoCompleting() && dictionaryLoaded) {
 			if (getTree() == null) {
-				logger.error("PriorityTree of activeProfile==NULL at getWordSuggest");
-				return "";
+				logger.error("PriorityTree of activeProfile==NULL at getWordSuggest"); //$NON-NLS-1$
+				return ""; //$NON-NLS-1$
 			}
 			return getTree().getSuggest(givenChars);
 		} else {
@@ -352,8 +353,8 @@ public class Profile_V2 implements Serializable {
 					// set active profile selected
 					ddl.setSelectedItem(getName());
 					
-					logger.debug("loaded " + ddl.getItemCount() + " items in profile-ddl");
-					logger.debug("Selected item is: " + ddl.getSelectedItem() + " should be: " + this);
+					logger.debug("loaded " + ddl.getItemCount() + " items in profile-ddl"); //$NON-NLS-1$ //$NON-NLS-2$
+					logger.debug("Selected item is: " + ddl.getSelectedItem() + " should be: " + this); //$NON-NLS-1$ //$NON-NLS-2$
 					
 					// now, where we are done, add all listeners back
 					for (int i = 0; i < als.length; i++) {
@@ -366,7 +367,7 @@ public class Profile_V2 implements Serializable {
 					
 					break;
 				default:
-					logger.warn("UNKOWN DDL found!");
+					logger.warn("UNKOWN DDL found!"); //$NON-NLS-1$
 			}
 		}
 	}
@@ -376,7 +377,7 @@ public class Profile_V2 implements Serializable {
 		tree = null;
 		kbdLayout = null;
 		dictionaryLoaded = false;
-		logger.debug("Tree and Layout \"deleted\" from main memory");
+		logger.debug("Tree and Layout \"deleted\" from main memory"); //$NON-NLS-1$
 	}
 
 
@@ -392,7 +393,7 @@ public class Profile_V2 implements Serializable {
 	 * @author SebastianN
 	 */
 	public String getName() {
-		return properties.getProperty("name");
+		return properties.getProperty("name"); //$NON-NLS-1$
 	}
 	
 	
@@ -403,7 +404,7 @@ public class Profile_V2 implements Serializable {
 	 * @author SebastianN
 	 */
 	public void setName(String newName) {
-		properties.setProperty("name", newName);
+		properties.setProperty("name", newName); //$NON-NLS-1$
 	}
 	
 	
@@ -435,32 +436,32 @@ public class Profile_V2 implements Serializable {
 	
 	
 	public boolean isAutoProfileChange() {
-		return properties.getProperty("autoProfileChange").equals("true");
+		return properties.getProperty("autoProfileChange").equals("true"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 	
 	
 	public void setAutoProfileChange(boolean autoProfileChange) {
-		properties.setProperty("autoProfileChange", String.valueOf(autoProfileChange));
+		properties.setProperty("autoProfileChange", String.valueOf(autoProfileChange)); //$NON-NLS-1$
 	}
 	
 	
 	public boolean isAutoCompleting() {
-		return properties.getProperty("autoCompleting").equals("true");
+		return properties.getProperty("autoCompleting").equals("true"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 	
 	
 	public void setAutoCompleting(boolean autoCompleting) {
-		properties.setProperty("autoCompleting", String.valueOf(autoCompleting));
+		properties.setProperty("autoCompleting", String.valueOf(autoCompleting)); //$NON-NLS-1$
 	}
 	
 	
 	public boolean isTreeExpanding() {
-		return properties.getProperty("treeExpanding").equals("true");
+		return properties.getProperty("treeExpanding").equals("true"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 	
 	
 	public void setTreeExpanding(boolean treeExpanding) {
-		properties.setProperty("treeExpanding", String.valueOf(treeExpanding));
+		properties.setProperty("treeExpanding", String.valueOf(treeExpanding)); //$NON-NLS-1$
 	}
 	
 	
@@ -476,15 +477,15 @@ public class Profile_V2 implements Serializable {
 	
 	public HashMap<String, String> getPaths() {
 		HashMap<String, String> hash = new HashMap<String, String>();
-		hash.put("profile", properties.getProperty("profile"));
-		hash.put("layout", properties.getProperty("layout"));
-		hash.put("tree", properties.getProperty("tree"));
+		hash.put("profile", properties.getProperty("profile")); //$NON-NLS-1$ //$NON-NLS-2$
+		hash.put("layout", properties.getProperty("layout")); //$NON-NLS-1$ //$NON-NLS-2$
+		hash.put("tree", properties.getProperty("tree")); //$NON-NLS-1$ //$NON-NLS-2$
 		return hash;
 	}
 	
 	
 	public void setAllowedChars(String allowedChars) {
 		tree.loadChars(allowedChars);
-		properties.setProperty("chars", allowedChars);
+		properties.setProperty("chars", allowedChars); //$NON-NLS-1$
 	}
 }

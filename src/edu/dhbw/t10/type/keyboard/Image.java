@@ -42,7 +42,7 @@ public class Image extends JLabel implements ILayoutElement {
 	private Dimension					origSize				= new Dimension(10, 10);
 	private int							pos_x					= 0;
 	private int							pos_y					= 0;
-	private String						src					= "";
+	private String						src					= ""; //$NON-NLS-1$
 	private BufferedImage			img;
 	private int							imgType				= 0;
 	
@@ -83,10 +83,10 @@ public class Image extends JLabel implements ILayoutElement {
 				imgType = img.getType() == 0 ? BufferedImage.TYPE_INT_ARGB : img.getType();
 				setIcon(new ImageIcon(img));
 			} catch (IOException e) {
-				logger.warn("An image could not be loaded!");
+				logger.warn("An image could not be loaded!"); //$NON-NLS-1$
 			}
 		} else {
-			logger.warn("Image URL \"" + src + "\" is not valid!");
+			logger.warn("Image URL \"" + src + "\" is not valid!"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	}
 	

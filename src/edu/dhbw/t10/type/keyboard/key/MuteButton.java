@@ -100,11 +100,11 @@ public class MuteButton extends PhysicalButton {
 		if (!activated) {
 			setText(off.getName());
 			setBackground(off.getColor());
-			logger.debug("MuteButton deactivated");
+			logger.debug("MuteButton deactivated"); //$NON-NLS-1$
 		} else {
 			setText(on.getName());
 			setBackground(on.getColor());
-			logger.debug("MuteButton activated");
+			logger.debug("MuteButton activated"); //$NON-NLS-1$
 		}
 	}
 
@@ -174,7 +174,7 @@ public class MuteButton extends PhysicalButton {
 		
 		
 		private Mode(Color c) {
-			colorS = "white";
+			colorS = "white"; //$NON-NLS-1$
 			color = c;
 		}
 		
@@ -225,7 +225,7 @@ public class MuteButton extends PhysicalButton {
 		private Color getColorFromString(String bgColor) {
 			Color color;
 			try {
-				Field field = Class.forName("java.awt.Color").getField(bgColor);
+				Field field = Class.forName("java.awt.Color").getField(bgColor); //$NON-NLS-1$
 				color = (Color) field.get(null);
 			} catch (Exception e) {
 				color = null;

@@ -63,7 +63,7 @@ public class PriorityTree implements Serializable {
 	 * @author DirkK
 	 */
 	public PriorityTree() {
-		stringToAllowedChars = "0-255";
+		stringToAllowedChars = "0-255"; //$NON-NLS-1$
 		int[] t  = {0,255};
 		allowedChars = new LinkedList<int[]>();
 		allowedChars.add(t);
@@ -177,7 +177,7 @@ public class PriorityTree implements Serializable {
 			// logger.debug("Word Inserted");
 			return true;
 		} else {
-			logger.warn("Word (" + word + ") ignored - not valid (valid: " + stringToAllowedChars + ")");
+			logger.warn("Word (" + word + ") ignored - not valid (valid: " + stringToAllowedChars + ")"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			return false;
 		}
 	}
@@ -273,7 +273,7 @@ public class PriorityTree implements Serializable {
 	 * @author DirkK
 	 */
 	public void printTree() {
-		printTree(true, "");
+		printTree(true, ""); //$NON-NLS-1$
 	}
 	
 	
@@ -303,13 +303,13 @@ public class PriorityTree implements Serializable {
 			if (start == null)
 				start = root;
 		}
-		logger.debug("Printing output...");
+		logger.debug("Printing output..."); //$NON-NLS-1$
 		start.print();
 		for (PriorityElement pe : start.getListOfFollowers()) {
 			pe.print();
 		}
-		logger.debug("Complete amount of Elements: " + start.getListOfFollowers().size());
-		logger.debug("Output printed");
+		logger.debug("Complete amount of Elements: " + start.getListOfFollowers().size()); //$NON-NLS-1$
+		logger.debug("Output printed"); //$NON-NLS-1$
 	}
 	
 	
@@ -323,7 +323,7 @@ public class PriorityTree implements Serializable {
 		for (Entry<String, Integer> entry : input.entrySet()) {
 			insert(entry.getKey(), entry.getValue(), true);
 			}
-		logger.debug("imported from HashMap");
+		logger.debug("imported from HashMap"); //$NON-NLS-1$
 	}
 	
 	
@@ -334,7 +334,7 @@ public class PriorityTree implements Serializable {
 	 * @author DirkK
 	 */
 	public HashMap<String, Integer> exportToHashMap() {
-		logger.debug("exporting to HashMap");
+		logger.debug("exporting to HashMap"); //$NON-NLS-1$
 		return root.getHashMapOfFollowers();
 		// HashMap<String, Integer> exportMap = new HashMap<String, Integer>();
 		// for (PriorityElement pe : root.getListOfFollowers()) {
@@ -376,7 +376,7 @@ public class PriorityTree implements Serializable {
 			PriorityElement pe = toDelete.pop();
 			delete(pe.buildWord());
 		}
-		logger.info("Cleaned (removed elements: " + length + ")");
+		logger.info("Cleaned (removed elements: " + length + ")"); //$NON-NLS-1$ //$NON-NLS-2$
 		return length;
 	}
 	

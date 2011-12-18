@@ -42,7 +42,7 @@ public class DialogContainer extends JFrame {
 	public DialogContainer(EMenuItem menuType) {
 		pc = new ProfileChooser(menuType, this);
 		
-		getContentPane().add(pc, "Center");
+		getContentPane().add(pc, "Center"); //$NON-NLS-1$
 
 		this.setAlwaysOnTop(true);
 		pack();

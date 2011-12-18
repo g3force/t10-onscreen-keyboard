@@ -10,12 +10,14 @@
 package edu.dhbw.t10;
 
 import java.net.URL;
+import java.util.Locale;
 
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
+import edu.dhbw.t10.helper.Messages;
 import edu.dhbw.t10.manager.Controller;
 
 
@@ -39,9 +41,8 @@ public class SuperFelix {
 	 * Revision of Git Repository: Look in file .git/refs/heads/master
 	 * automatic: git shortlog | grep -E '^[ ]+\w+' | wc -l
 	 */
-	public static final String		VERSION	= "1.0";
-	public static final String		REV		= "639";
-
+	public static final String		VERSION	= "1.0"; //$NON-NLS-1$
+	public static final String		REV		= "1363";										//$NON-NLS-1$
 
 	// --------------------------------------------------------------------------
 	// --- constructors ---------------------------------------------------------
@@ -54,7 +55,7 @@ public class SuperFelix {
 		 * 
 		 * configuration is stored in a config file. If it does not exist, use basic config
 		 */
-		URL logUrl = getClass().getResource("/res/log4j.conf");
+		URL logUrl = getClass().getResource("/res/log4j.conf"); //$NON-NLS-1$
 
 		if (logUrl != null) {
 			PropertyConfigurator.configure(logUrl);
@@ -64,8 +65,10 @@ public class SuperFelix {
 			logger.setLevel(Level.ALL);
 		}
 		
+		Locale.setDefault(new Locale("de", "DE"));
+
 		Controller.getInstance();
-		logger.info("Keyboard started.");
+		logger.info("Keyboard started.");  //$NON-NLS-1$
 	}
 	
 
@@ -82,9 +85,9 @@ public class SuperFelix {
 	public static void main(String[] args) {
 		
 		if (args.length == 1) {
-			if (args[0].equals("-v") || args[0].equals("--version")) {
-				System.out.println("Version: " + VERSION);
-				System.out.println("Revision: " + REV);
+			if (args[0].equals("-v") || args[0].equals("--version")) { //$NON-NLS-1$ //$NON-NLS-2$
+				System.out.println(Messages.getString("SuperFelix.6") + VERSION); //$NON-NLS-1$
+				System.out.println(Messages.getString("SuperFelix.7") + REV); //$NON-NLS-1$
 				System.exit(0);
 			}
 		}

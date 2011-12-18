@@ -22,6 +22,7 @@ import java.util.zip.ZipException;
 
 import org.apache.log4j.Logger;
 
+import edu.dhbw.t10.helper.Messages;
 import edu.dhbw.t10.manager.Controller;
 import edu.dhbw.t10.type.Config;
 import edu.dhbw.t10.type.keyboard.DropDownList;
@@ -70,13 +71,13 @@ public class ProfileManager {
 	 * @author SebastianN, NicolaiO
 	 */
 	public ProfileManager(MainPanel mainPanel) {
-		logger.debug("initializing...");
+		logger.debug("initializing..."); //$NON-NLS-1$
 		
 		this.mainPanel = mainPanel;
 
 		// load datapath
 		// works for Windows and Linux... so the data is stored in the systems userdata folder...
-		datapath = System.getProperty("user.home") + "/.t10keyboard";
+		datapath = System.getProperty("user.home") + "/.t10keyboard"; //$NON-NLS-1$ //$NON-NLS-2$
 		File tf = new File(datapath);
 		if (!tf.exists()) {
 			tf.mkdirs();
@@ -90,14 +91,14 @@ public class ProfileManager {
 
 		// if no profiles were loaded, create a new one
 		if (profiles.size() == 0) {
-			logger.debug("No profiles loaded. New profile will be created.");
-			activeProfile = createProfile("default");
+			logger.debug("No profiles loaded. New profile will be created."); //$NON-NLS-1$
+			activeProfile = createProfile("default"); //$NON-NLS-1$
 		}
 
 		// set active profile by defauleActiveProfile which was either loaded from config file or is set to a default
 		// value
 		else {
-			activeProfile = getProfileByName(Config.getConf().getProperty("ActiveProfile"));
+			activeProfile = getProfileByName(Config.getConf().getProperty("ActiveProfile")); //$NON-NLS-1$
 			if (activeProfile == null) {
 				activeProfile = profiles.get(0);
 			}
@@ -106,7 +107,7 @@ public class ProfileManager {
 		// change to chosen profile
 		changeProfile(activeProfile);
 
-		logger.debug("initialized.");
+		logger.debug("initialized."); //$NON-NLS-1$
 	}
 	
 	
@@ -129,7 +130,7 @@ public class ProfileManager {
 		Profile_V2 newProfile = getProfileByName(profileName);
 		
 		if (newProfile != null) {
-			logger.warn("Profile already exists.");
+			logger.warn("Profile already exists."); //$NON-NLS-1$
 		} else {
 			newProfile = new Profile_V2(profileName, datapath);
 			profiles.add(newProfile);
@@ -167,11 +168,11 @@ public class ProfileManager {
 	 */
 	public void deleteProfile(Profile_V2 profile) {
 		if (profiles.size() <= 1) {
-			logger.debug("Only one or zero profiles left. Can't delete.");
+			logger.debug("Only one or zero profiles left. Can't delete."); //$NON-NLS-1$
 			return;
 		}
 		profiles.remove(profile);
-		File dir = new File(profile.getPaths().get("profile"));
+		File dir = new File(profile.getPaths().get("profile")); //$NON-NLS-1$
 		dir = dir.getParentFile();
 		for (Entry<String, String> file : profile.getPaths().entrySet()) {
 			if (!existDependency(file.getValue()))
@@ -210,7 +211,7 @@ public class ProfileManager {
 	public void importProfiles(final File zipFile) throws ZipException, IOException {
 		// Finding possible Profile Name
 		String profileName = zipFile.getName();
-		profileName = profileName.replace(".zip", "");
+		profileName = profileName.replace(".zip", ""); //$NON-NLS-1$ //$NON-NLS-2$
 		int counter = 0;
 		while (existProfile(profileName)) {
 			counter++;
@@ -229,17 +230,17 @@ public class ProfileManager {
 				try {
 					ImportExportManager.importProfiles(zipFile, prof);
 				} catch (ZipException err) {
-					Controller.getInstance().showStatusMessage("Could not import profile");
-					logger.error("Could not import profile from " + zipFile.toString());
+					Controller.getInstance().showStatusMessage(Messages.getString("ProfileManager.12")); //$NON-NLS-1$
+					logger.error("Could not import profile from " + zipFile.toString()); //$NON-NLS-1$
 					err.printStackTrace();
 				} catch (IOException err) {
-					Controller.getInstance().showStatusMessage("Could not import profile");
-					logger.error("Could not import profile from " + zipFile.toString());
+					Controller.getInstance().showStatusMessage(Messages.getString("ProfileManager.14")); //$NON-NLS-1$
+					logger.error("Could not import profile from " + zipFile.toString()); //$NON-NLS-1$
 					err.printStackTrace();
 				}
 			}
 		}.start();
-		logger.debug("Files from the zip File " + zipFile + " extracted");
+		logger.debug("Files from the zip File " + zipFile + " extracted"); //$NON-NLS-1$ //$NON-NLS-2$
 		
 		changeProfile(prof, false);
 	}
@@ -270,7 +271,7 @@ public class ProfileManager {
 		File f;
 		f = new File(path);
 		if (!f.delete())
-			logger.error(path + " could not be deleted.");
+			logger.error(path + " could not be deleted."); //$NON-NLS-1$
 	}
 	
 	
@@ -291,11 +292,11 @@ public class ProfileManager {
 			changeProfileBlocked = true;
 			
 			if (newActive == null) {
-				logger.error("changeProfile was called with null-Profile");
+				logger.error("changeProfile was called with null-Profile"); //$NON-NLS-1$
 				return;
 			}
 			
-			logger.info("Setting profile " + newActive + " active.");
+			logger.info("Setting profile " + newActive + " active."); //$NON-NLS-1$ //$NON-NLS-2$
 
 			// save currently active profile
 			if (activeProfile != null) {
@@ -307,16 +308,16 @@ public class ProfileManager {
 			activeProfile = newActive;
 			activeProfile.load(load);
 			activeProfile.loadDDLs(profiles);
-			Config.getConf().setProperty("ActiveProfile", activeProfile.getName());
+			Config.getConf().setProperty("ActiveProfile", activeProfile.getName()); //$NON-NLS-1$
 			
 			// update GUI
 			loadLayoutToGUI(activeProfile.getKbdLayout());
 			Controller.getInstance().resizeWindow(getActive().getKbdLayout().getSize());
 			
-			logger.info("Profile now active: " + getActive());
+			logger.info("Profile now active: " + getActive()); //$NON-NLS-1$
 			changeProfileBlocked = false;
 		} else {
-			logger.debug("changeProfile blocked");
+			logger.debug("changeProfile blocked"); //$NON-NLS-1$
 		}
 	}
 	
@@ -341,7 +342,7 @@ public class ProfileManager {
 		for (Image img : kbd.getImages()) {
 			mainPanel.add(img);
 		}
-		logger.debug("GUI contains " + mainPanel.getComponentCount() + " Compontents now.");
+		logger.debug("GUI contains " + mainPanel.getComponentCount() + " Compontents now."); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 
@@ -360,10 +361,10 @@ public class ProfileManager {
 		LinkedList<File> profileFiles = new LinkedList<File>();
 		
 		// getting all profile files from the default directory
-		profileFiles.addAll(getProfileFiles(new File(datapath + "/profiles")));
+		profileFiles.addAll(getProfileFiles(new File(datapath + "/profiles"))); //$NON-NLS-1$
 
 		// getting all profile files from the PROFILE_PATH directory
-		String[] profilePathes = Config.getConf().getProperty("PROFILE_PATH").split(":");
+		String[] profilePathes = Config.getConf().getProperty("PROFILE_PATH").split(":"); //$NON-NLS-1$ //$NON-NLS-2$
 		for (int i = 0; i < profilePathes.length; i++) {
 			File file = new File(profilePathes[i]);
 			profileFiles.addAll(getProfileFiles(file));
@@ -380,31 +381,31 @@ public class ProfileManager {
 				profiles.add(prof);
 			} catch (IOException err) {
 				// prof = new Profile("toDelete, take the new profile format", datapath);
-				logger.warn("Could not read the profile file");
+				logger.warn("Could not read the profile file"); //$NON-NLS-1$
 			} catch (ExceptionInInitializerError e) {
 				try {
 					prop = new Properties();
 					Profile p = Serializer.deserialize(profileFile.toString());
-					prop.setProperty("name", p.getName());
-					prop.setProperty("profile", p.getPaths().get("profile"));
-					prop.setProperty("tree", p.getPaths().get("tree"));
-					prop.setProperty("layout", p.getPaths().get("layout"));
-					prop.setProperty("chars", Config.getConf().getProperty("defaultAllowedChars"));
-					prop.setProperty("autoCompleting", String.valueOf(p.isAutoCompleting()));
-					prop.setProperty("treeExpanding", String.valueOf(p.isTreeExpanding()));
-					prop.setProperty("autoProfileChange", String.valueOf(p.isAutoProfileChange()));
+					prop.setProperty("name", p.getName()); //$NON-NLS-1$
+					prop.setProperty("profile", p.getPaths().get("profile")); //$NON-NLS-1$ //$NON-NLS-2$
+					prop.setProperty("tree", p.getPaths().get("tree")); //$NON-NLS-1$ //$NON-NLS-2$
+					prop.setProperty("layout", p.getPaths().get("layout")); //$NON-NLS-1$ //$NON-NLS-2$
+					prop.setProperty("chars", Config.getConf().getProperty("defaultAllowedChars")); //$NON-NLS-1$ //$NON-NLS-2$
+					prop.setProperty("autoCompleting", String.valueOf(p.isAutoCompleting())); //$NON-NLS-1$
+					prop.setProperty("treeExpanding", String.valueOf(p.isTreeExpanding())); //$NON-NLS-1$
+					prop.setProperty("autoProfileChange", String.valueOf(p.isAutoProfileChange())); //$NON-NLS-1$
 					prof = new Profile_V2(prop, datapath);
 					prof.save();
 					profiles.add(prof);
-					File oldCharFile = new File(p.getPaths().get("chars"));
+					File oldCharFile = new File(p.getPaths().get("chars")); //$NON-NLS-1$
 					if (oldCharFile.exists())
 						oldCharFile.delete();
 				} catch (IOException err) {
-					logger.error("Found profile is neither a new profile config file, nor a serialized profile");
+					logger.error("Found profile is neither a new profile config file, nor a serialized profile"); //$NON-NLS-1$
 				}
 			}
 		}
-		logger.info("Deserialized " + counter + " profiles.");
+		logger.info("Deserialized " + counter + " profiles."); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 	
 	
@@ -418,14 +419,14 @@ public class ProfileManager {
 		//define filter for all directories in a given dir
 		FilenameFilter isDir = new FilenameFilter() {
 		    public boolean accept(File dir, String name) {
-				return new File(dir.toString() + "/" + name).isDirectory();
+				return new File(dir.toString() + "/" + name).isDirectory(); //$NON-NLS-1$
 		    }
 		};
 		//define filter for all .proifle files in a given dir
 		FilenameFilter isProject = new FilenameFilter() {
 		    public boolean accept(File dir, String name) {
-				if (name.lastIndexOf(".") > 0)
-					return name.substring(name.lastIndexOf("."), name.length()).equals(".profile");
+				if (name.lastIndexOf(".") > 0) //$NON-NLS-1$
+					return name.substring(name.lastIndexOf("."), name.length()).equals(".profile"); //$NON-NLS-1$ //$NON-NLS-2$
 				else
 					return false;
 		    }

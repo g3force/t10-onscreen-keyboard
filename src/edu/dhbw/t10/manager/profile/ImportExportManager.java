@@ -82,9 +82,9 @@ public class ImportExportManager {
 		if (confFile.exists()) {
 			FileReader fr = new FileReader(confFile);
 			BufferedReader br = new BufferedReader(fr);
-			String entry = "";
+			String entry = ""; //$NON-NLS-1$
 			while ((entry = br.readLine()) != null) {
-				String[] entries = entry.split("-");
+				String[] entries = entry.split("-"); //$NON-NLS-1$
 				int[] newi = { Integer.parseInt(entries[0]), Integer.parseInt(entries[1]) };
 				allowedChars.add(newi);
 			}
@@ -93,7 +93,7 @@ public class ImportExportManager {
 			allowedChars.add(newi);
 			// saveChars to generate a new chars file
 			saveChars(pathToAllowedChars, allowedChars);
-			logger.debug("Chars-File was generated at: " + pathToAllowedChars);
+			logger.debug("Chars-File was generated at: " + pathToAllowedChars); //$NON-NLS-1$
 		}
 		return allowedChars;
 	}
@@ -112,7 +112,7 @@ public class ImportExportManager {
 		BufferedWriter bw = new BufferedWriter(fw);
 		
 		for (int i = 0; i < allowedChars.size(); i++) {
-			bw.write(allowedChars.get(i)[0] + "-" + allowedChars.get(i)[1] + "\n");
+			bw.write(allowedChars.get(i)[0] + "-" + allowedChars.get(i)[1] + "\n"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		bw.close();
 	}
@@ -128,20 +128,20 @@ public class ImportExportManager {
 	 */
 	public static HashMap<String, Integer> importFromText(String fileName) throws IOException {
 		HashMap<String, Integer> importMap = new HashMap<String, Integer>();
-		logger.debug("reading form file");
+		logger.debug("reading form file"); //$NON-NLS-1$
 		FileReader fr = new FileReader(fileName);
 		BufferedReader x = new BufferedReader(fr);
 		String res = x.readLine();
 		while (res != null) {
 			// System.out.println("Tmpbuf: " + res);
 			res = StringHelper.removePunctuation(res);
-			String[] words = res.split(" ");
+			String[] words = res.split(" "); //$NON-NLS-1$
 			for (String word : words)
 				if (word.length() > 1)
 					increase(importMap, word);
 			res = x.readLine();
 		}
-		logger.debug("read form file");
+		logger.debug("read form file"); //$NON-NLS-1$
 		return importMap;
 	}
 	
@@ -154,16 +154,16 @@ public class ImportExportManager {
 	 * @author DirkK
 	 */
 	public static void exportToFile(HashMap<String, Integer> exportMap, String fileName) throws IOException {
-		logger.debug("saving to file");
+		logger.debug("saving to file"); //$NON-NLS-1$
 		int counter = 0;
 		FileWriter file = new FileWriter(fileName);
 		BufferedWriter o = new BufferedWriter(file);
 		for (Entry<String, Integer> entry : exportMap.entrySet()) {
-			o.write(entry.getKey() + " " + entry.getValue() + "\n");
+			o.write(entry.getKey() + " " + entry.getValue() + "\n"); //$NON-NLS-1$ //$NON-NLS-2$
 			counter++;
 		}
 		o.close();
-		logger.debug("saved to file (" + counter + " words written)");
+		logger.debug("saved to file (" + counter + " words written)"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 	
 	
@@ -177,14 +177,14 @@ public class ImportExportManager {
 	 */
 	public static HashMap<String, Integer> importFromFile(String fileName, boolean withFreq) throws IOException {
 		HashMap<String, Integer> importMap = new HashMap<String, Integer>();
-		logger.debug("reading form file");
+		logger.debug("reading form file"); //$NON-NLS-1$
 		int amount = 0;
 		FileReader fr = new FileReader(fileName);
 		BufferedReader x = new BufferedReader(fr);
 		String res = x.readLine();
 		while (res != null) {
-			if (withFreq && res.contains(" ")) {
-				String[] entries = res.split(" ");
+			if (withFreq && res.contains(" ")) { //$NON-NLS-1$
+				String[] entries = res.split(" "); //$NON-NLS-1$
 				if (entries.length == 2 && entries[0].length() > 1 && entries[1].length() > 0) {
 					importMap.put(entries[0], Integer.parseInt(entries[1]));
 					amount++;
@@ -194,7 +194,7 @@ public class ImportExportManager {
 			}
 			res = x.readLine();
 		}
-		logger.debug("read form file (" + amount + ")");
+		logger.debug("read form file (" + amount + ")"); //$NON-NLS-1$ //$NON-NLS-2$
 		return importMap;
 	}
 	
@@ -228,10 +228,10 @@ public class ImportExportManager {
 	 * @author DirkK
 	 */
 	public static void exportProfiles(Profile_V2 prof, File folder) throws IOException {
-		logger.debug("Exporting profile " + folder.getName());
+		logger.debug("Exporting profile " + folder.getName()); //$NON-NLS-1$
 		BufferedInputStream origin = null;
 		String zipFile = folder.toString();
-		logger.debug("Exporting to " + zipFile);
+		logger.debug("Exporting to " + zipFile); //$NON-NLS-1$
 		FileOutputStream dest = new FileOutputStream(zipFile);
 		ZipOutputStream out = new ZipOutputStream(new BufferedOutputStream(dest));
 		byte data[] = new byte[BUFFER];
@@ -239,7 +239,7 @@ public class ImportExportManager {
 		for (Entry<String, String> fileS : prof.getPaths().entrySet()) {
 			File file = new File(fileS.getValue());
 			if (file.exists()) {
-				logger.debug("Writing to zip file: " + file);
+				logger.debug("Writing to zip file: " + file); //$NON-NLS-1$
 				FileInputStream fi = new FileInputStream(file);
 				origin = new BufferedInputStream(fi, BUFFER);
 				ZipEntry entry = new ZipEntry(file.getName().toString());
@@ -250,7 +250,7 @@ public class ImportExportManager {
 				}
 				origin.close();
 			} else {
-				logger.warn("Could not writ to zip file: " + file + ". Will be ignored");
+				logger.warn("Could not writ to zip file: " + file + ". Will be ignored"); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 		}
 		out.close();
@@ -267,7 +267,7 @@ public class ImportExportManager {
 	 * @author DirkK
 	 */
 	public static void importProfiles(File zipFile, Profile_V2 prof) throws ZipException, IOException {
-		logger.debug("Extracting zip file " + zipFile.toString());
+		logger.debug("Extracting zip file " + zipFile.toString()); //$NON-NLS-1$
 
 		// Reading the zip file
 		BufferedOutputStream dest = null;
@@ -285,7 +285,7 @@ public class ImportExportManager {
 			
 			// ignoring the names of the files, renaming them to [profileName].(tree|char|profile)
 			// save this files to [datapath]/profiles/
-			String file = prof.getPaths().get(entry.getName().substring(entry.getName().lastIndexOf(".") + 1));
+			String file = prof.getPaths().get(entry.getName().substring(entry.getName().lastIndexOf(".") + 1)); //$NON-NLS-1$
 			FileOutputStream fos = new FileOutputStream(file);
 			dest = new BufferedOutputStream(fos, BUFFER);
 			while ((count = is.read(data, 0, BUFFER)) != -1) {

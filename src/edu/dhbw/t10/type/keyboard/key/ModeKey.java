@@ -78,7 +78,7 @@ public class ModeKey extends Key {
 				setState(DEFAULT);
 				break;
 		}
-		logger.debug("ModeButton pressed. State is now " + state);
+		logger.debug("ModeButton pressed. State is now " + state); //$NON-NLS-1$
 	}
 	
 	
@@ -89,7 +89,7 @@ public class ModeKey extends Key {
 	 */
 	public void release() {
 		setState(DEFAULT);
-		logger.debug("ModeButton released");
+		logger.debug("ModeButton released"); //$NON-NLS-1$
 	}
 	
 	
@@ -140,7 +140,7 @@ public class ModeKey extends Key {
 				}
 				break;
 		}
-		logger.debug("State set to " + state);
+		logger.debug("State set to " + state); //$NON-NLS-1$
 	}
 	
 
