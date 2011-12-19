@@ -1,3 +1,2 @@
 #!/bin/sh
-
 java -jar /usr/share/t10-keyboard/t10-keyboard.jar $@

@@ -1,6 +1,5 @@
 bin
-*.deb
+*.class
 t10-keyboard.jar
-*.zip
 .bzr
 .bzrignore
