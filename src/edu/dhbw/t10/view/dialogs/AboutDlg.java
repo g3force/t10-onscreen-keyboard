@@ -76,7 +76,7 @@ public class AboutDlg extends JDialog {
 
 
 		JLabel titleLbl = new JLabel("<html>" + Messages.getString("AboutDlg.8") + "<br>" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				+ Messages.getString("AboutDlg.10") + SuperFelix.VERSION + "<br>" + Messages.getString("AboutDlg.12") + SuperFelix.REV + "</html>"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+				+ Messages.getString("AboutDlg.10") + SuperFelix.VERSION + "</html>"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		titleLbl.setAlignmentX(CENTER_ALIGNMENT);
 		titleLbl.setAlignmentY(CENTER_ALIGNMENT);
 		JLabel descriptionLbl = new JLabel("<html>" + Messages.getString("AboutDlg.15") + "<br>" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$

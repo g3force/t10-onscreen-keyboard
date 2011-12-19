@@ -11,6 +11,7 @@ package edu.dhbw.t10;
 
 import java.net.URL;
 import java.util.Locale;
+import java.util.Scanner;
 
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
@@ -41,13 +42,34 @@ public class SuperFelix {
 	 * Revision of Git Repository: Look in file .git/refs/heads/master
 	 * automatic: git shortlog | grep -E '^[ ]+\w+' | wc -l
 	 */
-	public static final String		VERSION	= "1.0"; //$NON-NLS-1$
-	public static final String		REV		= "1363";										//$NON-NLS-1$
+	public static String				VERSION	= "unknown";									//$NON-NLS-1$
 
+	
 	// --------------------------------------------------------------------------
 	// --- constructors ---------------------------------------------------------
 	// --------------------------------------------------------------------------
-	private SuperFelix() {
+	private SuperFelix(String[] args) {
+		
+		StringBuilder versionFile = new StringBuilder();
+		// String NL = System.getProperty("line.separator");
+		Scanner scanner = new Scanner(getClass().getResourceAsStream("/res/version"), "UTF-8");
+		try {
+			// while (scanner.hasNextLine()) {
+			versionFile.append(scanner.nextLine()); // + NL);
+			// }
+		} finally {
+			scanner.close();
+		}
+		
+		VERSION = versionFile.toString();
+
+		if (args.length == 1) {
+			if (args[0].equals("-v") || args[0].equals("--version")) { //$NON-NLS-1$ //$NON-NLS-2$
+				System.out.println(Messages.getString("SuperFelix.6") + VERSION); //$NON-NLS-1$
+				System.exit(0);
+			}
+		}
+
 		/*
 		 * initialize log4j, a logger from apache.
 		 * See http://logging.apache.org/log4j/1.2/manual.html for more details
@@ -69,7 +91,7 @@ public class SuperFelix {
 		Locale.setDefault(new Locale("de", "DE"));
 
 		Controller.getInstance();
-		logger.info("Keyboard started.");  //$NON-NLS-1$
+		logger.info("Keyboard started."); //$NON-NLS-1$
 	}
 	
 
@@ -84,17 +106,7 @@ public class SuperFelix {
 	 * @author NicolaiO
 	 */
 	public static void main(String[] args) {
-		
-		if (args.length == 1) {
-			if (args[0].equals("-v") || args[0].equals("--version")) { //$NON-NLS-1$ //$NON-NLS-2$
-				System.out.println(Messages.getString("SuperFelix.6") + VERSION); //$NON-NLS-1$
-				System.out.println(Messages.getString("SuperFelix.7") + REV); //$NON-NLS-1$
-				System.exit(0);
-			}
-		}
-
-		new SuperFelix();
-
+		new SuperFelix(args);
 	}
 	
 	// --------------------------------------------------------------------------
