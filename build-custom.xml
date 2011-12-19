@@ -15,8 +15,6 @@
 		<arg line="--tags" />
 	</exec> 
 
-	<exec executable="./getREV.sh" output="src/res/rev" failifexecutionfails="false" /> 
-
 	<target name="compress">
 		<jar destfile="t10-keyboard.jar" basedir="bin">
 			<manifest>
