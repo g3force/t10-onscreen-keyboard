@@ -202,7 +202,7 @@ public class PriorityElement implements Serializable {
 	 */
 	public String buildWord() {
 		// logger.trace("Building Word...");
-		String word = "";
+		String word = ""; //$NON-NLS-1$
 		PriorityElement node = this;
 		while (node.getFather() != null) {
 			word = node.getLetter() + word;
@@ -294,13 +294,13 @@ public class PriorityElement implements Serializable {
 	 */
 	public void print() {
 		if (father == null) {
-			System.out.print("[root], " + frequency + ", " + lastUse + ", Suggest: " + suggest + " (Father: " + father
-					+ ")\n");
+			System.out.print("[root], " + frequency + ", " + lastUse + ", Suggest: " + suggest + " (Father: " + father //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+					+ ")\n"); //$NON-NLS-1$
 		} else {
-			System.out.print(buildWord() + ", " + frequency + ", " + lastUse // this item
-					+ ", Suggest: " + suggest.buildWord() + "(" + suggest.getFrequency() + ")" // according
+			System.out.print(buildWord() + ", " + frequency + ", " + lastUse // this item //$NON-NLS-1$ //$NON-NLS-2$
+					+ ", Suggest: " + suggest.buildWord() + "(" + suggest.getFrequency() + ")" // according //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 																														// suggest
-					+ " (Father: " + father.buildWord() + ")\n"); // according father
+					+ " (Father: " + father.buildWord() + ")\n"); // according father //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	}
 	

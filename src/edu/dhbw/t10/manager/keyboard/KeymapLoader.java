@@ -68,7 +68,7 @@ public class KeymapLoader {
 	 * @author NicolaiO
 	 */
 	public static HashMap<Integer, Key> load(InputStream filePath) {
-		logger.debug("Loadung keymap...");
+		logger.debug("Loadung keymap..."); //$NON-NLS-1$
 		// do everything in a try and return only empty keymap, if XML could not be loaded
 		try {
 			// load file and initialize document builder factory for XML parsing
@@ -79,7 +79,7 @@ public class KeymapLoader {
 			
 			// create keymap that will be returned
 			HashMap<Integer, Key> keymap = new HashMap<Integer, Key>();
-			NodeList keytypes = doc.getElementsByTagName("keytype");
+			NodeList keytypes = doc.getElementsByTagName("keytype"); //$NON-NLS-1$
 			int type = Key.UNKNOWN;
 			
 			// loop over all keytype like "control", "char", "unicode"
@@ -87,25 +87,25 @@ public class KeymapLoader {
 				NodeList keys = keytypes.item(i).getChildNodes();
 				try {
 					// get name of keytype
-					String stype = keytypes.item(i).getAttributes().getNamedItem("name").getTextContent();
+					String stype = keytypes.item(i).getAttributes().getNamedItem("name").getTextContent(); //$NON-NLS-1$
 					type = convertType(stype);
 				} catch (NullPointerException e) {
-					logger.warn("A keytype could not be read. i=" + i);
+					logger.warn("A keytype could not be read. i=" + i); //$NON-NLS-1$
 					type = Key.UNKNOWN;
 				}
 				// loop over all keys in keytype
 				for (int j = 0; j < keys.getLength(); j++) {
 					Node key = keys.item(j);
 					try {
-						if (key.getNodeName().equals("key")) {
-							int id = Integer.parseInt(key.getAttributes().getNamedItem("id").getTextContent());
-							String keycode = key.getAttributes().getNamedItem("keycode").getTextContent();
-							String iconUrl = "";
-							if (key.getAttributes().getNamedItem("icon") != null)
-								iconUrl = key.getAttributes().getNamedItem("icon").getTextContent();
-							String holdiconUrl = "";
-							if (key.getAttributes().getNamedItem("holdicon") != null) {
-								holdiconUrl = key.getAttributes().getNamedItem("holdicon").getTextContent();
+						if (key.getNodeName().equals("key")) { //$NON-NLS-1$
+							int id = Integer.parseInt(key.getAttributes().getNamedItem("id").getTextContent()); //$NON-NLS-1$
+							String keycode = key.getAttributes().getNamedItem("keycode").getTextContent(); //$NON-NLS-1$
+							String iconUrl = ""; //$NON-NLS-1$
+							if (key.getAttributes().getNamedItem("icon") != null) //$NON-NLS-1$
+								iconUrl = key.getAttributes().getNamedItem("icon").getTextContent(); //$NON-NLS-1$
+							String holdiconUrl = ""; //$NON-NLS-1$
+							if (key.getAttributes().getNamedItem("holdicon") != null) { //$NON-NLS-1$
+								holdiconUrl = key.getAttributes().getNamedItem("holdicon").getTextContent(); //$NON-NLS-1$
 							}
 							String name = key.getTextContent();
 							// save key in keymap
@@ -117,26 +117,26 @@ public class KeymapLoader {
 							keymap.put(id, newKey);
 						}
 					} catch (NullPointerException e) {
-						logger.warn("A key in keymap could not be read. j=" + j + " i=" + i);
+						logger.warn("A key in keymap could not be read. j=" + j + " i=" + i); //$NON-NLS-1$ //$NON-NLS-2$
 						e.printStackTrace();
 					} catch (NumberFormatException e) {
-						logger.warn("A key in keymap had a bad number format. j=" + j + " i=" + i);
+						logger.warn("A key in keymap had a bad number format. j=" + j + " i=" + i); //$NON-NLS-1$ //$NON-NLS-2$
 					}
 				}
 			}
-			logger.info("loaded " + keymap.size() + " keys.");
-			logger.debug("Keymap loaded.");
+			logger.info("loaded " + keymap.size() + " keys."); //$NON-NLS-1$ //$NON-NLS-2$
+			logger.debug("Keymap loaded."); //$NON-NLS-1$
 			return keymap;
 		} catch (ParserConfigurationException err) {
-			logger.error("Could not initialize dBuilder");
+			logger.error("Could not initialize dBuilder"); //$NON-NLS-1$
 			err.printStackTrace();
 		} catch (SAXException err) {
-			logger.error("Could not parse document");
+			logger.error("Could not parse document"); //$NON-NLS-1$
 			err.printStackTrace();
 		} catch (IOException err) {
-			logger.error("Could not parse document. IOException with path " + filePath.toString());
+			logger.error("Could not parse document. IOException with path " + filePath.toString()); //$NON-NLS-1$
 		}
-		logger.warn("Loading Keymap not finished.");
+		logger.warn("Loading Keymap not finished."); //$NON-NLS-1$
 		return new HashMap<Integer, Key>();
 	}
 	
@@ -149,11 +149,11 @@ public class KeymapLoader {
 	 * @author NicolaiO
 	 */
 	private static int convertType(String stype) {
-		if (stype.equals("control"))
+		if (stype.equals("control")) //$NON-NLS-1$
 			return Key.CONTROL;
-		else if (stype.equals("char"))
+		else if (stype.equals("char")) //$NON-NLS-1$
 			return Key.CHAR;
-		else if (stype.equals("unicode"))
+		else if (stype.equals("unicode")) //$NON-NLS-1$
 			return Key.UNICODE;
 		return Key.UNKNOWN;
 	}

@@ -150,7 +150,7 @@ public class ModeButton extends PhysicalButton implements MouseListener {
 	
 	public void setModeKey(ModeKey modeKey) {
 		this.modeKey = modeKey;
-		if (!modeKey.getDefaultIconSrc().equals("")) {
+		if (!modeKey.getDefaultIconSrc().equals("")) { //$NON-NLS-1$
 			setIcon(modeKey.getDefaultIcon());
 		} else
 			setText(modeKey.getName());

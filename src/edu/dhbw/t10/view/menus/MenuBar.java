@@ -17,6 +17,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
+import edu.dhbw.t10.helper.Messages;
 import edu.dhbw.t10.manager.Controller;
 import edu.dhbw.t10.view.dialogs.AboutDlg;
 import edu.dhbw.t10.view.dialogs.DialogContainer;
@@ -51,24 +52,24 @@ public class MenuBar extends JMenuBar {
 	 */
 	public MenuBar() {
 		// File Menu
-		JMenu mFile = new JMenu("Keyboard");
-		JMenuItem iNewProfile = new JMenuItem("New Profile");
-		JMenuItem iImport = new JMenuItem("Import Profile");
-		JMenuItem iClose = new JMenuItem("Close");
+		JMenu mFile = new JMenu(Messages.getString("MenuBar.0")); //$NON-NLS-1$
+		JMenuItem iNewProfile = new JMenuItem(Messages.getString("MenuBar.1")); //$NON-NLS-1$
+		JMenuItem iImport = new JMenuItem(Messages.getString("MenuBar.2")); //$NON-NLS-1$
+		JMenuItem iClose = new JMenuItem(Messages.getString("MenuBar.3")); //$NON-NLS-1$
 		
 		// ProfileMenu
-		JMenu mProfile = new JMenu("Profile");
+		JMenu mProfile = new JMenu(Messages.getString("MenuBar.4")); //$NON-NLS-1$
 		// JMenuItem iChange = new JMenuItem("Modify");
-		JMenuItem iExport = new JMenuItem("Export Profile");
-		JMenuItem iT2D = new JMenuItem("Extend Dictionary By Text");
-		JMenuItem iF2D = new JMenuItem("Extend Dictionary From File");
-		JMenuItem iD2F = new JMenuItem("Export Dictionary To File");
-		JMenuItem iClean = new JMenuItem("Clean Dictionary");
-		JMenuItem iDelete = new JMenuItem("Delete");
+		JMenuItem iExport = new JMenuItem(Messages.getString("MenuBar.5")); //$NON-NLS-1$
+		JMenuItem iT2D = new JMenuItem(Messages.getString("MenuBar.6")); //$NON-NLS-1$
+		JMenuItem iF2D = new JMenuItem(Messages.getString("MenuBar.7")); //$NON-NLS-1$
+		JMenuItem iD2F = new JMenuItem(Messages.getString("MenuBar.8")); //$NON-NLS-1$
+		JMenuItem iClean = new JMenuItem(Messages.getString("MenuBar.9")); //$NON-NLS-1$
+		JMenuItem iDelete = new JMenuItem(Messages.getString("MenuBar.10")); //$NON-NLS-1$
 		
 		// Help Menu
-		JMenu mHelp = new JMenu("Help");
-		JMenuItem iAbout = new JMenuItem("About");
+		JMenu mHelp = new JMenu(Messages.getString("MenuBar.11")); //$NON-NLS-1$
+		JMenuItem iAbout = new JMenuItem(Messages.getString("MenuBar.12")); //$NON-NLS-1$
 
 		// add menus to GUI
 		add(mFile);
@@ -98,7 +99,7 @@ public class MenuBar extends JMenuBar {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new InputDlg(EMenuItem.iNewProfile, "New Profile", "Name of profile:");
+				new InputDlg(EMenuItem.iNewProfile, Messages.getString("MenuBar.13"), Messages.getString("MenuBar.14")); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 		});
 		

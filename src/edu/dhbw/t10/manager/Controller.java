@@ -26,6 +26,7 @@ import javax.swing.JFileChooser;
 
 import org.apache.log4j.Logger;
 
+import edu.dhbw.t10.helper.Messages;
 import edu.dhbw.t10.helper.StringHelper;
 import edu.dhbw.t10.manager.output.Output;
 import edu.dhbw.t10.manager.output.OutputManager;
@@ -83,7 +84,7 @@ public class Controller implements ActionListener, WindowListener, MouseListener
 	 */
 	private Controller() {
 		instance = this;
-		logger.debug("initializing...");
+		logger.debug("initializing..."); //$NON-NLS-1$
 
 		// load GUI
 		mainPanel = new MainPanel();
@@ -92,7 +93,7 @@ public class Controller implements ActionListener, WindowListener, MouseListener
 
 		// This message is important! Otherwise, The StatusPane has a wrong height and the layout will be decreased
 		// meaning, it gets smaller with each start...
-		showStatusMessage("Keyboard initializing...");
+		showStatusMessage(Messages.getString("Controller.1")); //$NON-NLS-1$
 		
 		// load Managers
 		profileMan = new ProfileManager(mainPanel);
@@ -104,8 +105,8 @@ public class Controller implements ActionListener, WindowListener, MouseListener
 		resizeWindow(profileMan.getActive().getKbdLayout().getSize());
 		
 		// now we are done.
-		showStatusMessage("Keyboard initialized.");
-		logger.debug("initialized.");
+		showStatusMessage(Messages.getString("Controller.2")); //$NON-NLS-1$
+		logger.debug("initialized."); //$NON-NLS-1$
 	}
 	
 	
@@ -121,14 +122,14 @@ public class Controller implements ActionListener, WindowListener, MouseListener
 	 */
 	public void closeSuperFelix() {
 		try {
-			logger.debug("closing - saving profile");
+			logger.debug("closing - saving profile"); //$NON-NLS-1$
 			profileMan.getActive().save();
-			logger.debug("closing - saving the config");
+			logger.debug("closing - saving the config"); //$NON-NLS-1$
 			profileMan.saveConfig();
-			logger.debug("closed - good BUY");
-			logger.info("(c) FIT 42");
+			logger.debug("closed - good BUY"); //$NON-NLS-1$
+			logger.info("(c) FIT 42"); //$NON-NLS-1$
 		} catch (Exception e) {
-			logger.error("closing routine produced an error: " + e.toString());
+			logger.error("closing routine produced an error: " + e.toString()); //$NON-NLS-1$
 		}
 	}
 	
@@ -152,7 +153,7 @@ public class Controller implements ActionListener, WindowListener, MouseListener
 				kbdLayout.rescale();
 				mainPanel.setPreferredSize(new Dimension(kbdLayout.getSize_x(), kbdLayout.getSize_y()));
 				presenter.pack();
-				logger.debug("Window rescaled");
+				logger.debug("Window rescaled"); //$NON-NLS-1$
 			}
 		}
 	}
@@ -173,7 +174,7 @@ public class Controller implements ActionListener, WindowListener, MouseListener
 		if (profile != null) {
 			profileMan.changeProfile(profile);
 		} else {
-			logger.error("can not add new profile, it could not be created!");
+			logger.error("can not add new profile, it could not be created!"); //$NON-NLS-1$
 		}
 	}
 	
@@ -194,7 +195,7 @@ public class Controller implements ActionListener, WindowListener, MouseListener
 			if (profileMan.getProfiles().size() > 1) {
 				newProfile = profileMan.getProfiles().get(1);
 			} else {
-				logger.debug("Only one or zero profiles left. Can't delete.");
+				logger.debug("Only one or zero profiles left. Can't delete."); //$NON-NLS-1$
 				return;
 			}
 		}
@@ -237,7 +238,7 @@ public class Controller implements ActionListener, WindowListener, MouseListener
 	 * @author NicolaiO
 	 */
 	public void hideTooltip() {
-		statusPane.enqueueMessage("", StatusPane.RIGHT);
+		statusPane.enqueueMessage("", StatusPane.RIGHT); //$NON-NLS-1$
 	}
 	
 
@@ -267,23 +268,23 @@ public class Controller implements ActionListener, WindowListener, MouseListener
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (!readyForActionEvents) {
-			logger.debug("An ActionEvent was blocked, because controller is not ready yet.");
+			logger.debug("An ActionEvent was blocked, because controller is not ready yet."); //$NON-NLS-1$
 			return;
 		}
 
 		if (e.getSource() instanceof Button) {
-			logger.debug("Normal Button pressed.");
+			logger.debug("Normal Button pressed."); //$NON-NLS-1$
 			outputMan.buttonPressed((Button) e.getSource(), profileMan.getActive());
 		}
 		
 		if (e.getSource() instanceof ModeButton) {
-			logger.debug("ModeButton pressed.");
+			logger.debug("ModeButton pressed."); //$NON-NLS-1$
 			ModeButton modeB = (ModeButton) e.getSource();
 			// currently we do not support some buttons for linux...
 			if (Output.getOs() == Output.LINUX
-					&& (modeB.getModeKey().getKeycode().equals("\\WINDOWS\\") || modeB.getModeKey().getKeycode()
-							.equals("\\CONTEXT_MENU\\"))) {
-				showStatusMessage("Button not supported by your OS");
+					&& (modeB.getModeKey().getKeycode().equals("\\WINDOWS\\") || modeB.getModeKey().getKeycode() //$NON-NLS-1$
+							.equals("\\CONTEXT_MENU\\"))) { //$NON-NLS-1$
+				showStatusMessage(Messages.getString("Controller.0")); //$NON-NLS-1$
 			} else {
 				if (modeB.isModesDisabled()) {
 					// The helpB is created, because a Modebuttoon should with a right click treated as a normal button. So a
@@ -300,12 +301,12 @@ public class Controller implements ActionListener, WindowListener, MouseListener
 		}
 		
 		if (e.getSource() instanceof MuteButton) {
-			logger.debug("MuteButton pressed.");
+			logger.debug("MuteButton pressed."); //$NON-NLS-1$
 			outputMan.muteButtonPressed((MuteButton) e.getSource(), profileMan.getActive());
 		}
 		
 		if (e.getSource() instanceof DropDownList) {
-			logger.debug("DropDownList pressed.");
+			logger.debug("DropDownList pressed."); //$NON-NLS-1$
 			eIsDropDownList((DropDownList) e.getSource());
 		}
 		
@@ -338,21 +339,21 @@ public class Controller implements ActionListener, WindowListener, MouseListener
 				try {
 					profileMan.importProfiles(path);
 				} catch (ZipException err1) {
-					logger.error("unable to extract file " + path.toString());
+					logger.error("unable to extract file " + path.toString()); //$NON-NLS-1$
 				} catch (IOException err1) {
-					logger.error("Error by importing Profile from " + path.toString());
+					logger.error("Error by importing Profile from " + path.toString()); //$NON-NLS-1$
 				}
 				break;
 			
 			// export profile
 			case iExport:
-				String pathToFile = StringHelper.addEnding(path.toString(), ".zip");
+				String pathToFile = StringHelper.addEnding(path.toString(), ".zip"); //$NON-NLS-1$
 				try {
 					profileMan.exportProfiles(pathToFile);
-					logger.debug("Profile exported");
-					showStatusMessage("Profile exported");
+					logger.debug("Profile exported"); //$NON-NLS-1$
+					showStatusMessage(Messages.getString("Controller.25")); //$NON-NLS-1$
 				} catch (IOException err1) {
-					logger.error("Unable to export profile " + pathToFile);
+					logger.error("Unable to export profile " + pathToFile); //$NON-NLS-1$
 				}
 				break;
 			
@@ -365,9 +366,9 @@ public class Controller implements ActionListener, WindowListener, MouseListener
 							HashMap<String, Integer> words = ImportExportManager.importFromText(path.toString());
 							profileMan.getActive().getTree().importFromHashMap(words);
 						} catch (IOException err) {
-							showStatusMessage("Could not load the text file. Please choose another one.");
+							showStatusMessage(Messages.getString("Controller.27")); //$NON-NLS-1$
 						}
-						showStatusMessage("Text file included.");
+						showStatusMessage(Messages.getString("Controller.28")); //$NON-NLS-1$
 					}
 				}.start();
 				break;
@@ -379,9 +380,9 @@ public class Controller implements ActionListener, WindowListener, MouseListener
 						try {
 							HashMap<String, Integer> words = ImportExportManager.importFromFile(path.toString(), true);
 							profileMan.getActive().getTree().importFromHashMap(words);
-							showStatusMessage("Dictionary file included.");
+							showStatusMessage(Messages.getString("Controller.29")); //$NON-NLS-1$
 						} catch (IOException err) {
-							showStatusMessage("Could not load the text file. Please choose another one.");
+							showStatusMessage(Messages.getString("Controller.30")); //$NON-NLS-1$
 						}
 					}
 				}.start();
@@ -391,11 +392,11 @@ public class Controller implements ActionListener, WindowListener, MouseListener
 			case iD2F:
 				words = profileMan.getActive().getTree().exportToHashMap();
 				try {
-					pathToFile = StringHelper.addEnding(path.toString(), ".tree");
+					pathToFile = StringHelper.addEnding(path.toString(), ".tree"); //$NON-NLS-1$
 					ImportExportManager.exportToFile(words, pathToFile);
-					showStatusMessage("Dictionary file exported to " + pathToFile + ".");
+					showStatusMessage(Messages.getString("Controller.32") + pathToFile + "."); //$NON-NLS-1$ //$NON-NLS-2$
 				} catch (IOException err) {
-					showStatusMessage("Could not create the dictionary file. Please choose another path.");
+					showStatusMessage(Messages.getString("Controller.34")); //$NON-NLS-1$
 				}
 				break;
 		}
@@ -420,7 +421,7 @@ public class Controller implements ActionListener, WindowListener, MouseListener
 					this.addNewProfile(newProfile);
 					iDlg.setVisible(false);
 				} else {
-					iDlg.setLblText("Profile already exists :-(");
+					iDlg.setLblText(Messages.getString("Controller.35")); //$NON-NLS-1$
 				}
 				break;
 			
@@ -431,7 +432,7 @@ public class Controller implements ActionListener, WindowListener, MouseListener
 				Date date = iCleanDlg.getDate();
 				int deleted = profileMan.getActive().getTree()
 						.autoCleaning(freq, date.getTime(), PriorityTree.BOTTOM_OR_OLDER);
-				showStatusMessage("Dictionary cleaned (" + deleted + " deleted).");
+				showStatusMessage(Messages.getString("Controller.36") + deleted + Messages.getString("Controller.37")); //$NON-NLS-1$ //$NON-NLS-2$
 				break;
 		}
 	}
@@ -447,10 +448,10 @@ public class Controller implements ActionListener, WindowListener, MouseListener
 		if (currentDdl.getType() == DropDownList.PROFILE) {
 			Profile_V2 selectedProfile = profileMan.getProfileByName(currentDdl.getSelectedItem().toString());
 			if (selectedProfile != null) {
-				logger.debug("selected Profilename: " + selectedProfile.getName());
+				logger.debug("selected Profilename: " + selectedProfile.getName()); //$NON-NLS-1$
 				profileMan.changeProfile(selectedProfile);
 			} else {
-				logger.warn("Selected Item refers to a non valid profile: \"" + currentDdl.getSelectedItem() + "\"");
+				logger.warn("Selected Item refers to a non valid profile: \"" + currentDdl.getSelectedItem() + "\""); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 		}
 	}

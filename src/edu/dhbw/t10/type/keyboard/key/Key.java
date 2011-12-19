@@ -33,14 +33,14 @@ public class Key {
 	public static final int	CHAR				= 3;
 	
 	private int					id					= 0;
-	private String				keycode			= "";
-	private String				name				= "";
+	private String				keycode			= ""; //$NON-NLS-1$
+	private String				name				= ""; //$NON-NLS-1$
 	private int					type				= 0;
 	private boolean			accept			= false;
 	private ImageIcon			defaultIcon		= new ImageIcon();
-	private String				defaultIconSrc	= "";
+	private String				defaultIconSrc	= ""; //$NON-NLS-1$
 	private ImageIcon			holdIcon			= new ImageIcon();
-	private String				holdIconSrc		= "";
+	private String				holdIconSrc		= ""; //$NON-NLS-1$
 
 	
 	// --------------------------------------------------------------------------
@@ -81,7 +81,7 @@ public class Key {
 	
 	
 	public String toString() {
-		return "id:" + id + " n:" + name + " kc:" + keycode + " t:" + type + " a:" + accept + " i:" + defaultIcon;
+		return "id:" + id + " n:" + name + " kc:" + keycode + " t:" + type + " a:" + accept + " i:" + defaultIcon; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$ //$NON-NLS-6$
 	}
 	
 	
@@ -158,10 +158,10 @@ public class Key {
 	public void setHoldIcon(String holdIcon) {
 		holdIconSrc = holdIcon;
 		URL iconUrl = getClass().getResource(holdIcon);
-		if (!holdIcon.equals("") && iconUrl != null) {
+		if (!holdIcon.equals("") && iconUrl != null) { //$NON-NLS-1$
 			this.holdIcon = new ImageIcon(iconUrl);
 		} else {
-			holdIconSrc = "";
+			holdIconSrc = ""; //$NON-NLS-1$
 		}
 	}
 	
@@ -172,7 +172,7 @@ public class Key {
 		if (iconUrl != null) {
 			this.defaultIcon = new ImageIcon(iconUrl);
 		} else {
-			defaultIconSrc = "";
+			defaultIconSrc = ""; //$NON-NLS-1$
 		}
 	}
 

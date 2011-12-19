@@ -91,12 +91,12 @@ public class Button extends PhysicalButton implements MouseListener {
 			if (modes.get(mode) != null) {
 				setText(modes.get(mode).getName());
 			} else {
-				logger.warn("addCurrentMode called with invalid mode!");
+				logger.warn("addCurrentMode called with invalid mode!"); //$NON-NLS-1$
 			}
 		} else {
 			// If no mode or more than one mode is active, just set ButtonText to default...
 			setText(key.getName());
-			logger.warn("Multi-ModeButtons not implemented yet! Show default key name as Button Text.");
+			logger.warn("Multi-ModeButtons not implemented yet! Show default key name as Button Text."); //$NON-NLS-1$
 		}
 	}
 	
@@ -186,7 +186,7 @@ public class Button extends PhysicalButton implements MouseListener {
 				b.getModel().setPressed(true);
 				// press shift
 				for (ModeKey mb : modes.keySet()) {
-					if (mb.getName().toLowerCase().equals("shift")) {
+					if (mb.getName().toLowerCase().equals("shift")) { //$NON-NLS-1$
 						this.addCurrentMode(mb);
 						break;
 					}
@@ -213,7 +213,7 @@ public class Button extends PhysicalButton implements MouseListener {
 
 				// release shift
 				for (ModeKey mb : modes.keySet()) {
-					if (mb.getName().toLowerCase().equals("shift")) {
+					if (mb.getName().toLowerCase().equals("shift")) { //$NON-NLS-1$
 						this.rmCurrentMode(mb);
 						break;
 					}
@@ -267,7 +267,7 @@ public class Button extends PhysicalButton implements MouseListener {
 	
 	public void setKey(Key key) {
 		this.key = key;
-		if (!key.getDefaultIconSrc().equals("")) {
+		if (!key.getDefaultIconSrc().equals("")) { //$NON-NLS-1$
 			setIcon(key.getDefaultIcon());
 		} else
 			setText(key.getName());

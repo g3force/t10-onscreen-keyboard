@@ -59,7 +59,7 @@ public class DropDownList extends JComboBox implements ILayoutElement {
 	 * @param pos_y
 	 */
 	public DropDownList(String type, int size_x, int size_y, int pos_x, int pos_y) {
-		if (type.equals("profile")) {
+		if (type.equals("profile")) { //$NON-NLS-1$
 			this.type = PROFILE;
 		}
 		init(this.type, size_x, size_y, pos_x, pos_y);
@@ -106,8 +106,8 @@ public class DropDownList extends JComboBox implements ILayoutElement {
 	
 	public String getTypeAsString() {
 		if (type == DropDownList.PROFILE)
-			return "profile";
-		return "";
+			return "profile"; //$NON-NLS-1$
+		return ""; //$NON-NLS-1$
 	}
 	
 	

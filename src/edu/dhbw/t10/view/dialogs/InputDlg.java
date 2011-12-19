@@ -21,6 +21,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import edu.dhbw.t10.helper.Messages;
 import edu.dhbw.t10.manager.Controller;
 import edu.dhbw.t10.view.menus.EMenuItem;
 
@@ -64,8 +65,8 @@ public class InputDlg extends JDialog {
 		
 		textLbl = new JLabel(text);
 		textField = new JTextField();
-		okBtn = new JButton("Ok");
-		cancelBtn = new JButton("Cancel");
+		okBtn = new JButton(Messages.getString("InputDlg.0")); //$NON-NLS-1$
+		cancelBtn = new JButton(Messages.getString("InputDlg.1")); //$NON-NLS-1$
 		
 		okBtn.addActionListener(new ActionListener() {
 			@Override

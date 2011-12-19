@@ -46,7 +46,7 @@ public class KeyboardLayout {
 	private float							scale_x		= 1;
 	private float							scale_y		= 1;
 	private float							scale_font	= 1;
-	private Font							font			= new Font("Dialog", Font.PLAIN, 12);
+	private Font							font			= new Font("Dialog", Font.PLAIN, 12); //$NON-NLS-1$
 	
 	
 	// --------------------------------------------------------------------------
@@ -113,7 +113,7 @@ public class KeyboardLayout {
 					(int) (img.getOrigSize().width * scale_x), (int) (img.getOrigSize().height * scale_y));
 			img.setBounds(rect);
 		}
-		logger.debug("Layout rescaled.");
+		logger.debug("Layout rescaled."); //$NON-NLS-1$
 	}
 	
 	

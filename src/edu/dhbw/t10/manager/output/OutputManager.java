@@ -13,6 +13,7 @@ import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 
+import edu.dhbw.t10.helper.Messages;
 import edu.dhbw.t10.manager.Controller;
 import edu.dhbw.t10.type.Config;
 import edu.dhbw.t10.type.keyboard.key.Button;
@@ -54,7 +55,7 @@ public class OutputManager {
 	 * @author DanielAl
 	 */
 	public OutputManager() {
-		logger.debug("initializing...");
+		logger.debug("initializing..."); //$NON-NLS-1$
 		try {
 			out = new Output();
 		} catch (UnknownOSException err) {
@@ -63,9 +64,9 @@ public class OutputManager {
 			System.exit(-1);
 		}
 		clearWord();
-		unMark = Config.getConf().getProperty("unMark", "false").equals("true");
-		Config.getConf().setProperty("unMark", String.valueOf(unMark));
-		logger.debug("initialized");
+		unMark = Config.getConf().getProperty("unMark", "false").equals("true"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		Config.getConf().setProperty("unMark", String.valueOf(unMark)); //$NON-NLS-1$
+		logger.debug("initialized"); //$NON-NLS-1$
 	}
 	
 	
@@ -98,7 +99,7 @@ public class OutputManager {
 			return false;
 		else {
 			for (int i = 0; i < num; i++) {
-				out.printString("\\BACK_SPACE\\", Key.CONTROL);
+				out.printString("\\BACK_SPACE\\", Key.CONTROL); //$NON-NLS-1$
 			}
 			return true;
 		}
@@ -116,14 +117,14 @@ public class OutputManager {
 		// Use a ArrayList to be able to use the printCombi
 		ArrayList<Key> markCombiHold = new ArrayList<Key>();
 		ArrayList<Key> markCombiPress = new ArrayList<Key>();
-		markCombiHold.add(new Key(0, "Shift", "\\SHIFT\\", Key.CONTROL, false, "", ""));
+		markCombiHold.add(new Key(0, "Shift", "\\SHIFT\\", Key.CONTROL, false, "", "")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		for (int j = 1; j < num + 1; j++) {
 			// Add one marked char via one LEFT Key...
-			markCombiPress.add(new Key(j, "Left", "\\LEFT\\", Key.CONTROL, false, "", ""));
-			logger.trace("Added one mark...");
+			markCombiPress.add(new Key(j, "Left", "\\LEFT\\", Key.CONTROL, false, "", "")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+			logger.trace("Added one mark..."); //$NON-NLS-1$
 		}
 		boolean mark = out.printCombi(markCombiHold, markCombiPress);
-		logger.info(num + " Symboly marked");
+		logger.info(num + " Symboly marked"); //$NON-NLS-1$
 		return mark;
 	}
 	
@@ -135,8 +136,8 @@ public class OutputManager {
 	 * @author DanielAl
 	 */
 	public void unMark() {
-		out.printString("\\RIGHT\\", Key.CONTROL);
-		logger.trace("Keys unmarked");
+		out.printString("\\RIGHT\\", Key.CONTROL); //$NON-NLS-1$
+		logger.trace("Keys unmarked"); //$NON-NLS-1$
 	}
 	
 	
@@ -148,8 +149,8 @@ public class OutputManager {
 	 */
 	public void delMark(int num) {
 		if (num > 0)
-			out.printString("\\DELETE\\", Key.CONTROL);
-		logger.trace("marked Keys are deleted");
+			out.printString("\\DELETE\\", Key.CONTROL); //$NON-NLS-1$
+		logger.trace("marked Keys are deleted"); //$NON-NLS-1$
 	}
 	
 	
@@ -183,7 +184,7 @@ public class OutputManager {
 			out.printString(newSuggest.substring(typed.length()), Key.CHAR);
 			if (func == 0)
 				mark(newSuggest.length() - typed.length());
-			logger.debug("Suggest: " + newSuggest + " printed");
+			logger.debug("Suggest: " + newSuggest + " printed"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	}
 	
@@ -314,7 +315,7 @@ public class OutputManager {
 				activeProfile.setTreeExpanding(muteB.isActivated());
 				break;
 		}
-		logger.debug("MuteButton pressed");
+		logger.debug("MuteButton pressed"); //$NON-NLS-1$
 	}
 	
 	
@@ -329,16 +330,16 @@ public class OutputManager {
 		
 		// currently we do not support some buttons for linux...
 		if (Output.getOs() == Output.LINUX
-				&& (button.getKey().getKeycode().equals("\\WINDOWS\\") || button.getKey().getKeycode()
-						.equals("\\CONTEXT_MENU\\"))) {
-			Controller.getInstance().showStatusMessage("Button not supported by your OS");
+				&& (button.getKey().getKeycode().equals("\\WINDOWS\\") || button.getKey().getKeycode() //$NON-NLS-1$
+						.equals("\\CONTEXT_MENU\\"))) { //$NON-NLS-1$
+			Controller.getInstance().showStatusMessage(Messages.getString("OutputManager.26")); //$NON-NLS-1$
 			return;
 		}
 		
 		// get all currently pressed Modekeys
 		ArrayList<ModeKey> pressedModeKeys = activeProfile.getKbdLayout().getPressedModeKeys();
 		
-		if (key.getKeycode().equals("\\CAPS_LOCK\\")) {
+		if (key.getKeycode().equals("\\CAPS_LOCK\\")) { //$NON-NLS-1$
 			keyIsCapsLock(activeProfile);
 		} else {
 			// Print the key iff zero or one ModeKeys is pressed
@@ -350,7 +351,7 @@ public class OutputManager {
 					typedWord = typedWord + key.getName();
 					suggest = activeProfile.getWordSuggest(typedWord);
 					keyIsChar(key);
-				} else if (key.getKeycode().equals("\\BACK_SPACE\\")) {
+				} else if (key.getKeycode().equals("\\BACK_SPACE\\")) { //$NON-NLS-1$
 					if (typedWord.length() > 0) {
 						String oldTypedWord = typedWord;
 						String oldSuggest = suggest;
@@ -360,23 +361,23 @@ public class OutputManager {
 					} else {
 						keyIsBackspace(typedWord, suggest);
 					}
-				} else if (key.getKeycode().equals("\\DELETE\\")) {
+				} else if (key.getKeycode().equals("\\DELETE\\")) { //$NON-NLS-1$
 					printKey(key);
 					suggest = typedWord;
 				} else if (key.getType() == Key.CONTROL || key.getType() == Key.UNICODE) {
 					keyIsControlOrUnicode(key);
 					if (key.getType() == Key.UNICODE
-							|| (key.getKeycode().equals("\\SPACE\\") || key.getKeycode().equals("\\ENTER\\"))) {
+							|| (key.getKeycode().equals("\\SPACE\\") || key.getKeycode().equals("\\ENTER\\"))) { //$NON-NLS-1$ //$NON-NLS-2$
 						acceptWord(typedWord, activeProfile);
 					} else if (key.getType() == Key.CONTROL) {
 						clearWord();
 					}
 				}
-				logger.debug("Key pressed: " + key.toString());
+				logger.debug("Key pressed: " + key.toString()); //$NON-NLS-1$
 			} else {
 				// print the key combi else (-> pressedModeKeys.size() - button.getActiveModes().size() >= 1
-				logger.debug("Keycombi will be executed. Hint: " + pressedModeKeys.size() + "-"
-						+ button.getActiveModes().size() + " >= 1");
+				logger.debug("Keycombi will be executed. Hint: " + pressedModeKeys.size() + "-" //$NON-NLS-1$ //$NON-NLS-2$
+						+ button.getActiveModes().size() + " >= 1"); //$NON-NLS-1$
 				logger.trace(pressedModeKeys);
 				printCombi(pressedModeKeys, button.getKey());
 			}
@@ -393,8 +394,8 @@ public class OutputManager {
 	 * @author DanielAl
 	 */
 	public void clearWord() {
-		typedWord = "";
-		suggest = "";
+		typedWord = ""; //$NON-NLS-1$
+		suggest = ""; //$NON-NLS-1$
 	}
 	
 	/**
@@ -406,8 +407,8 @@ public class OutputManager {
 	private void acceptWord(String word, Profile_V2 activeProfile) {
 		boolean success = activeProfile.acceptWord(word);
 		if (success) {
-			Controller.getInstance().showStatusMessage("Word inserted: " + word);
-			logger.trace("Word accepted");
+			Controller.getInstance().showStatusMessage(Messages.getString("OutputManager.38") + word); //$NON-NLS-1$
+			logger.trace("Word accepted"); //$NON-NLS-1$
 		}
 		clearWord();
 	}
@@ -420,9 +421,9 @@ public class OutputManager {
 	 * @author NicolaiO
 	 */
 	private void keyIsCapsLock(Profile_V2 activeProfile) {
-		logger.trace("CapsLock");
+		logger.trace("CapsLock"); //$NON-NLS-1$
 		for (ModeKey mk : activeProfile.getKbdLayout().getModeKeys()) {
-			if (mk.getKeycode().equals("\\SHIFT\\")) {
+			if (mk.getKeycode().equals("\\SHIFT\\")) { //$NON-NLS-1$
 				if (mk.getState() == ModeKey.DEFAULT) {
 					mk.setState(ModeKey.HOLD);
 				} else {

@@ -19,6 +19,7 @@ import java.util.Stack;
 
 import org.apache.log4j.Logger;
 
+import edu.dhbw.t10.helper.Messages;
 import edu.dhbw.t10.helper.StringHelper;
 import edu.dhbw.t10.type.keyboard.key.Key;
 
@@ -72,29 +73,29 @@ public class Output {
 	 * @author DanielAl
 	 */
 	protected Output() throws UnknownOSException {
-		logger.debug("initializing...");
-		String osName = System.getProperty("os.name");
-		logger.info("OS: " + osName);
-		if (osName.startsWith("Linux"))
+		logger.debug("initializing..."); //$NON-NLS-1$
+		String osName = System.getProperty("os.name"); //$NON-NLS-1$
+		logger.info("OS: " + osName); //$NON-NLS-1$
+		if (osName.startsWith("Linux")) //$NON-NLS-1$
 			os = LINUX;
-		else if (osName.startsWith("Windows"))
+		else if (osName.startsWith("Windows")) //$NON-NLS-1$
 			os = WINDOWS;
-		else if (osName.startsWith("Mac")) {
+		else if (osName.startsWith("Mac")) { //$NON-NLS-1$
 			os = MAC;
-			throw new UnknownOSException("Mac is not supported yet");
+			throw new UnknownOSException(Messages.getString("Output.1")); //$NON-NLS-1$
 		}
 		else {
 			os = UNKNOWN;
-			throw new UnknownOSException("Unsupported Operating System: " + osName);
+			throw new UnknownOSException(Messages.getString("Output.0") + osName); //$NON-NLS-1$
 		}
 		try {
 			keyRobot = new Robot();
-			logger.debug("Output: Robot initialized");
+			logger.debug("Output: Robot initialized"); //$NON-NLS-1$
 		} catch (AWTException err) {
-			logger.error("sendKey: AWTException: " + err.getMessage());
+			logger.error("sendKey: AWTException: " + err.getMessage()); //$NON-NLS-1$
 		}
 		combi = new Stack<Integer>();
-		logger.debug("initialized");
+		logger.debug("initialized"); //$NON-NLS-1$
 	}
 	
 	
@@ -137,18 +138,18 @@ public class Output {
 		// Print Control Symbol, like ENTER or SPACE
 			case Key.CONTROL:
 				sendKey(convertKeyCode(charSequence.substring(1, length - 1)));
-				logger.info("Control Symbol printed: " + charSequence);
+				logger.info("Control Symbol printed: " + charSequence); //$NON-NLS-1$
 				break;
 			case Key.UNICODE:
 				sendUnicode(charSequence);
-				logger.info("Unicode Symbol printed: " + charSequence);
+				logger.info("Unicode Symbol printed: " + charSequence); //$NON-NLS-1$
 				break;
 			case Key.CHAR:
 				// Get the starter Positions of Unicodes in a String...
 				charSequence = StringHelper.convertToUnicode(charSequence);
 				length = charSequence.length();
 				ArrayList<Integer> unicodeStart = StringHelper.extractUnicode(charSequence);
-				logger.trace("Unicodes starts at: " + unicodeStart.toString());
+				logger.trace("Unicodes starts at: " + unicodeStart.toString()); //$NON-NLS-1$
 				
 				for (int i = 0; i < length; i++) {
 					// Unicode Zeichen
@@ -164,12 +165,12 @@ public class Output {
 						sendKey(convertKeyCode(charSequence.substring(i, i + 1)), PRESS);
 					}
 				}
-				logger.info("String printed: " + charSequence);
+				logger.info("String printed: " + charSequence); //$NON-NLS-1$
 				break;
 			// No correct type can't be handeld...
 			case Key.UNKNOWN:
 			default:
-				logger.info("Undefined type for printing:" + type);
+				logger.info("Undefined type for printing:" + type); //$NON-NLS-1$
 				return false;
 		}
 		return true;
@@ -194,7 +195,7 @@ public class Output {
 				try {
 					sendKey(convertKeyCode(key.getKeycode().substring(1, key.getKeycode().length() - 1)), COMBI);
 				} catch (Exception err) {
-					logger.error("printCombi: " + err.getMessage());
+					logger.error("printCombi: " + err.getMessage()); //$NON-NLS-1$
 					state = false;
 					// On Error release all Keys
 					sendKey(0, COMBI);
@@ -208,7 +209,7 @@ public class Output {
 				try {
 					printKey(key);
 				} catch (Exception err) {
-					logger.error("printCombi: " + err.getMessage());
+					logger.error("printCombi: " + err.getMessage()); //$NON-NLS-1$
 					state = false;
 					// On Error release all Keys
 					sendKey(0, COMBI);
@@ -219,9 +220,9 @@ public class Output {
 		// Releases the holded Keys
 		sendKey(0, COMBI);
 		if (state)
-			logger.debug("Key Combi printed");
+			logger.debug("Key Combi printed"); //$NON-NLS-1$
 		else
-			logger.debug("Key Combi not printed");
+			logger.debug("Key Combi not printed"); //$NON-NLS-1$
 		return state;
 	}
 	
@@ -254,27 +255,27 @@ public class Output {
 		try {
 			switch (type) {
 				case 0:
-					f = KeyEvent.class.getField("VK_" + code.toUpperCase());
+					f = KeyEvent.class.getField("VK_" + code.toUpperCase()); //$NON-NLS-1$
 					f.setAccessible(true);
 					return (Integer) f.get(null);
 				case 1:
-					f = KeyEvent.class.getField("VK_NUMPAD" + code.toUpperCase());
+					f = KeyEvent.class.getField("VK_NUMPAD" + code.toUpperCase()); //$NON-NLS-1$
 					f.setAccessible(true);
 					return (Integer) f.get(null);
 				default:
 					return KeyEvent.VK_UNDEFINED;
 			}
 		} catch (SecurityException err) {
-			logger.warn("convertKeyCode: Security: " + code);
+			logger.warn("convertKeyCode: Security: " + code); //$NON-NLS-1$
 			return KeyEvent.VK_UNDEFINED;
 		} catch (NoSuchFieldException err) {
-			logger.warn("convertKeyCode: No Such Field: " + code);
+			logger.warn("convertKeyCode: No Such Field: " + code); //$NON-NLS-1$
 			return KeyEvent.VK_UNDEFINED;
 		} catch (IllegalArgumentException err) {
-			logger.warn("convertKeyCode: Illegal Argument: " + code);
+			logger.warn("convertKeyCode: Illegal Argument: " + code); //$NON-NLS-1$
 			return KeyEvent.VK_UNDEFINED;
 		} catch (IllegalAccessException err) {
-			logger.warn("convertKeyCode: Illegal Access: " + code);
+			logger.warn("convertKeyCode: Illegal Access: " + code); //$NON-NLS-1$
 			return KeyEvent.VK_UNDEFINED;
 		}
 	}
@@ -295,8 +296,8 @@ public class Output {
 	 */
 	private boolean sendUnicode(String uni) {
 		// Chekcs for the correct Unicode length, begin and end
-		if (uni.length() != 8 || !uni.substring(0, 3).equals("\\U+") || !uni.substring(7, 8).equals("\\")) {
-			logger.error("UNICODE wrong format; length: " + uni.length());
+		if (uni.length() != 8 || !uni.substring(0, 3).equals("\\U+") || !uni.substring(7, 8).equals("\\")) { //$NON-NLS-1$ //$NON-NLS-2$
+			logger.error("UNICODE wrong format; length: " + uni.length()); //$NON-NLS-1$
 			return false;
 		}
 		// Extract the Unicode Hexadecimal digit from the surrounding meta symbols (\\u+XXXX\\)
@@ -311,10 +312,10 @@ public class Output {
 				sendKey(KeyEvent.VK_U, PRESS);
 				sendKey(KeyEvent.VK_SHIFT, RELEASE);
 				sendKey(KeyEvent.VK_CONTROL, RELEASE);
-				sendKey(convertKeyCode(uniArr[0] + ""), PRESS);
-				sendKey(convertKeyCode(uniArr[1] + ""), PRESS);
-				sendKey(convertKeyCode(uniArr[2] + ""), PRESS);
-				sendKey(convertKeyCode(uniArr[3] + ""), PRESS);
+				sendKey(convertKeyCode(uniArr[0] + ""), PRESS); //$NON-NLS-1$
+				sendKey(convertKeyCode(uniArr[1] + ""), PRESS); //$NON-NLS-1$
+				sendKey(convertKeyCode(uniArr[2] + ""), PRESS); //$NON-NLS-1$
+				sendKey(convertKeyCode(uniArr[3] + ""), PRESS); //$NON-NLS-1$
 				sendKey(KeyEvent.VK_ENTER, PRESS);
 				return true;
 				
@@ -325,7 +326,7 @@ public class Output {
 					// Checks the status of Num_Lock
 					Toolkit tool = Toolkit.getDefaultToolkit();
 					num_lock = tool.getLockingKeyState(KeyEvent.VK_NUM_LOCK);
-					logger.info((num_lock ? "Num Lock is on" : "Num Lock is off"));
+					logger.info((num_lock ? "Num Lock is on" : "Num Lock is off")); //$NON-NLS-1$ //$NON-NLS-2$
 					// If Num_Lock is off, turn it on
 					if (!num_lock) {
 						sendKey(KeyEvent.VK_NUM_LOCK, PRESS);
@@ -334,8 +335,8 @@ public class Output {
 					// converts the Hexa Decimal number to KeyCodes with digits as NUMPAD digits and chars as normal chars...
 					int[] keyCodes = { 0, 0, 0, 0 };
 					for(int i= 0; i<4; i++){
-						keyCodes[i] = Character.isDigit(uniArr[i]) ? convertKeyCode(uniArr[i] + "", 1) : convertKeyCode(
-								uniArr[i] + "", 0);
+						keyCodes[i] = Character.isDigit(uniArr[i]) ? convertKeyCode(uniArr[i] + "", 1) : convertKeyCode( //$NON-NLS-1$
+								uniArr[i] + "", 0); //$NON-NLS-1$
 					}
 
 					// Sending KeyCombination for Unicode input to Windows (Hold ALT and press ADD and the digits, then
@@ -353,7 +354,7 @@ public class Output {
 						sendKey(KeyEvent.VK_NUM_LOCK, PRESS);
 					}
 				} catch (UnsupportedOperationException err) {
-					logger.error("Unsupported Operation: Check Num_Lock state; can't write Unicode" + uniArr.toString());
+					logger.error("Unsupported Operation: Check Num_Lock state; can't write Unicode" + uniArr.toString()); //$NON-NLS-1$
 				}
 				return true;
 				// Mac Unicode send: Hold OPTION key and type the Hexadecimal digits and release OPTION Key
@@ -361,14 +362,14 @@ public class Output {
 				// Untested
 			case MAC:
 				sendKey(KeyEvent.VK_ALT, HOLD);
-				sendKey(convertKeyCode(uniArr[0] + ""), PRESS);
-				sendKey(convertKeyCode(uniArr[1] + ""), PRESS);
-				sendKey(convertKeyCode(uniArr[2] + ""), PRESS);
-				sendKey(convertKeyCode(uniArr[3] + ""), PRESS);
+				sendKey(convertKeyCode(uniArr[0] + ""), PRESS); //$NON-NLS-1$
+				sendKey(convertKeyCode(uniArr[1] + ""), PRESS); //$NON-NLS-1$
+				sendKey(convertKeyCode(uniArr[2] + ""), PRESS); //$NON-NLS-1$
+				sendKey(convertKeyCode(uniArr[3] + ""), PRESS); //$NON-NLS-1$
 				sendKey(KeyEvent.VK_ALT, RELEASE);
 				return true;
 			default:
-				logger.error("OS not supported: Unicode");
+				logger.error("OS not supported: Unicode"); //$NON-NLS-1$
 				return false;
 		}
 	}
@@ -402,7 +403,7 @@ public class Output {
 	 */
 	private boolean sendKey(int key, int function) {
 		if (key == 0 && function != COMBI) {
-			logger.error("sendKey: UNKNOWN Key");
+			logger.error("sendKey: UNKNOWN Key"); //$NON-NLS-1$
 			return false;
 		}
 
@@ -411,17 +412,17 @@ public class Output {
 			case PRESS:
 				keyRobot.keyPress(key);
 				keyRobot.keyRelease(key);
-				logger.trace("sendKey: Key sent: " + key);
+				logger.trace("sendKey: Key sent: " + key); //$NON-NLS-1$
 				break;
 			// Hold a specific Key
 			case HOLD:
 				keyRobot.keyPress(key);
-				logger.trace("sendKey: Key pressed: " + key);
+				logger.trace("sendKey: Key pressed: " + key); //$NON-NLS-1$
 				break;
 			// Release a specific Key and release it
 			case RELEASE:
 				keyRobot.keyRelease(key);
-				logger.trace("sendKey: Key released: " + key);
+				logger.trace("sendKey: Key released: " + key); //$NON-NLS-1$
 				break;
 			case COMBI: // Combination
 				// Input are keys from the printCombi method...
@@ -447,7 +448,7 @@ public class Output {
 				keyRobot.keyPress(key);
 				keyRobot.keyRelease(key);
 				keyRobot.keyRelease(KeyEvent.VK_SHIFT);
-				logger.trace("sendKey: Key sent with SHIFT: " + key);
+				logger.trace("sendKey: Key sent with SHIFT: " + key); //$NON-NLS-1$
 				break;
 		}
 		return true;

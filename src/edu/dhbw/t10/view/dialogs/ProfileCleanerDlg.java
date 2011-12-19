@@ -22,6 +22,7 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerDateModel;
 import javax.swing.SpinnerNumberModel;
 
+import edu.dhbw.t10.helper.Messages;
 import edu.dhbw.t10.manager.Controller;
 import edu.dhbw.t10.view.menus.EMenuItem;
 
@@ -55,14 +56,14 @@ public class ProfileCleanerDlg extends JDialog {
 		Date earliestDate = calendar.getTime();
 		SpinnerDateModel dateModel = new SpinnerDateModel(initDate, earliestDate, initDate, Calendar.YEAR);
 		dateField = new JSpinner(dateModel);
-		dateField.setEditor(new JSpinner.DateEditor(dateField, "d.MM.yyyy"));
+		dateField.setEditor(new JSpinner.DateEditor(dateField, "d.MM.yyyy")); //$NON-NLS-1$
 
 		SpinnerNumberModel numModel = new SpinnerNumberModel(5, 0, Integer.MAX_VALUE, 1);
 		spinField = new JSpinner(numModel);
 
 
-		okBtn = new JButton("Ok");
-		cancelBtn = new JButton("Cancel");
+		okBtn = new JButton(Messages.getString("ProfileCleanerDlg.1")); //$NON-NLS-1$
+		cancelBtn = new JButton("Cancel"); //$NON-NLS-1$
 		
 		mhh = this;
 		
@@ -89,7 +90,7 @@ public class ProfileCleanerDlg extends JDialog {
 		this.add(spinField, BorderLayout.CENTER);
 		this.add(p1, BorderLayout.SOUTH);
 		
-		this.setTitle("Clean Dictionary");
+		this.setTitle("Clean Dictionary"); //$NON-NLS-1$
 
 		this.pack();
 		this.setAlwaysOnTop(true);

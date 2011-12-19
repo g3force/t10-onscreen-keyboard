@@ -50,10 +50,10 @@ public class MainPanel extends JPanel implements ComponentListener {
 	 * @author NicolaiO
 	 */
 	public MainPanel() {
-		logger.debug("Initializing...");
+		logger.debug("Initializing..."); //$NON-NLS-1$
 		this.setLayout(null);
 		this.addComponentListener(this);
-		logger.debug("Initializied.");
+		logger.debug("Initializied."); //$NON-NLS-1$
 	}
 	
 	
@@ -69,7 +69,7 @@ public class MainPanel extends JPanel implements ComponentListener {
 	 */
 	@Deprecated
 	public void setKbdLayout(KeyboardLayout kbd) {
-		logger.debug("adding Layout...");
+		logger.debug("adding Layout..."); //$NON-NLS-1$
 		this.setPreferredSize(new Dimension(kbd.getSize_x(), kbd.getSize_y()));
 		this.removeAll();
 		for (PhysicalButton button : kbd.getAllPhysicalButtons()) {
@@ -81,7 +81,7 @@ public class MainPanel extends JPanel implements ComponentListener {
 		for (Image img : kbd.getImages()) {
 			this.add(img);
 		}
-		logger.debug("Layout added.");
+		logger.debug("Layout added."); //$NON-NLS-1$
 	}
 	
 
@@ -102,7 +102,7 @@ public class MainPanel extends JPanel implements ComponentListener {
 		// do not resize if (0,0)
 		if (Controller.getInstance().isReadyForActionEvents() && e.getComponent().getSize().height != 0
 				&& e.getComponent().getSize().width != 0) {
-			logger.debug("Window resized handler called");
+			logger.debug("Window resized handler called"); //$NON-NLS-1$
 			Controller.getInstance().resizeWindow(e.getComponent().getSize());
 		}
 	}

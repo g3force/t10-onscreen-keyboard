@@ -19,6 +19,7 @@ import javax.swing.JPanel;
 
 import org.apache.log4j.Logger;
 
+import edu.dhbw.t10.helper.Messages;
 import edu.dhbw.t10.manager.Controller;
 import edu.dhbw.t10.view.menus.MenuBar;
 import edu.dhbw.t10.view.menus.StatusPane;
@@ -51,10 +52,10 @@ public class Presenter extends JFrame implements WindowFocusListener {
 	 * @author NicolaiO, DanielAl
 	 */
 	public Presenter(MainPanel mainPanel, StatusPane statusPane) {
-		logger.debug("Initializing...");
+		logger.debug("Initializing..."); //$NON-NLS-1$
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setLocationByPlatform(true);
-		this.setTitle("T10 On-Screen Keyboard");
+		this.setTitle(Messages.getString("Presenter.1")); //$NON-NLS-1$
 		this.setAlwaysOnTop(true);
 		// Window can't be focussed, so you can type at your current position with the On-Screen Keyboard
 		this.setFocusableWindowState(false);
@@ -63,27 +64,27 @@ public class Presenter extends JFrame implements WindowFocusListener {
 		this.addWindowFocusListener(this);
 		
 		// add new MenuBar
-		logger.debug("add new MenuBar now");
+		logger.debug("add new MenuBar now"); //$NON-NLS-1$
 		this.setJMenuBar(new MenuBar());
 
 		// load icon
-		logger.debug("load icon now");
-		URL iconUrl = getClass().getResource("/res/icons/useacc_logo.png");
+		logger.debug("load icon now"); //$NON-NLS-1$
+		URL iconUrl = getClass().getResource("/res/icons/useacc_logo.png"); //$NON-NLS-1$
 		if (iconUrl != null) {
 			this.setIconImage(Toolkit.getDefaultToolkit().getImage(iconUrl));
 		}
 
 		// get a reference to the content pane
-		logger.debug("add content now");
+		logger.debug("add content now"); //$NON-NLS-1$
 		contentPane = (JPanel) getContentPane();
 		contentPane.add(mainPanel);
 		contentPane.add(statusPane, java.awt.BorderLayout.SOUTH);
 		
 		// build GUI
-		logger.debug("pack() now");
+		logger.debug("pack() now"); //$NON-NLS-1$
 		pack();
 		
-		logger.debug("Initialized.");
+		logger.debug("Initialized."); //$NON-NLS-1$
 	}
 	
 	
@@ -95,13 +96,13 @@ public class Presenter extends JFrame implements WindowFocusListener {
 	// TODO NicolaiO or any other... detect a change in focus...
 	@Override
 	public void windowGainedFocus(WindowEvent e) {
-		logger.error("1");
+		logger.error("1"); //$NON-NLS-1$
 	}
 	
 	
 	@Override
 	public void windowLostFocus(WindowEvent e) {
-		logger.error("2");
+		logger.error("2"); //$NON-NLS-1$
 	}
 	
 	// --------------------------------------------------------------------------
