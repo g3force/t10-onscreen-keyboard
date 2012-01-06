@@ -5,3 +5,5 @@ t10-keyboard.jar
 .bzrignore
 build
 build.credentials.properties
+debian/t10-keyboard.install
+debian/t10-keyboard.sh
