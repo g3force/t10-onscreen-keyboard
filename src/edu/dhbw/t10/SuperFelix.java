@@ -44,7 +44,7 @@ public class SuperFelix {
 	 */
 	public static String				VERSION	= "unknown";									//$NON-NLS-1$
 
-	
+
 	// --------------------------------------------------------------------------
 	// --- constructors ---------------------------------------------------------
 	// --------------------------------------------------------------------------
@@ -63,11 +63,17 @@ public class SuperFelix {
 		
 		VERSION = versionFile.toString();
 
-		if (args.length == 1) {
+		if (args.length >= 1) {
 			if (args[0].equals("-v") || args[0].equals("--version")) { //$NON-NLS-1$ //$NON-NLS-2$
 				System.out.println(Messages.getString("SuperFelix.6") + VERSION); //$NON-NLS-1$
-				System.exit(0);
+			} else { //if (args[0].equals("-h") || args[0].equals("--help")) { //$NON-NLS-1$ //$NON-NLS-2$
+				System.out.println("Following parameters are allowed:");
+				System.out.println("-v (--version)");
+				System.out.println("-h (--help)");
+				System.out.println("Run without parameters, to start keyboard.");
+				System.out.println(Messages.getString("SuperFelix.6") + VERSION); //$NON-NLS-1$
 			}
+			System.exit(0);
 		}
 
 		/*

@@ -1,22 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse.ant.import?>
-<project basedir="." default="compress" name="t10-onscreen-keyboard">
-	<delete file="t10-keyboard.jar" />
-	
-	<!-- copy the JARs that you need to "bin" directory  -->
-	<copy todir="bin" >
-		<!--<fileset dir="lib" includes="*" />-->
-		<fileset dir="lib" includes="*.jar" />
-		<fileset dir="lib"/>
-	</copy>
+<project basedir="." default="compress" name="build-custom">
+	<target name="pre-build">
+		<!-- copy the JARs that you need to "bin" directory  -->
+		<copy todir="bin">
+			<!--<fileset dir="lib" includes="*.jar" />-->
+			<fileset dir="lib" />
+		</copy>
 
-	<exec executable="git" output="src/res/version" failifexecutionfails="false">
-		<arg line="describe" />
-		<arg line="--tags" />
-	</exec> 
+		<exec executable="git" output="src/res/version" failifexecutionfails="false">
+			<arg line="describe" />
+			<arg line="--tags" />
+		</exec>
 
-	<target name="compress">
-		<jar destfile="t10-keyboard.jar" basedir="bin">
+		<loadfile property="version" srcFile="src/res/version">
+			<filterchain>
+				<striplinebreaks />
+			</filterchain>
+		</loadfile>
+
+		<property name="jar.file" value="t10-keyboard-${version}.jar" />
+		<property name="jar.file.path" value="build/${jar.file}" />
+	</target>
+
+	<target name="clean-build">
+		<delete>
+			<fileset dir="build" includes="*.jar" />
+		</delete>
+	</target>
+
+	<target depends="pre-build" name="compress">
+		<jar destfile="${jar.file.path}" basedir="bin">
 			<manifest>
 				<attribute name="Built-By" value="${user.name}" />
 				<!-- Information about the program itself -->
@@ -26,8 +40,40 @@
 				<attribute name="Main-Class" value="org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader" />
 				<attribute name="Rsrc-Class-Path" value="./ log4j-1.2.16.jar" />
 				<attribute name="Class-Path" value="." />
-				<attribute name="Rsrc-Main-Class" value="edu.dhbw.t10.SuperFelix"/>
+				<attribute name="Rsrc-Main-Class" value="edu.dhbw.t10.SuperFelix" />
 			</manifest>
 		</jar>
+	</target>
+
+	<target name="release" description="Upload 'jar' to Downloads.  Use 'featured', 'beta' or 'alpha'.">
+		<condition property="file.already.uploaded">
+			<http url="http://t10-onscreen-keyboard.googlecode.com/files/${jar.file}" />
+		</condition>
+
+		<property file="build.credentials.properties" />
+
+		<fail unless="gc.username" message="Missing property 'gc.username' from file 'build.credentials.properties'." />
+		<fail unless="gc.password" message="Missing property 'gc.password' from file 'build.credentials.properties'." />
+		<fail if="file.already.uploaded" message="The file is already uploaded." />
+
+		<echo message="Uploading..." />
+		<exec executable="python" failifexecutionfails="true">
+			<arg line="googlecode_upload.py -u ${gc.username} -w ${gc.password} -p t10-onscreen-keyboard -s 'System-independent java jar file' -l '${release.labels.jar}' ${jar.file.path}" />
+		</exec>
+	</target>
+
+	<target name="featured" description="Define labels for a Featured release, call 'release'.">
+		<property name="release.labels.jar" value="Featured, Type-Executable, OpSys-All" />
+		<antcall target="release" />
+	</target>
+
+	<target name="alpha" description="Define labels for an Alpha release, call 'release'.">
+		<property name="release.labels.jar" value="Alpha, Type-Executable, OpSys-All" />
+		<antcall target="release" />
+	</target>
+
+	<target name="beta" description="Define labels for a Beta release, call 'release'.">
+		<property name="release.labels.jar" value="Beta, Type-Executable, OpSys-All" />
+		<antcall target="release" />
 	</target>
 </project>

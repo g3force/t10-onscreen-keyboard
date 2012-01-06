@@ -1,4 +1,4 @@
-all: compile pack
+all: compile pack predebpack
 
 compile:
 	echo "build keyboard with ant"
@@ -8,3 +8,6 @@ pack:
 	ant compress
 clean:
 	ant clean
+predebpack:
+	echo "prepare for debian packaging"
+	./prepackaging.sh

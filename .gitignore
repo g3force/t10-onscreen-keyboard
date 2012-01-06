@@ -3,3 +3,5 @@ bin
 t10-keyboard.jar
 .bzr
 .bzrignore
+build
+build.credentials.properties
