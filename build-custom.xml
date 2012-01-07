@@ -93,14 +93,14 @@
 	</target>
 
 	<target depends="post-build" name="featured-exe" description="Define labels for a Featured release, call 'release'.">
-		<property name="release.labels.jar" value="Featured, Type-Executable, OpSys-All" />
+		<property name="release.labels.jar" value="Featured, Type-Executable, OpSys-Windows" />
 		<property name="release.file" value="${exe.file}" />
 		<property name="release.file.path" value="${exe.file.path}" />
 		<antcall target="release" />
 	</target>
 
 	<target depends="post-build" name="beta-exe" description="Define labels for a Beta release, call 'release'.">
-		<property name="release.labels.jar" value="Beta, Type-Executable, OpSys-All" />
+		<property name="release.labels.jar" value="Beta, Type-Executable, OpSys-Windows" />
 		<property name="release.file" value="${exe.file}" />
 		<property name="release.file.path" value="${exe.file.path}" />
 		<antcall target="release" />
