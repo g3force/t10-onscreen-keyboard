@@ -11,7 +11,7 @@ if [ -z "$version" ]; then
   echo "Error: Version empty"
   exit 1
 fi
-filename="`ls build | grep \"$version\"`"
+filename="`ls build | grep \"$version.jar\"`"
 if [ -z "$filename" ]; then
   echo "Error: Filename empty"
   exit 1
