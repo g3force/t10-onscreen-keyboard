@@ -23,6 +23,7 @@ import edu.dhbw.t10.view.dialogs.AboutDlg;
 import edu.dhbw.t10.view.dialogs.DialogContainer;
 import edu.dhbw.t10.view.dialogs.InputDlg;
 import edu.dhbw.t10.view.dialogs.ProfileCleanerDlg;
+import edu.dhbw.t10.view.dialogs.UpdateDlg;
 
 
 /**
@@ -69,6 +70,7 @@ public class MenuBar extends JMenuBar {
 		
 		// Help Menu
 		JMenu mHelp = new JMenu(Messages.getString("MenuBar.11")); //$NON-NLS-1$
+		JMenuItem iUpdate = new JMenuItem(Messages.getString("MenuBar.15")); //$NON-NLS-1$
 		JMenuItem iAbout = new JMenuItem(Messages.getString("MenuBar.12")); //$NON-NLS-1$
 
 		// add menus to GUI
@@ -85,6 +87,7 @@ public class MenuBar extends JMenuBar {
 		mProfile.add(iD2F);
 		mProfile.add(iClean);
 		mProfile.add(iDelete);
+		mHelp.add(iUpdate);
 		mHelp.add(iAbout);
 		
 		
@@ -124,7 +127,6 @@ public class MenuBar extends JMenuBar {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				Controller.getInstance().closeSuperFelix();
-				System.exit(0);
 			}
 		});
 		
@@ -181,6 +183,14 @@ public class MenuBar extends JMenuBar {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				new AboutDlg();
+			}
+		});
+		
+		iUpdate.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				new UpdateDlg();
 			}
 		});
 	}

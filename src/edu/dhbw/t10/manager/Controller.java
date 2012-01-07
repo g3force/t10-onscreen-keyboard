@@ -128,9 +128,11 @@ public class Controller implements ActionListener, WindowListener, MouseListener
 			profileMan.saveConfig();
 			logger.debug("closed - good BUY"); //$NON-NLS-1$
 			logger.info("(c) FIT 42"); //$NON-NLS-1$
+			System.exit(0);
 		} catch (Exception e) {
 			logger.error("closing routine produced an error: " + e.toString()); //$NON-NLS-1$
 		}
+		System.exit(1);
 	}
 	
 	
