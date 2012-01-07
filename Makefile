@@ -5,7 +5,7 @@ compile:
 	ant build
 pack:
 	echo "pack with ant into jar"
-	ant compress
+	ant pack-jar
 clean:
 	ant clean
 predebpack:

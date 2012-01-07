@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse.ant.import?>
 <project basedir="." default="compress" name="build-custom">
-	<target name="pre-build">
-		<!-- copy the JARs that you need to "bin" directory  -->
+	<target name="pre-build" description="Prepare some thing before building project. Should be called before standard build target!">
 		<copy todir="bin">
-			<!--<fileset dir="lib" includes="*.jar" />-->
 			<fileset dir="lib" />
 		</copy>
 
@@ -12,31 +10,47 @@
 			<arg line="describe" />
 			<arg line="--tags" />
 		</exec>
-
+	</target>
+	
+	<target name="post-build" description="Set some properties right after build">
 		<loadfile property="version" srcFile="src/res/version">
 			<filterchain>
 				<striplinebreaks />
 			</filterchain>
 		</loadfile>
-
 		<property name="jar.file" value="t10-keyboard-${version}.jar" />
 		<property name="jar.file.path" value="build/${jar.file}" />
+		<property name="exe.file" value="t10-keyboard-${version}.exe" />
+		<property name="exe.file.path" value="build/${exe.file}" />
+	</target>
+	
+	<target depends="post-build" name="pre-pack-exe">
+		<replaceregexp file="launch4j.xml"
+	           match="&lt;jar&gt;.*&lt;/jar&gt;"
+	           replace="&lt;jar&gt;${jar.file.path}&lt;/jar&gt;"
+	           byline="true"
+		/>
+		<replaceregexp file="launch4j.xml"
+	           match="&lt;outfile&gt;.*&lt;/outfile&gt;"
+	           replace="&lt;outfile&gt;${exe.file.path}&lt;/outfile&gt;"
+	           byline="true"
+		/>
+	</target>
+	
+	<target depends="pre-pack-exe" name="pack-exe">
+		<exec executable="launch4j" failifexecutionfails="true">
+			<arg line="${basedir}/launch4j.xml" />
+		</exec>
 	</target>
 
-	<target name="clean-build">
-		<delete>
-			<fileset dir="build" includes="*.jar" />
-		</delete>
-	</target>
-
-	<target depends="pre-build" name="compress">
+	<target depends="post-build" name="pack-jar" description="Pack everything into a runnable jar">
 		<jar destfile="${jar.file.path}" basedir="bin">
 			<manifest>
 				<attribute name="Built-By" value="${user.name}" />
 				<!-- Information about the program itself -->
-				<attribute name="Implementation-Vendor" value="UseAcc" />
+				<attribute name="Implementation-Vendor" value="UseAcc/FIT42" />
 				<attribute name="Implementation-Title" value="T10-OnScreen-Keyboard" />
-				<attribute name="Implementation-Version" value="${git.branch}" />
+				<attribute name="Implementation-Version" value="${version}" />
 				<attribute name="Main-Class" value="org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader" />
 				<attribute name="Rsrc-Class-Path" value="./ log4j-1.2.16.jar" />
 				<attribute name="Class-Path" value="." />
@@ -45,35 +59,61 @@
 		</jar>
 	</target>
 
-	<target name="release" description="Upload 'jar' to Downloads.  Use 'featured', 'beta' or 'alpha'.">
+	<target name="release" description="Upload file to Downloads.  Use 'featured-jar/exe' or 'beta-jar/exe'.">
 		<condition property="file.already.uploaded">
-			<http url="http://t10-onscreen-keyboard.googlecode.com/files/${jar.file}" />
+			<http url="http://t10-onscreen-keyboard.googlecode.com/files/${release.file}" />
 		</condition>
 
 		<property file="build.credentials.properties" />
 
 		<fail unless="gc.username" message="Missing property 'gc.username' from file 'build.credentials.properties'." />
 		<fail unless="gc.password" message="Missing property 'gc.password' from file 'build.credentials.properties'." />
+		<fail unless="release.file" message="Release file not specified." />
+		<fail unless="release.file.path" message="Release file path not specified." />
 		<fail if="file.already.uploaded" message="The file is already uploaded." />
 
-		<echo message="Uploading..." />
+		<echo message="Uploading ${release.file}..." />
 		<exec executable="python" failifexecutionfails="true">
-			<arg line="googlecode_upload.py -u ${gc.username} -w ${gc.password} -p t10-onscreen-keyboard -s 'System-independent java jar file' -l '${release.labels.jar}' ${jar.file.path}" />
+			<arg line="googlecode_upload.py -u ${gc.username} -w ${gc.password} -p t10-onscreen-keyboard -s 'System-independent java jar file' -l '${release.labels.jar}' ${release.file.path}" />
 		</exec>
 	</target>
 
-	<target name="featured" description="Define labels for a Featured release, call 'release'.">
+	<target depends="post-build" name="featured-jar" description="Define labels for a Featured release, call 'release'.">
 		<property name="release.labels.jar" value="Featured, Type-Executable, OpSys-All" />
+		<property name="release.file" value="${jar.file}" />
+		<property name="release.file.path" value="${jar.file.path}" />
 		<antcall target="release" />
 	</target>
 
-	<target name="alpha" description="Define labels for an Alpha release, call 'release'.">
-		<property name="release.labels.jar" value="Alpha, Type-Executable, OpSys-All" />
-		<antcall target="release" />
-	</target>
-
-	<target name="beta" description="Define labels for a Beta release, call 'release'.">
+	<target depends="post-build" name="beta-jar" description="Define labels for a Beta release, call 'release'.">
 		<property name="release.labels.jar" value="Beta, Type-Executable, OpSys-All" />
+		<property name="release.file" value="${jar.file}" />
+		<property name="release.file.path" value="${jar.file.path}" />
 		<antcall target="release" />
+	</target>
+
+	<target depends="post-build" name="featured-exe" description="Define labels for a Featured release, call 'release'.">
+		<property name="release.labels.jar" value="Featured, Type-Executable, OpSys-All" />
+		<property name="release.file" value="${exe.file}" />
+		<property name="release.file.path" value="${exe.file.path}" />
+		<antcall target="release" />
+	</target>
+
+	<target depends="post-build" name="beta-exe" description="Define labels for a Beta release, call 'release'.">
+		<property name="release.labels.jar" value="Beta, Type-Executable, OpSys-All" />
+		<property name="release.file" value="${exe.file}" />
+		<property name="release.file.path" value="${exe.file.path}" />
+		<antcall target="release" />
+	</target>
+
+	<target name="clean-build">
+		<delete>
+			<fileset dir="build" includes="*.jar" />
+			<fileset dir="build" includes="*.exe" />
+		</delete>
+	</target>
+	
+	<target name="compress" description="Deprecated. Only for compatibility">
+		<antcall target="pack-jar" />
 	</target>
 </project>
