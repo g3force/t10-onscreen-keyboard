@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse.ant.import?>
+<project basedir="." name="build-release">
+	<import file="build-properties.xml"/>
+	<target name="release" description="Upload file to Downloads.  Use 'featured-jar/exe' or 'beta-jar/exe'.">
+		<condition property="file.already.uploaded">
+			<http url="http://t10-onscreen-keyboard.googlecode.com/files/${release.file}" />
+		</condition>
+
+		<property file="build.credentials.properties" />
+
+		<fail unless="gc.username" message="Missing property 'gc.username' from file 'build.credentials.properties'." />
+		<fail unless="gc.password" message="Missing property 'gc.password' from file 'build.credentials.properties'." />
+		<fail unless="release.file" message="Release file not specified." />
+		<fail unless="build.path" message="Build path not specified" />
+		<fail if="file.already.uploaded" message="The file is already uploaded." />
+
+		<echo message="Uploading ${release.file}..." />
+		<exec executable="python" failifexecutionfails="true">
+			<arg line="googlecode_upload.py -u ${gc.username} -w ${gc.password} -p t10-onscreen-keyboard -s 'System-independent java jar file' -l '${release.labels}' ${build.path}/${release.file}" />
+		</exec>
+	</target>
+
+	<target depends="init" name="featured-jar" description="Define labels for a Featured release, call 'release'.">
+		<property name="release.labels" value="Featured, Type-Executable, OpSys-All" />
+		<property name="release.file" value="${file.name}.jar" />
+		<antcall target="release" />
+	</target>
+
+	<target depends="init" name="featured-exe" description="Define labels for a Featured release, call 'release'.">
+		<property name="release.labels" value="Featured, Type-Executable, OpSys-Windows" />
+		<property name="release.file" value="${file.name}.exe" />
+		<antcall target="release" />
+	</target>
+
+	<target depends="init" name="updater" description="Upload updater">
+		<property name="release.labels" value="Type-Executable, OpSys-Windows" />
+		<property name="release.file" value="${updater.file.name}.exe" />
+		<antcall target="release" />
+	</target>
+</project>

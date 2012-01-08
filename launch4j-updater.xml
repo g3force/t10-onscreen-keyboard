@@ -1,8 +1,8 @@
 <launch4jConfig>
   <dontWrapJar>false</dontWrapJar>
   <headerType>gui</headerType>
-  <jar>build/t10-keyboard-v1.2-5-g973e5e4.jar</jar>
-  <outfile>build/t10-keyboard-v1.2-5-g973e5e4.exe</outfile>
+  <jar>build/t10-keyboard-updater-v1.2-11-gcec5970.jar</jar>
+  <outfile>build/t10-keyboard-updater-v1.2-11-gcec5970.exe</outfile>
   <errTitle></errTitle>
   <cmdLine></cmdLine>
   <chdir></chdir>
@@ -14,8 +14,8 @@
   <manifest></manifest>
   <icon></icon>
   <singleInstance>
-    <mutexName>t10-keyboard</mutexName>
-    <windowTitle>T10 Keyboard</windowTitle>
+    <mutexName>t10-keyboard-updater</mutexName>
+    <windowTitle>T10 Keyboard Updater</windowTitle>
   </singleInstance>
   <jre>
     <path></path>

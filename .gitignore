@@ -1,4 +1,5 @@
 bin
+updater-bin
 *.class
 t10-keyboard.jar
 .bzr
