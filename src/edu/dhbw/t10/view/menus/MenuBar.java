@@ -87,14 +87,16 @@ public class MenuBar extends JMenuBar {
 		mProfile.add(iD2F);
 		mProfile.add(iClean);
 		mProfile.add(iDelete);
-		mHelp.add(iUpdate);
+		if (System.getProperty("os.name").startsWith("Windows")) {
+			mHelp.add(iUpdate);
+		}
 		mHelp.add(iAbout);
 		
 		
 		// Action Listener for menu items
 		// iChange.addActionListener(new ActionListener() {
 		// public void actionPerformed(ActionEvent e) {
-		//				
+		//
 		// }
 		// });
 		
@@ -131,7 +133,7 @@ public class MenuBar extends JMenuBar {
 		});
 		
 		// iChange.addActionListener(new ActionListener() {
-		//			
+		//
 		// @Override
 		// public void actionPerformed(ActionEvent e) {
 		// // TODO FelixP Menu bearbeiten(eingabe: Name und Pfad, vor ausgefuellt)

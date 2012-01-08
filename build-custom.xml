@@ -1,19 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?eclipse.ant.import?>
-<project basedir="." default="compress" name="build-custom">
-	<import file="build-properties.xml" />
-	<target name="pre-build" description="Prepare some things before building project. Should be called before standard build target!">
-		<copy todir="bin">
-			<fileset dir="lib" />
-		</copy>
 
-		<exec executable="git" output="src/res/version" failifexecutionfails="false">
-			<arg line="describe" />
-			<arg line="--tags" />
-		</exec>
+<!--<?eclipse.ant.import?>-->
+<project basedir="." name="build-custom">
+	<import file="build.xml" />
+
+	<target name="properties" description="Set some properties right after build">
+		<loadfile property="version" srcFile="src/res/version">
+			<filterchain>
+				<striplinebreaks />
+			</filterchain>
+		</loadfile>
+		<property name="build.path" value="build" />
+		<property name="file.name" value="t10-keyboard-${version}" />
+		<property name="updater.file.name" value="t10-keyboard-updater-${version}" />
+		<echo>
+			${build.path}
+			${file.name}
+			${updater.file.name}</echo>
 	</target>
 
-	<target depends="init" name="pack-exe">
+	<target name="upload-jar" depends="pack-jar" description="Define labels for a Featured release, call 'release'.">
+		<property name="release.labels" value="Featured, Type-Executable, OpSys-All" />
+		<property name="release.file" value="${file.name}.jar" />
+		<antcall target="release" />
+	</target>
+
+	<target name="upload-exe" depends="pack-exe" description="Define labels for a Featured release, call 'release'.">
+		<property name="release.labels" value="Featured, Type-Executable, OpSys-Windows" />
+		<property name="release.file" value="${file.name}.exe" />
+		<antcall target="release" />
+	</target>
+
+	<target name="pack-exe" depends="pack-jar">
 		<replaceregexp file="launch4j.xml" match="&lt;jar&gt;.*&lt;/jar&gt;" replace="&lt;jar&gt;${build.path}/${file.name}.jar&lt;/jar&gt;" byline="true" />
 		<replaceregexp file="launch4j.xml" match="&lt;outfile&gt;.*&lt;/outfile&gt;" replace="&lt;outfile&gt;${build.path}/${file.name}.exe&lt;/outfile&gt;" byline="true" />
 		<exec executable="launch4j" failifexecutionfails="true">
@@ -21,15 +39,9 @@
 		</exec>
 	</target>
 
-	<target depends="init, pack-updater" name="pack-updater-exe">
-		<replaceregexp file="launch4j-updater.xml" match="&lt;jar&gt;.*&lt;/jar&gt;" replace="&lt;jar&gt;${build.path}/${updater.file.name}.jar&lt;/jar&gt;" byline="true" />
-		<replaceregexp file="launch4j-updater.xml" match="&lt;outfile&gt;.*&lt;/outfile&gt;" replace="&lt;outfile&gt;${build.path}/${updater.file.name}.exe&lt;/outfile&gt;" byline="true" />
-		<exec executable="launch4j" failifexecutionfails="true">
-			<arg line="${basedir}/launch4j-updater.xml" />
-		</exec>
-	</target>
-
-	<target depends="init" name="pack-jar" description="Pack everything into a runnable jar">
+	<target name="pack-jar" depends="properties, build-custom" description="Pack everything into a runnable jar">
+		<fail unless="file.name" message="Release file not specified." />
+		<fail unless="build.path" message="Build path not specified" />
 		<jar destfile="${build.path}/${file.name}.jar" basedir="bin">
 			<manifest>
 				<attribute name="Built-By" value="${user.name}" />
@@ -44,16 +56,38 @@
 		</jar>
 	</target>
 
-	<target name="build-updater" depends="init" description="Build a single instance of the Updater">
-		<mkdir dir="updater-bin" />
-		<path id="updater.classpath">
-			<pathelement location="bin/" />
-			<pathelement location="lib/log4j-1.2.16.jar" />
-		</path>
-		<javac srcdir="src" destdir="updater-bin" source="1.6" target="1.6" includes="edu/dhbw/t10/Updater.java" />
+	<target depends="pre-build, build" name="build-custom" />
+
+	<target name="pre-build" description="Prepare some things before building project. Should be called before standard build target!">
+		<copy todir="bin">
+			<fileset dir="lib" />
+		</copy>
+
+		<exec executable="git" output="src/res/version" failifexecutionfails="false">
+			<arg line="describe" />
+			<arg line="--tags" />
+		</exec>
 	</target>
 
-	<target depends="build-updater" name="pack-updater" description="Pack Updater into a runnable jar">
+	<!-- Updater -->
+
+	<target name="upload-updater" depends="properties" description="Upload updater">
+		<property name="release.labels" value="Type-Executable, OpSys-Windows" />
+		<property name="release.file" value="${updater.file.name}.exe" />
+		<antcall target="release" />
+	</target>
+
+	<target name="pack-updater-exe" depends="pack-updater">
+		<replaceregexp file="launch4j-updater.xml" match="&lt;jar&gt;.*&lt;/jar&gt;" replace="&lt;jar&gt;${build.path}/${updater.file.name}.jar&lt;/jar&gt;" byline="true" />
+		<replaceregexp file="launch4j-updater.xml" match="&lt;outfile&gt;.*&lt;/outfile&gt;" replace="&lt;outfile&gt;${build.path}/${updater.file.name}.exe&lt;/outfile&gt;" byline="true" />
+		<exec executable="launch4j" failifexecutionfails="true">
+			<arg line="${basedir}/launch4j-updater.xml" />
+		</exec>
+	</target>
+
+	<target name="pack-updater" depends="build-updater" description="Pack Updater into a runnable jar">
+		<fail unless="file.name" message="Release file not specified." />
+		<fail unless="build.path" message="Build path not specified" />
 		<jar destfile="${build.path}/${updater.file.name}.jar" basedir="updater-bin">
 			<manifest>
 				<attribute name="Built-By" value="${user.name}" />
@@ -61,20 +95,52 @@
 				<attribute name="Implementation-Title" value="T10-OnScreen-Keyboard Updater" />
 				<attribute name="Implementation-Version" value="${version}" />
 				<attribute name="Main-Class" value="org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader" />
+				<attribute name="Rsrc-Class-Path" value="./" />
 				<attribute name="Class-Path" value="." />
 				<attribute name="Rsrc-Main-Class" value="edu.dhbw.t10.Updater" />
 			</manifest>
 		</jar>
 	</target>
 
+	<target name="build-updater" depends="properties" description="Build a single instance of the Updater">
+		<mkdir dir="updater-bin" />
+		<copy todir="updater-bin">
+			<fileset dir="lib" excludes="log4j-1.2.16.jar" />
+		</copy>
+		<path id="updater.classpath">
+			<pathelement location="bin/" />
+			<pathelement location="lib/log4j-1.2.16.jar" />
+		</path>
+		<javac srcdir="src" destdir="updater-bin" source="1.6" target="1.6" includes="edu/dhbw/t10/Updater.java" />
+	</target>
+
+	<!-- release -->
+
+	<target name="release" description="Upload file to Downloads.  Use 'featured-jar/exe' or 'beta-jar/exe'.">
+		<condition property="file.already.uploaded">
+			<http url="http://t10-onscreen-keyboard.googlecode.com/files/${release.file}" />
+		</condition>
+
+		<property file="build.credentials.properties" />
+
+		<fail unless="gc.username" message="Missing property 'gc.username' from file 'build.credentials.properties'." />
+		<fail unless="gc.password" message="Missing property 'gc.password' from file 'build.credentials.properties'." />
+		<fail unless="release.file" message="Release file not specified." />
+		<fail unless="build.path" message="Build path not specified" />
+		<fail if="file.already.uploaded" message="The file is already uploaded." />
+
+		<echo message="Uploading ${release.file}..." />
+		<exec executable="python" failifexecutionfails="true">
+			<arg line="googlecode_upload.py -u ${gc.username} -w ${gc.password} -p t10-onscreen-keyboard -s 'System-independent java jar file' -l '${release.labels}' ${build.path}/${release.file}" />
+		</exec>
+	</target>
+
+	<!-- Other targets -->
+
 	<target name="clean-build">
 		<delete>
 			<fileset dir="build" includes="*.jar" />
 			<fileset dir="build" includes="*.exe" />
 		</delete>
-	</target>
-
-	<target name="compress" description="Deprecated. Only for compatibility">
-		<antcall target="pack-jar" />
 	</target>
 </project>
