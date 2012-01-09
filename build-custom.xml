@@ -22,12 +22,14 @@
 	<target name="upload-jar" depends="pack-jar" description="Define labels for a Featured release, call 'release'.">
 		<property name="release.labels" value="Featured, Type-Executable, OpSys-All" />
 		<property name="release.file" value="${file.name}.jar" />
+		<property name="release.summary" value="System-independent java jar file" />
 		<antcall target="release" />
 	</target>
 
 	<target name="upload-exe" depends="pack-exe" description="Define labels for a Featured release, call 'release'.">
 		<property name="release.labels" value="Featured, Type-Executable, OpSys-Windows" />
 		<property name="release.file" value="${file.name}.exe" />
+		<property name="release.summary" value="Windows executable" />
 		<antcall target="release" />
 	</target>
 
@@ -39,7 +41,7 @@
 		</exec>
 	</target>
 
-	<target name="pack-jar" depends="properties, build-custom" description="Pack everything into a runnable jar">
+	<target name="pack-jar" depends="build-custom, properties" description="Pack everything into a runnable jar">
 		<fail unless="file.name" message="Release file not specified." />
 		<fail unless="build.path" message="Build path not specified" />
 		<jar destfile="${build.path}/${file.name}.jar" basedir="bin">
@@ -71,9 +73,10 @@
 
 	<!-- Updater -->
 
-	<target name="upload-updater" depends="properties" description="Upload updater">
+	<target name="upload-updater" depends="pack-updater-exe" description="Upload updater">
 		<property name="release.labels" value="Type-Executable, OpSys-Windows" />
 		<property name="release.file" value="${updater.file.name}.exe" />
+		<property name="release.summary" value="Windows Updater" />
 		<antcall target="release" />
 	</target>
 
@@ -85,7 +88,7 @@
 		</exec>
 	</target>
 
-	<target name="pack-updater" depends="build-updater" description="Pack Updater into a runnable jar">
+	<target name="pack-updater" depends="build-updater, properties" description="Pack Updater into a runnable jar">
 		<fail unless="file.name" message="Release file not specified." />
 		<fail unless="build.path" message="Build path not specified" />
 		<jar destfile="${build.path}/${updater.file.name}.jar" basedir="updater-bin">
@@ -102,7 +105,7 @@
 		</jar>
 	</target>
 
-	<target name="build-updater" depends="properties" description="Build a single instance of the Updater">
+	<target name="build-updater" description="Build a single instance of the Updater">
 		<mkdir dir="updater-bin" />
 		<copy todir="updater-bin">
 			<fileset dir="lib" excludes="log4j-1.2.16.jar" />
@@ -127,11 +130,12 @@
 		<fail unless="gc.password" message="Missing property 'gc.password' from file 'build.credentials.properties'." />
 		<fail unless="release.file" message="Release file not specified." />
 		<fail unless="build.path" message="Build path not specified" />
+		<fail unless="release.summary" message="release summary not specified" />
 		<fail if="file.already.uploaded" message="The file is already uploaded." />
 
 		<echo message="Uploading ${release.file}..." />
 		<exec executable="python" failifexecutionfails="true">
-			<arg line="googlecode_upload.py -u ${gc.username} -w ${gc.password} -p t10-onscreen-keyboard -s 'System-independent java jar file' -l '${release.labels}' ${build.path}/${release.file}" />
+			<arg line="googlecode_upload.py -u ${gc.username} -w ${gc.password} -p t10-onscreen-keyboard -s '${release.summary}' -l '${release.labels}' ${build.path}/${release.file}" />
 		</exec>
 	</target>
 
