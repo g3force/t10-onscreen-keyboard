@@ -51,6 +51,7 @@ public class UpdateDlg extends JDialog {
 	// --------------------------------------------------------------------------
 	public UpdateDlg() {
 		this.setTitle(Messages.getString("MenuBar.15")); //$NON-NLS-1$
+		this.setLocationByPlatform(true);
 		String version = "";
 		
 		
