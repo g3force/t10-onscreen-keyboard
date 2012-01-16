@@ -14,6 +14,7 @@
         <pathelement location="bin"/>
         <pathelement location="lib/log4j-1.2.16.jar"/>
     </path>
+	<import file="build-custom.xml" />
     <target name="init">
         <mkdir dir="bin"/>
         <copy includeemptydirs="false" todir="bin">

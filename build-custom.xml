@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!--<?eclipse.ant.import?>-->
+<?eclipse.ant.import?>
 <project basedir="." name="build-custom">
 	<import file="build.xml" />
 
