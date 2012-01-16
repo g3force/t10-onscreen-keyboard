@@ -52,7 +52,7 @@ public class SuperFelix {
 		
 		StringBuilder versionFile = new StringBuilder();
 		// String NL = System.getProperty("line.separator");
-		Scanner scanner = new Scanner(getClass().getResourceAsStream("/res/version"), "UTF-8");
+		Scanner scanner = new Scanner(getClass().getResourceAsStream("/res/version"), "UTF-8"); //$NON-NLS-1$ //$NON-NLS-2$
 		try {
 			// while (scanner.hasNextLine()) {
 			versionFile.append(scanner.nextLine()); // + NL);
@@ -67,10 +67,10 @@ public class SuperFelix {
 			if (args[0].equals("-v") || args[0].equals("--version")) { //$NON-NLS-1$ //$NON-NLS-2$
 				System.out.println(Messages.getString("SuperFelix.6") + VERSION); //$NON-NLS-1$
 			} else { //if (args[0].equals("-h") || args[0].equals("--help")) { //$NON-NLS-1$ //$NON-NLS-2$
-				System.out.println("Following parameters are allowed:");
-				System.out.println("-v (--version)");
-				System.out.println("-h (--help)");
-				System.out.println("Run without parameters, to start keyboard.");
+				System.out.println(Messages.getString("SuperFelix.2")); //$NON-NLS-1$
+				System.out.println("-v (--version)"); //$NON-NLS-1$
+				System.out.println("-h (--help)"); //$NON-NLS-1$
+				System.out.println(Messages.getString("SuperFelix.5")); //$NON-NLS-1$
 				System.out.println(Messages.getString("SuperFelix.6") + VERSION); //$NON-NLS-1$
 			}
 			System.exit(0);
@@ -94,7 +94,7 @@ public class SuperFelix {
 		}
 		
 		// Locale.setDefault(new Locale("en", "EN"));
-		Locale.setDefault(new Locale("de", "DE"));
+		Locale.setDefault(new Locale("de", "DE")); //$NON-NLS-1$ //$NON-NLS-2$
 
 		Controller.getInstance();
 		logger.info("Keyboard started."); //$NON-NLS-1$

@@ -19,6 +19,8 @@ import java.net.URL;
 
 import javax.swing.JOptionPane;
 
+import edu.dhbw.t10.helper.Messages;
+
 
 /**
  * This is a stand-alone class that is compiled separately to offer a stand-alone Updater application
@@ -36,26 +38,26 @@ public class Updater {
 	 * @author NicolaiO
 	 */
 	public static void main(String[] args) {
-		String version = getLatestVersion("latestversion");
-		if (!version.equals("")) {
+		String version = getLatestVersion("latestversion"); //$NON-NLS-1$
+		if (!version.equals("")) { //$NON-NLS-1$
 			URL url;
-			String filename = "t10-keyboard-" + version + ".exe";
-			String filepath = System.getProperty("user.dir") + "/" + filename;
+			String filename = "t10-keyboard-" + version + ".exe"; //$NON-NLS-1$ //$NON-NLS-2$
+			String filepath = System.getProperty("user.dir") + "/" + filename; //$NON-NLS-1$ //$NON-NLS-2$
 			if ((new File(filepath)).exists()) {
-				JOptionPane.showMessageDialog(null, "Already up-to-date", "Already up-to-date",
+				JOptionPane.showMessageDialog(null, Messages.getString("Updater.0"), Messages.getString("Updater.0"), //$NON-NLS-1$ //$NON-NLS-2$
 						JOptionPane.INFORMATION_MESSAGE);
 				System.exit(0);
 			}
 			try {
-				url = new URL("http://t10-onscreen-keyboard.googlecode.com/files/" + filename);
+				url = new URL("http://t10-onscreen-keyboard.googlecode.com/files/" + filename); //$NON-NLS-1$
 				downloadFile(url, filepath);
 			} catch (MalformedURLException err) {
-				error("Download URL malformed");
+				error("Download URL malformed"); //$NON-NLS-1$
 			}
 		} else {
-			error("Version could not be read.");
+			error("Version could not be read."); //$NON-NLS-1$
 		}
-		JOptionPane.showMessageDialog(null, "Update successful.", "Update successful", JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(null, Messages.getString("Updater.11"), Messages.getString("Updater.12"), JOptionPane.INFORMATION_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
 		System.exit(0);
 	}
 	
@@ -93,9 +95,9 @@ public class Updater {
 			bout.close();
 			in.close();
 		} catch (MalformedURLException err) {
-			error("The url is malformed: " + url.toString());
+			error(Messages.getString("Updater.13") + url.toString()); //$NON-NLS-1$
 		} catch (IOException err) {
-			error("The file " + url.toString() + " could not be found on the server.");
+			error(Messages.getString("Updater.14") + url.toString() + Messages.getString("Updater.15")); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 
 	}
@@ -108,26 +110,26 @@ public class Updater {
 	 * @author NicolaiO
 	 */
 	public static String getLatestVersion(String versionfile) {
-		String version = "";
+		String version = ""; //$NON-NLS-1$
 		try {
-			URL versionUrl = new URL("http://t10-onscreen-keyboard.googlecode.com/git/" + versionfile);
+			URL versionUrl = new URL("http://t10-onscreen-keyboard.googlecode.com/git/" + versionfile); //$NON-NLS-1$
 			BufferedInputStream bin = new BufferedInputStream(versionUrl.openStream());
 			
 			// create a byte array
 			byte[] contents = new byte[1024];
 			
 			int bytesRead = 0;
-			String versionFile = "";
+			String versionFile = ""; //$NON-NLS-1$
 			
 			while ((bytesRead = bin.read(contents)) != -1) {
 				versionFile = new String(contents, 0, bytesRead);
 			}
 			
-			version = versionFile.split("\n", 2)[0];
+			version = versionFile.split("\n", 2)[0]; //$NON-NLS-1$
 		} catch (MalformedURLException err) {
-			error("URL for latestversion malformed");
+			error(Messages.getString("Updater.20")); //$NON-NLS-1$
 		} catch (IOException err) {
-			error("The lastestversion file could not be found on the server.");
+			error(Messages.getString("Updater.21")); //$NON-NLS-1$
 		}
 		return version;
 	}
@@ -141,7 +143,7 @@ public class Updater {
 	 * @author NicolaiO
 	 */
 	public static boolean isLatest(String version) {
-		String latestVersion = getLatestVersion("latestversion");
+		String latestVersion = getLatestVersion("latestversion"); //$NON-NLS-1$
 		if (getMajorPart(latestVersion) > getMajorPart(version)) {
 			return false;
 		} else if (getMinorPart(latestVersion) > getMinorPart(version)) {
@@ -155,9 +157,9 @@ public class Updater {
 	
 	private static int getMajorPart(String version) {
 		try {
-			return Integer.parseInt(version.split("\\.", 2)[0].substring(1));
+			return Integer.parseInt(version.split("\\.", 2)[0].substring(1)); //$NON-NLS-1$
 		} catch (NumberFormatException e) {
-			error("Parsing version failed.");
+			error(Messages.getString("Updater.1")); //$NON-NLS-1$
 		}
 		return 0;
 	}
@@ -165,9 +167,9 @@ public class Updater {
 	
 	private static int getMinorPart(String version) {
 		try {
-			return Integer.parseInt(version.split("\\.", 2)[1].split("-", 2)[0]);
+			return Integer.parseInt(version.split("\\.", 2)[1].split("-", 2)[0]); //$NON-NLS-1$ //$NON-NLS-2$
 		} catch (NumberFormatException e) {
-			error("Parsing version failed.");
+			error(Messages.getString("Updater.1")); //$NON-NLS-1$
 		}
 		return 0;
 	}
@@ -175,9 +177,9 @@ public class Updater {
 	
 	private static int getRevisionPart(String version) {
 		try {
-			return Integer.parseInt(version.split("-", 3)[1]);
+			return Integer.parseInt(version.split("-", 3)[1]); //$NON-NLS-1$
 		} catch (NumberFormatException e) {
-			error("Parsing version failed.");
+			error(Messages.getString("Updater.1")); //$NON-NLS-1$
 		}
 		return 0;
 	}
@@ -190,7 +192,7 @@ public class Updater {
 	 * @author NicolaiO
 	 */
 	private static void error(String message) {
-		JOptionPane.showMessageDialog(null, "Error. " + message, "Error", JOptionPane.ERROR_MESSAGE);
+		JOptionPane.showMessageDialog(null, Messages.getString("Updater.2") + message, Messages.getString("Updater.3"), JOptionPane.ERROR_MESSAGE); //$NON-NLS-1$ //$NON-NLS-2$
 		System.exit(1);
 	}
 

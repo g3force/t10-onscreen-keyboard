@@ -52,7 +52,7 @@ public class UpdateDlg extends JDialog {
 	public UpdateDlg() {
 		this.setTitle(Messages.getString("MenuBar.15")); //$NON-NLS-1$
 		this.setLocationByPlatform(true);
-		String version = "";
+		String version = ""; //$NON-NLS-1$
 		
 		
 		updateBtn = new JButton(Messages.getString("MenuBar.15")); //$NON-NLS-1$
@@ -60,11 +60,11 @@ public class UpdateDlg extends JDialog {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				File curDir = new File(System.getProperty("user.dir"));
+				File curDir = new File(System.getProperty("user.dir")); //$NON-NLS-1$
 				File files[] = curDir.listFiles();
 				File exec = null;
 				for (int i = 0; i < files.length; i++) {
-					if (files[i].getName().startsWith("t10-keyboard-updater") && files[i].getName().endsWith(".exe")) {
+					if (files[i].getName().startsWith("t10-keyboard-updater") && files[i].getName().endsWith(".exe")) { //$NON-NLS-1$ //$NON-NLS-2$
 						// TODO NicolaiO deal with more than one file
 						exec = files[i];
 						break;
@@ -72,20 +72,20 @@ public class UpdateDlg extends JDialog {
 				}
 				if (exec == null) {
 					// no updater found, try downloading
-					String latestUpdaterVersion = Updater.getLatestVersion("latestupdaterversion");
-					String filename = "t10-keyboard-updater-" + latestUpdaterVersion + ".exe";
-					String filepath = System.getProperty("user.dir") + "/" + filename;
+					String latestUpdaterVersion = Updater.getLatestVersion("latestupdaterversion"); //$NON-NLS-1$
+					String filename = "t10-keyboard-updater-" + latestUpdaterVersion + ".exe"; //$NON-NLS-1$ //$NON-NLS-2$
+					String filepath = System.getProperty("user.dir") + "/" + filename; //$NON-NLS-1$ //$NON-NLS-2$
 					try {
-						URL url = new URL("http://t10-onscreen-keyboard.googlecode.com/files/" + filename);
+						URL url = new URL("http://t10-onscreen-keyboard.googlecode.com/files/" + filename); //$NON-NLS-1$
 						Updater.downloadFile(url, filepath);
 						exec = new File(filepath);
 					} catch (MalformedURLException err) {
-						logger.error("Download URL malformed");
+						logger.error("Download URL malformed"); //$NON-NLS-1$
 					}
 				}
 				if (exec.exists()) {
 					try {
-						new ProcessBuilder("javac.exe", "-jar", exec.getAbsolutePath(), "").start();
+						new ProcessBuilder("javac.exe", "-jar", exec.getAbsolutePath(), "").start(); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 						// Runtime.getRuntime().exec(exec.getAbsolutePath());
 						System.exit(0);
 					} catch (IOException err) {
@@ -93,7 +93,7 @@ public class UpdateDlg extends JDialog {
 						err.printStackTrace();
 					}
 				} else {
-					logger.error("Exec file does not exist");
+					logger.error("Exec file does not exist"); //$NON-NLS-1$
 				}
 
 				// TODO call external updater app
@@ -103,8 +103,8 @@ public class UpdateDlg extends JDialog {
 		});
 		
 
-		lblMessage = new JLabel("<html><p>Current Version: " + SuperFelix.VERSION + "</p><p>" + "Latest Version: "
-				+ version + "</p>");
+		lblMessage = new JLabel("<html><p>" + Messages.getString("UpdateDlg.16") + SuperFelix.VERSION + "</p><p>" + Messages.getString("UpdateDlg.18") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+				+ version + "</p>"); //$NON-NLS-1$
 		
 		
 		this.setLayout(new BorderLayout());
@@ -120,9 +120,10 @@ public class UpdateDlg extends JDialog {
 
 		new Thread() {
 			public void start() {
-				String version = Updater.getLatestVersion("latestversion");
-				lblMessage = new JLabel("<html><p>Current Version: " + SuperFelix.VERSION + "</p><p>" + "Latest Version: "
-						+ version + "</p>");
+				String version = Updater.getLatestVersion("latestversion"); //$NON-NLS-1$
+				lblMessage = new JLabel("<html><p>" + Messages.getString("UpdateDlg.16") + SuperFelix.VERSION + "</p><p>" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+						+ Messages.getString("UpdateDlg.18") //$NON-NLS-1$
+						+ version + "</p>"); //$NON-NLS-1$
 				me.remove(lblMessage);
 				me.add(lblMessage, BorderLayout.NORTH);
 				

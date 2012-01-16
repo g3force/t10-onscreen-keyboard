@@ -87,7 +87,7 @@ public class MenuBar extends JMenuBar {
 		mProfile.add(iD2F);
 		mProfile.add(iClean);
 		mProfile.add(iDelete);
-		if (System.getProperty("os.name").startsWith("Windows")) {
+		if (System.getProperty("os.name").startsWith("Windows")) { //$NON-NLS-1$ //$NON-NLS-2$
 			mHelp.add(iUpdate);
 		}
 		mHelp.add(iAbout);
