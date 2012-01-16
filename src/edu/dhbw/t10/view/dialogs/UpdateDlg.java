@@ -85,7 +85,8 @@ public class UpdateDlg extends JDialog {
 				}
 				if (exec.exists()) {
 					try {
-						Runtime.getRuntime().exec(exec.getAbsolutePath());
+						new ProcessBuilder("javac.exe", "-jar", exec.getAbsolutePath(), "").start();
+						// Runtime.getRuntime().exec(exec.getAbsolutePath());
 						System.exit(0);
 					} catch (IOException err) {
 						// TODO Auto-generated catch block

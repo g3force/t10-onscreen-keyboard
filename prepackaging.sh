@@ -23,4 +23,5 @@ echo
 echo "update debian/t10-keyboard.sh:"
 echo "#!/bin/sh" > debian/t10-keyboard.sh
 echo "java -jar /usr/share/t10-keyboard/$filename \$@" >> debian/t10-keyboard.sh
+chmod +x debian/t10-keyboard.sh
 cat debian/t10-keyboard.sh
