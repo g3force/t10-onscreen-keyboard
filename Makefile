@@ -9,5 +9,4 @@ pack:
 clean:
 	#ant clean
 predebpack:
-	echo "prepare for debian packaging"
-	./prepackaging.sh
+	#echo "prepare for debian packaging"

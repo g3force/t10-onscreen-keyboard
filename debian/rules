@@ -6,11 +6,11 @@ export JAVA_HOME=/usr/lib/jvm/default-java
 # export CLASSPATH=
 
 clean:
-	rm -f t10-keyboard.jar
 	echo -n >debian/files
 	rm -f debian/t10-keyboard.debhelper.log debian/t10-keyboard.substvars
 	rm -rf debian/t10-keyboard/
-	make clean
+	./prepackaging.sh
 %:
-	dh --with javahelper $@
+	#dh --with javahelper $@
+	dh $@
 
