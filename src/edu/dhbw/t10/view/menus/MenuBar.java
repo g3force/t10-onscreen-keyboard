@@ -73,9 +73,14 @@ public class MenuBar extends JMenuBar {
 		JMenuItem iUpdate = new JMenuItem(Messages.getString("MenuBar.15")); //$NON-NLS-1$
 		JMenuItem iAbout = new JMenuItem(Messages.getString("MenuBar.12")); //$NON-NLS-1$
 
+		// View Menu
+		JMenu mView = new JMenu(Messages.getString("MenuBar.View"));
+		JMenuItem iLockSize = new JMenuItem(Messages.getString("MenuBar.LockSize"));
+
 		// add menus to GUI
 		add(mFile);
 		add(mProfile);
+		add(mView);
 		add(mHelp);
 		mFile.add(iNewProfile);
 		mFile.add(iImport);
@@ -91,6 +96,7 @@ public class MenuBar extends JMenuBar {
 			mHelp.add(iUpdate);
 		}
 		mHelp.add(iAbout);
+		mView.add(iLockSize);
 		
 		
 		// Action Listener for menu items
@@ -189,6 +195,14 @@ public class MenuBar extends JMenuBar {
 		});
 		
 		iUpdate.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				new UpdateDlg();
+			}
+		});
+		
+		iLockSize.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {

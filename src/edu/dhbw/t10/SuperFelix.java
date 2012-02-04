@@ -19,6 +19,7 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
 import edu.dhbw.t10.helper.Messages;
+import edu.dhbw.t10.helper.WindowHelper;
 import edu.dhbw.t10.manager.Controller;
 
 
@@ -98,6 +99,21 @@ public class SuperFelix {
 
 		Controller.getInstance();
 		logger.info("Keyboard started."); //$NON-NLS-1$
+		
+		String activeWindow = "";
+		do {
+			try {
+				String newActiveWindow = WindowHelper.getActiveWindowTitle();
+				if (!newActiveWindow.equals(activeWindow)) {
+					activeWindow = newActiveWindow;
+					logger.info("Active Window changed: " + activeWindow);
+				}
+				Thread.sleep(500);
+			} catch (InterruptedException err) {
+				// TODO Auto-generated catch block
+				err.printStackTrace();
+			}
+		} while (true);
 	}
 	
 
