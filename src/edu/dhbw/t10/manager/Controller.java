@@ -10,6 +10,7 @@
 package edu.dhbw.t10.manager;
 
 import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -164,13 +165,21 @@ public class Controller implements ActionListener, WindowListener, MouseListener
 	
 	public void togglelockWindowSize() {
 		if (presenter.isResizable()) {
-			// Point p = presenter.getLocationOnScreen();
-			// logger.info(p.toString());
+			Point p = presenter.getLocationOnScreen();
+			logger.info(p.toString());
+			logger.info(presenter.getLocation());
 			presenter.setResizable(false);
-			// presenter.setLocation(p);
+			presenter.setLocation(p);
+			logger.info(presenter.getLocationOnScreen().toString());
 		} else {
 			presenter.setResizable(true);
 		}
+	}
+	
+	
+	public void setWindowVisible() {
+		presenter.setVisible(true);
+		presenter.setState(Presenter.NORMAL);
 	}
 
 
@@ -490,7 +499,7 @@ public class Controller implements ActionListener, WindowListener, MouseListener
 	
 	@Override
 	public void windowClosing(WindowEvent arg0) {
-		closeSuperFelix();
+		// closeSuperFelix();
 	}
 	
 	
@@ -575,15 +584,5 @@ public class Controller implements ActionListener, WindowListener, MouseListener
 	
 	public boolean isReadyForActionEvents() {
 		return readyForActionEvents;
-	}
-	
-	
-	public boolean isResizeWindowLocked() {
-		return resizeWindowLocked;
-	}
-	
-	
-	public void setResizeWindowLocked(boolean resizeWindowLocked) {
-		this.resizeWindowLocked = resizeWindowLocked;
 	}
 }

@@ -9,7 +9,13 @@
  */
 package edu.dhbw.t10;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.util.Locale;
 import java.util.Scanner;
 
@@ -35,10 +41,6 @@ public class SuperFelix {
 	// --------------------------------------------------------------------------
 	private static final Logger	logger	= Logger.getLogger(SuperFelix.class);
 	/**
-	 * VERSION and REV are used and manipulated by a script! Please be careful, when editing anything...
-	 * VERSION shouldn't start with a V... it can be added in the output.
-	 * REV will be filled by a script, when generating the deb package, so do not change this value!
-	 * 
 	 * For information:
 	 * Revision of Git Repository: Look in file .git/refs/heads/master
 	 * automatic: git shortlog | grep -E '^[ ]+\w+' | wc -l
@@ -51,6 +53,8 @@ public class SuperFelix {
 	// --------------------------------------------------------------------------
 	private SuperFelix(String[] args) {
 		
+		singleInstance();
+
 		StringBuilder versionFile = new StringBuilder();
 		// String NL = System.getProperty("line.separator");
 		Scanner scanner = new Scanner(getClass().getResourceAsStream("/res/version"), "UTF-8");
@@ -100,6 +104,8 @@ public class SuperFelix {
 		Controller.getInstance();
 		logger.info("Keyboard started."); //$NON-NLS-1$
 		
+		checkForExternalComm();
+
 		String activeWindow = "";
 		do {
 			try {
@@ -131,6 +137,60 @@ public class SuperFelix {
 		new SuperFelix(args);
 	}
 	
+
+	private static void checkForExternalComm() {
+		ServerSocket echoServer = null;
+		Byte response;
+		DataInputStream is;
+		Socket clientSocket = null;
+		try {
+			echoServer = new ServerSocket(4242);
+		} catch (IOException e) {
+			System.out.println(e);
+		}
+		while (true) {
+			try {
+				clientSocket = echoServer.accept();
+				is = new DataInputStream(clientSocket.getInputStream());
+				while (true) {
+					response = is.readByte();
+					logger.info("Received response: " + response);
+					Controller.getInstance().setWindowVisible();
+				}
+			} catch (IOException e) {
+				logger.info("Connection lost");
+			}
+		}
+	}
+	
+	
+	private static void singleInstance() {
+		Socket socket = null;
+		DataOutputStream os = null;
+		try {
+			socket = new Socket("localhost", 4242);
+			os = new DataOutputStream(socket.getOutputStream());
+		} catch (UnknownHostException e) {
+			System.err.println("Don't know about host: localhost");
+		} catch (IOException e) {
+			System.out.println("I seem to be the first one :) no other instance detected");
+			return;
+		}
+		if (socket != null && os != null) {
+			try {
+				os.writeBytes("42 :)");
+				os.close();
+				socket.close();
+				System.out.println("Instance detected and notified. Exit.");
+				System.exit(42);
+			} catch (UnknownHostException e) {
+				System.err.println("Trying to connect to unknown host: " + e);
+			} catch (IOException e) {
+				System.err.println("IOException:  " + e);
+			}
+		}
+	}
+
 	// --------------------------------------------------------------------------
 	// --- getter/setter --------------------------------------------------------
 	// --------------------------------------------------------------------------

@@ -9,7 +9,10 @@
  */
 package edu.dhbw.t10.view;
 
+import java.awt.Point;
 import java.awt.Toolkit;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.net.URL;
 
 import javax.swing.JFrame;
@@ -36,6 +39,8 @@ public class Presenter extends JFrame {
 	private static final Logger	logger				= Logger.getLogger(Presenter.class);
 	private static final long		serialVersionUID	= 6217926957357225677L;
 	private JPanel						contentPane;
+	private JPanel						glassPane;
+	private Point						mousePos				= new Point();
 	
 	// --------------------------------------------------------------------------
 	// --- constructors ---------------------------------------------------------
@@ -51,7 +56,7 @@ public class Presenter extends JFrame {
 	 */
 	public Presenter(MainPanel mainPanel, StatusPane statusPane) {
 		logger.debug("Initializing..."); //$NON-NLS-1$
-		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		this.setDefaultCloseOperation(HIDE_ON_CLOSE);
 		this.setLocationByPlatform(true);
 		this.setTitle(Messages.getString("Presenter.1")); //$NON-NLS-1$
 		this.setAlwaysOnTop(true);
@@ -77,6 +82,55 @@ public class Presenter extends JFrame {
 		contentPane.add(mainPanel);
 		contentPane.add(statusPane, java.awt.BorderLayout.SOUTH);
 		
+		// glassPane = (JPanel) getGlassPane();
+		// glassPane.addMouseListener(new MouseListener() {
+		contentPane.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				System.out.println("released");
+				Point newMousePos = e.getLocationOnScreen();
+				Point windowPos = getLocationOnScreen();
+				Point newWindowPos = new Point(windowPos.x + newMousePos.x - mousePos.x, windowPos.y + newMousePos.y
+						- mousePos.y);
+				System.out.println(newWindowPos);
+				setLocation(newWindowPos);
+				System.out.println(newMousePos);
+			}
+			
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				System.out.println("pressed");
+				mousePos = e.getLocationOnScreen();
+				System.out.println(mousePos);
+			}
+			
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		// glassPane.setVisible(true);
+
 		// build GUI
 		logger.debug("pack() now"); //$NON-NLS-1$
 		pack();
