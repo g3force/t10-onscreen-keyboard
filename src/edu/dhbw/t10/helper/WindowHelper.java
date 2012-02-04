@@ -81,14 +81,15 @@ public class WindowHelper {
 				err.printStackTrace();
 			}
 		} else if (Output.getOs() == Output.WINDOWS) {
-			
+			return getActiveTitleWindows();
 		} else {
 			logger.error("Operating System not supported");
 		}
 		return "";
 	}
 	
-	private static void getActiveTitleWindows() {
+	
+	private static String getActiveTitleWindows() {
 		final List<WindowInfo> inflList = new ArrayList<WindowInfo>();
 		final List<Integer> order = new ArrayList<Integer>();
 		int top = User32.instance.GetTopWindow(0);
@@ -116,9 +117,10 @@ public class WindowHelper {
 				return order.indexOf(o1.hwnd) - order.indexOf(o2.hwnd);
 			}
 		});
-		for (WindowInfo w : inflList) {
-			System.out.println(w);
-		}
+		// for (WindowInfo w : inflList) {
+		// System.out.println(w);
+		// }
+		return inflList.get(1).title;
 	}
 	
 	public static interface WndEnumProc extends StdCallLibrary.StdCallCallback {

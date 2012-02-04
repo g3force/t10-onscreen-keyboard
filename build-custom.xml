@@ -3,6 +3,15 @@
 <?eclipse.ant.import?>
 <project basedir="." name="build-custom">
 	<import file="build.xml" />
+	
+	<target name="os">
+		<condition property="isWindows">
+			<os family="windows" />
+		</condition>
+		<condition property="isUnix">
+			<os family="unix" />
+		</condition>
+	</target>
 
 	<target name="properties" description="Set some properties right after build">
 		<loadfile property="version" srcFile="src/res/version">
@@ -64,11 +73,25 @@
 		<copy todir="bin">
 			<fileset dir="lib" />
 		</copy>
-
+		
+		<antcall target="version" />
+	</target>
+	
+	<target name="version" depends="os,versionUnix,versionWindows" />
+			
+	<target name="versionUnix" if="isUnix">
+		<echo>Unix</echo>
 		<exec executable="git" output="src/res/version" failifexecutionfails="false">
 			<arg line="describe" />
 			<arg line="--tags" />
-		</exec>
+		</exec>	
+	</target>
+	<target name="versionWindows" if="isWindows">
+		<echo>Windows</echo>
+		<exec executable="C:\Program Files (x86)\Git\bin\git.exe" output="src/res/version" failifexecutionfails="false">
+			<arg line="describe" />
+			<arg line="--tags" />
+		</exec>		
 	</target>
 
 	<!-- Updater -->

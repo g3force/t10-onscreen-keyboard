@@ -53,7 +53,7 @@ public class SuperFelix {
 		
 		StringBuilder versionFile = new StringBuilder();
 		// String NL = System.getProperty("line.separator");
-		Scanner scanner = new Scanner(getClass().getResourceAsStream("/res/version"), "UTF-8"); //$NON-NLS-1$ //$NON-NLS-2$
+		Scanner scanner = new Scanner(getClass().getResourceAsStream("/res/version"), "UTF-8");
 		try {
 			// while (scanner.hasNextLine()) {
 			versionFile.append(scanner.nextLine()); // + NL);
