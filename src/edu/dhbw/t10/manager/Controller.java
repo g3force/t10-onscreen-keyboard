@@ -71,6 +71,7 @@ public class Controller implements ActionListener, WindowListener, MouseListener
 	private StatusPane				statusPane;
 	
 	private boolean					readyForActionEvents	= false;
+	private boolean					resizeWindowLocked	= false;
 	
 
 	// --------------------------------------------------------------------------
@@ -143,7 +144,7 @@ public class Controller implements ActionListener, WindowListener, MouseListener
 	 * @author NicolaiO
 	 */
 	public void resizeWindow(Dimension size) {
-		if (readyForActionEvents) {
+		if (readyForActionEvents && !resizeWindowLocked) {
 			KeyboardLayout kbdLayout = profileMan.getActive().getKbdLayout();
 			if (kbdLayout != null) {
 				float xscale = (float) size.width / (float) kbdLayout.getOrigSize_x();
@@ -157,6 +158,18 @@ public class Controller implements ActionListener, WindowListener, MouseListener
 				presenter.pack();
 				logger.debug("Window rescaled"); //$NON-NLS-1$
 			}
+		}
+	}
+	
+	
+	public void togglelockWindowSize() {
+		if (presenter.isResizable()) {
+			// Point p = presenter.getLocationOnScreen();
+			// logger.info(p.toString());
+			presenter.setResizable(false);
+			// presenter.setLocation(p);
+		} else {
+			presenter.setResizable(true);
 		}
 	}
 
@@ -562,5 +575,15 @@ public class Controller implements ActionListener, WindowListener, MouseListener
 	
 	public boolean isReadyForActionEvents() {
 		return readyForActionEvents;
+	}
+	
+	
+	public boolean isResizeWindowLocked() {
+		return resizeWindowLocked;
+	}
+	
+	
+	public void setResizeWindowLocked(boolean resizeWindowLocked) {
+		this.resizeWindowLocked = resizeWindowLocked;
 	}
 }

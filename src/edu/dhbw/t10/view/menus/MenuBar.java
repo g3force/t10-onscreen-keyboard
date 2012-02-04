@@ -203,10 +203,9 @@ public class MenuBar extends JMenuBar {
 		});
 		
 		iLockSize.addActionListener(new ActionListener() {
-			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				new UpdateDlg();
+				Controller.getInstance().togglelockWindowSize();
 			}
 		});
 	}

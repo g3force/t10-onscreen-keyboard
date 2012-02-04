@@ -10,8 +10,6 @@
 package edu.dhbw.t10.view;
 
 import java.awt.Toolkit;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowFocusListener;
 import java.net.URL;
 
 import javax.swing.JFrame;
@@ -31,7 +29,7 @@ import edu.dhbw.t10.view.panels.MainPanel;
  * @author NicolaiO, DanielAl
  * 
  */
-public class Presenter extends JFrame implements WindowFocusListener {
+public class Presenter extends JFrame {
 	// --------------------------------------------------------------------------
 	// --- variables and constants ----------------------------------------------
 	// --------------------------------------------------------------------------
@@ -61,7 +59,6 @@ public class Presenter extends JFrame implements WindowFocusListener {
 		this.setFocusableWindowState(false);
 		this.setVisible(true);
 		this.addWindowListener(Controller.getInstance());
-		this.addWindowFocusListener(this);
 		
 		// add new MenuBar
 		logger.debug("add new MenuBar now"); //$NON-NLS-1$
@@ -91,19 +88,6 @@ public class Presenter extends JFrame implements WindowFocusListener {
 	// --------------------------------------------------------------------------
 	// --- methods --------------------------------------------------------------
 	// --------------------------------------------------------------------------
-
-	
-	// TODO NicolaiO or any other... detect a change in focus...
-	@Override
-	public void windowGainedFocus(WindowEvent e) {
-		logger.error("1"); //$NON-NLS-1$
-	}
-	
-	
-	@Override
-	public void windowLostFocus(WindowEvent e) {
-		logger.error("2"); //$NON-NLS-1$
-	}
 	
 	// --------------------------------------------------------------------------
 	// --- getter/setter --------------------------------------------------------
