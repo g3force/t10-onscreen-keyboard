@@ -11,9 +11,12 @@ package edu.dhbw.t10;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.EOFException;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.Locale;
@@ -46,6 +49,7 @@ public class SuperFelix {
 	 * automatic: git shortlog | grep -E '^[ ]+\w+' | wc -l
 	 */
 	public static String				VERSION	= "unknown";									//$NON-NLS-1$
+	private static int				port		= 4242;
 
 
 	// --------------------------------------------------------------------------
@@ -105,21 +109,7 @@ public class SuperFelix {
 		logger.info("Keyboard started."); //$NON-NLS-1$
 		
 		checkForExternalComm();
-
-		String activeWindow = "";
-		do {
-			try {
-				String newActiveWindow = WindowHelper.getActiveWindowTitle();
-				if (!newActiveWindow.equals(activeWindow)) {
-					activeWindow = newActiveWindow;
-					logger.info("Active Window changed: " + activeWindow);
-				}
-				Thread.sleep(500);
-			} catch (InterruptedException err) {
-				// TODO Auto-generated catch block
-				err.printStackTrace();
-			}
-		} while (true);
+		checkForActiveWindow();
 	}
 	
 
@@ -137,57 +127,109 @@ public class SuperFelix {
 		new SuperFelix(args);
 	}
 	
+	
+	private static void checkForActiveWindow() {
+		new Thread() {
+			@Override
+			public void run() {
+				String activeWindow = "";
+				do {
+					try {
+						String newActiveWindow = WindowHelper.getActiveWindowTitle();
+						if (!newActiveWindow.equals(activeWindow)) {
+							activeWindow = newActiveWindow;
+							logger.info("Active Window changed: " + activeWindow);
+						}
+						Thread.sleep(500);
+					} catch (InterruptedException err) {
+						err.printStackTrace();
+					}
+				} while (true);
+			}
+		}.start();
+	}
+
 
 	private static void checkForExternalComm() {
-		ServerSocket echoServer = null;
-		Byte response;
-		DataInputStream is;
-		Socket clientSocket = null;
-		try {
-			echoServer = new ServerSocket(4242);
-		} catch (IOException e) {
-			System.out.println(e);
-		}
-		while (true) {
-			try {
-				clientSocket = echoServer.accept();
-				is = new DataInputStream(clientSocket.getInputStream());
-				while (true) {
-					response = is.readByte();
-					logger.info("Received response: " + response);
-					Controller.getInstance().setWindowVisible();
+		new Thread() {
+			@Override
+			public void run() {
+				ServerSocket server = null;
+				int response;
+				DataInputStream is;
+				PrintStream os;
+				Socket clientSocket = null;
+				try {
+					server = new ServerSocket(port);
+				} catch (IOException e) {
+					System.out.println(e);
 				}
-			} catch (IOException e) {
-				logger.info("Connection lost");
+				while (true) {
+					try {
+						clientSocket = server.accept();
+						is = new DataInputStream(clientSocket.getInputStream());
+						os = new PrintStream(clientSocket.getOutputStream());
+						while (true) {
+							response = is.readInt();
+							logger.info("Received response: " + response);
+							os.println(42);
+							Controller.getInstance().setWindowVisible();
+						}
+					} catch (EOFException e) {
+						logger.info("Connection lost");
+					} catch (SocketException e) {
+						logger.info("Connection lost");
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
 			}
-		}
+		}.start();
 	}
 	
 	
 	private static void singleInstance() {
 		Socket socket = null;
 		DataOutputStream os = null;
+		DataInputStream is = null;
 		try {
-			socket = new Socket("localhost", 4242);
+			socket = new Socket("localhost", port);
 			os = new DataOutputStream(socket.getOutputStream());
+			is = new DataInputStream(socket.getInputStream());
 		} catch (UnknownHostException e) {
 			System.err.println("Don't know about host: localhost");
 		} catch (IOException e) {
+			// no open socket
 			System.out.println("I seem to be the first one :) no other instance detected");
 			return;
 		}
-		if (socket != null && os != null) {
+		if (socket != null && os != null && is != null) {
+			// socket open. Send some data to notify application
 			try {
-				os.writeBytes("42 :)");
+				os.writeInt(42);
+				String responseLine;
+				while ((responseLine = is.readLine()) != null) {
+					System.out.println("Server: " + responseLine);
+					if (responseLine.indexOf("42") != -1) {
+						// received expected answer.
+						System.out.println("Instance detected and notified. Exit.");
+						System.exit(42);
+						break;
+					} else {
+						// wrong answer... Maybe not connected to keyboard?
+						System.out.println("Found open socket, but did not receive correct answer");
+						return;
+					}
+				}
 				os.close();
 				socket.close();
-				System.out.println("Instance detected and notified. Exit.");
-				System.exit(42);
 			} catch (UnknownHostException e) {
 				System.err.println("Trying to connect to unknown host: " + e);
 			} catch (IOException e) {
 				System.err.println("IOException:  " + e);
 			}
+		} else {
+			System.err.println("one of socket, os or is is null");
 		}
 	}
 
