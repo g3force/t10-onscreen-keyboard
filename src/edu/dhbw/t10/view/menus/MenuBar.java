@@ -57,6 +57,7 @@ public class MenuBar extends JMenuBar {
 		JMenuItem iNewProfile = new JMenuItem(Messages.getString("MenuBar.1")); //$NON-NLS-1$
 		JMenuItem iImport = new JMenuItem(Messages.getString("MenuBar.2")); //$NON-NLS-1$
 		JMenuItem iClose = new JMenuItem(Messages.getString("MenuBar.3")); //$NON-NLS-1$
+		JMenuItem iExit = new JMenuItem(Messages.getString("MenuBar.Exit")); //$NON-NLS-1$
 		
 		// ProfileMenu
 		JMenu mProfile = new JMenu(Messages.getString("MenuBar.4")); //$NON-NLS-1$
@@ -85,6 +86,7 @@ public class MenuBar extends JMenuBar {
 		mFile.add(iNewProfile);
 		mFile.add(iImport);
 		mFile.add(iClose);
+		mFile.add(iExit);
 		// mProfile.add(iChange);
 		mProfile.add(iExport);
 		mProfile.add(iT2D);
@@ -131,6 +133,14 @@ public class MenuBar extends JMenuBar {
 		});
 		
 		iClose.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Controller.getInstance().setWindowVisible(false);
+			}
+		});
+		
+		iExit.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {

@@ -21,7 +21,6 @@ import javax.swing.JPanel;
 import org.apache.log4j.Logger;
 
 import edu.dhbw.t10.helper.Messages;
-import edu.dhbw.t10.manager.Controller;
 import edu.dhbw.t10.view.menus.MenuBar;
 import edu.dhbw.t10.view.menus.StatusPane;
 import edu.dhbw.t10.view.panels.MainPanel;
@@ -63,7 +62,6 @@ public class Presenter extends JFrame {
 		// Window can't be focussed, so you can type at your current position with the On-Screen Keyboard
 		this.setFocusableWindowState(false);
 		this.setVisible(true);
-		this.addWindowListener(Controller.getInstance());
 		
 		// add new MenuBar
 		logger.debug("add new MenuBar now"); //$NON-NLS-1$

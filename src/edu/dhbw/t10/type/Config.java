@@ -69,6 +69,8 @@ public class Config {
 			conf.setProperty("PROFILE_PATH", ""); //$NON-NLS-1$ //$NON-NLS-2$
 		if (!conf.contains("defaultAllowedChars")) //$NON-NLS-1$
 			conf.setProperty("defaultAllowedChars","A-Za-z\u00E4\u00F6\u00FC\u00C4\u00D6\u00DC"); //$NON-NLS-1$ //$NON-NLS-2$
+		if (!conf.containsKey("singletonPort")) //$NON-NLS-1$
+			conf.setProperty("singletonPort", "1440");
 	}
 	
 	

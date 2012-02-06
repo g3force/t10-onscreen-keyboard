@@ -30,6 +30,7 @@ import org.apache.log4j.PropertyConfigurator;
 import edu.dhbw.t10.helper.Messages;
 import edu.dhbw.t10.helper.WindowHelper;
 import edu.dhbw.t10.manager.Controller;
+import edu.dhbw.t10.type.Config;
 
 
 /**
@@ -50,13 +51,45 @@ public class SuperFelix {
 	 */
 	public static String				VERSION	= "unknown";									//$NON-NLS-1$
 	private static int				port		= 4242;
+	private static String			datapath;
 
 
 	// --------------------------------------------------------------------------
 	// --- constructors ---------------------------------------------------------
 	// --------------------------------------------------------------------------
 	private SuperFelix(String[] args) {
+		/*
+		 * initialize log4j, a logger from apache.
+		 * See http://logging.apache.org/log4j/1.2/manual.html for more details
+		 * Log Levels: TRACE, DEBUG, INFO, WARN, ERROR and FATAL
+		 * 
+		 * configuration is stored in a config file. If it does not exist, use basic config
+		 */
+		URL logUrl = getClass().getResource("/res/log4j.conf"); //$NON-NLS-1$
 		
+		if (logUrl != null) {
+			PropertyConfigurator.configure(logUrl);
+		} else {
+			// basic config with only a console appender
+			BasicConfigurator.configure();
+			logger.setLevel(Level.ALL);
+		}
+		
+		// load datapath
+		// works for Windows and Linux... so the data is stored in the systems userdata folder...
+		datapath = System.getProperty("user.home") + "/.t10keyboard"; //$NON-NLS-1$ //$NON-NLS-2$
+		
+		// reading the config file once, if properties not found, use default ones; updates itself
+		Config.loadConfig(datapath);
+
+		try {
+
+			port = Integer.parseInt(Config.getConf().getProperty("singletonPort"));
+		} catch (NumberFormatException e) {
+			System.err.println("Port could not be parsed from config file.");
+			System.exit(2);
+		}
+
 		singleInstance();
 
 		StringBuilder versionFile = new StringBuilder();
@@ -85,22 +118,6 @@ public class SuperFelix {
 			System.exit(0);
 		}
 
-		/*
-		 * initialize log4j, a logger from apache.
-		 * See http://logging.apache.org/log4j/1.2/manual.html for more details
-		 * Log Levels: TRACE, DEBUG, INFO, WARN, ERROR and FATAL
-		 * 
-		 * configuration is stored in a config file. If it does not exist, use basic config
-		 */
-		URL logUrl = getClass().getResource("/res/log4j.conf"); //$NON-NLS-1$
-
-		if (logUrl != null) {
-			PropertyConfigurator.configure(logUrl);
-		} else {
-			// basic config with only a console appender
-			BasicConfigurator.configure();
-			logger.setLevel(Level.ALL);
-		}
 		
 		// Locale.setDefault(new Locale("en", "EN"));
 		Locale.setDefault(new Locale("de", "DE")); //$NON-NLS-1$ //$NON-NLS-2$
@@ -162,7 +179,7 @@ public class SuperFelix {
 				try {
 					server = new ServerSocket(port);
 				} catch (IOException e) {
-					System.out.println(e);
+					System.err.println(e);
 				}
 				while (true) {
 					try {
@@ -173,7 +190,7 @@ public class SuperFelix {
 							response = is.readInt();
 							logger.info("Received response: " + response);
 							os.println(42);
-							Controller.getInstance().setWindowVisible();
+							Controller.getInstance().setWindowVisible(true);
 						}
 					} catch (EOFException e) {
 						logger.info("Connection lost");
@@ -197,10 +214,10 @@ public class SuperFelix {
 			os = new DataOutputStream(socket.getOutputStream());
 			is = new DataInputStream(socket.getInputStream());
 		} catch (UnknownHostException e) {
-			System.err.println("Don't know about host: localhost");
+			logger.error("Don't know about host: localhost");
 		} catch (IOException e) {
 			// no open socket
-			System.out.println("I seem to be the first one :) no other instance detected");
+			logger.info("I seem to be the first one :) no other instance detected");
 			return;
 		}
 		if (socket != null && os != null && is != null) {
@@ -209,15 +226,15 @@ public class SuperFelix {
 				os.writeInt(42);
 				String responseLine;
 				while ((responseLine = is.readLine()) != null) {
-					System.out.println("Server: " + responseLine);
+					logger.info("Server: " + responseLine);
 					if (responseLine.indexOf("42") != -1) {
 						// received expected answer.
-						System.out.println("Instance detected and notified. Exit.");
+						logger.info("Instance detected and notified. Exit.");
 						System.exit(42);
 						break;
 					} else {
 						// wrong answer... Maybe not connected to keyboard?
-						System.out.println("Found open socket, but did not receive correct answer");
+						logger.info("Found open socket, but did not receive correct answer");
 						return;
 					}
 				}
@@ -236,4 +253,7 @@ public class SuperFelix {
 	// --------------------------------------------------------------------------
 	// --- getter/setter --------------------------------------------------------
 	// --------------------------------------------------------------------------
+	public static String getDatapath() {
+		return datapath;
+	}
 }

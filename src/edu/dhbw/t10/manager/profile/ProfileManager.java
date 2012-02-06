@@ -22,6 +22,7 @@ import java.util.zip.ZipException;
 
 import org.apache.log4j.Logger;
 
+import edu.dhbw.t10.SuperFelix;
 import edu.dhbw.t10.helper.Messages;
 import edu.dhbw.t10.manager.Controller;
 import edu.dhbw.t10.type.Config;
@@ -44,7 +45,6 @@ public class ProfileManager {
 	// --- variables and constants ----------------------------------------------
 	// --------------------------------------------------------------------------
 	private static final Logger	logger					= Logger.getLogger(ProfileManager.class);
-	private String						datapath;
 	private ArrayList<Profile_V2>		profiles					= new ArrayList<Profile_V2>();
 	private Profile_V2					activeProfile;
 	private MainPanel					mainPanel;
@@ -75,17 +75,11 @@ public class ProfileManager {
 		
 		this.mainPanel = mainPanel;
 
-		// load datapath
-		// works for Windows and Linux... so the data is stored in the systems userdata folder...
-		datapath = System.getProperty("user.home") + "/.t10keyboard"; //$NON-NLS-1$ //$NON-NLS-2$
-		File tf = new File(datapath);
+		File tf = new File(SuperFelix.getDatapath());
 		if (!tf.exists()) {
 			tf.mkdirs();
 		}
 		
-		// reading the config file once, if properties not found, use default ones; updates itself
-		Config.loadConfig(datapath);
-
 		// fill activeProfileName and profilePathes with the data from the config object
 		loadProfiles(); // deserializes all profiles, fills profiles
 
@@ -132,7 +126,7 @@ public class ProfileManager {
 		if (newProfile != null) {
 			logger.warn("Profile already exists."); //$NON-NLS-1$
 		} else {
-			newProfile = new Profile_V2(profileName, datapath);
+			newProfile = new Profile_V2(profileName, SuperFelix.getDatapath());
 			profiles.add(newProfile);
 		}
 		return newProfile;
@@ -361,7 +355,7 @@ public class ProfileManager {
 		LinkedList<File> profileFiles = new LinkedList<File>();
 		
 		// getting all profile files from the default directory
-		profileFiles.addAll(getProfileFiles(new File(datapath + "/profiles"))); //$NON-NLS-1$
+		profileFiles.addAll(getProfileFiles(new File(SuperFelix.getDatapath() + "/profiles")));
 
 		// getting all profile files from the PROFILE_PATH directory
 		String[] profilePathes = Config.getConf().getProperty("PROFILE_PATH").split(":"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -377,7 +371,7 @@ public class ProfileManager {
 			try {
 				FileInputStream fis = new FileInputStream(profileFile);
 				prop.load(fis);
-				prof = new Profile_V2(prop, datapath);
+				prof = new Profile_V2(prop, SuperFelix.getDatapath());
 				profiles.add(prof);
 			} catch (IOException err) {
 				// prof = new Profile("toDelete, take the new profile format", datapath);
@@ -394,7 +388,7 @@ public class ProfileManager {
 					prop.setProperty("autoCompleting", String.valueOf(p.isAutoCompleting())); //$NON-NLS-1$
 					prop.setProperty("treeExpanding", String.valueOf(p.isTreeExpanding())); //$NON-NLS-1$
 					prop.setProperty("autoProfileChange", String.valueOf(p.isAutoProfileChange())); //$NON-NLS-1$
-					prof = new Profile_V2(prop, datapath);
+					prof = new Profile_V2(prop, SuperFelix.getDatapath());
 					prof.save();
 					profiles.add(prof);
 					File oldCharFile = new File(p.getPaths().get("chars")); //$NON-NLS-1$
@@ -467,7 +461,7 @@ public class ProfileManager {
 	
 	// ---------------config-------------
 	public void saveConfig() {
-		Config.saveConfig(datapath);
+		Config.saveConfig(SuperFelix.getDatapath());
 	}
 
 	
