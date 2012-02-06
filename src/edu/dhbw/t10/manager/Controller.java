@@ -27,6 +27,7 @@ import org.apache.log4j.Logger;
 
 import edu.dhbw.t10.helper.Messages;
 import edu.dhbw.t10.helper.StringHelper;
+import edu.dhbw.t10.helper.WindowHelper;
 import edu.dhbw.t10.manager.output.Output;
 import edu.dhbw.t10.manager.output.OutputManager;
 import edu.dhbw.t10.manager.profile.ImportExportManager;
@@ -104,6 +105,9 @@ public class Controller implements ActionListener, MouseListener {
 		readyForActionEvents = true;
 		resizeWindow(profileMan.getActive().getKbdLayout().getSize());
 		
+		// checking for changing active window
+		checkForActiveWindow();
+
 		// now we are done.
 		showStatusMessage(Messages.getString("Controller.2")); //$NON-NLS-1$
 		logger.debug("initialized."); //$NON-NLS-1$
@@ -179,6 +183,29 @@ public class Controller implements ActionListener, MouseListener {
 		presenter.setVisible(visible);
 		if (visible)
 			presenter.setState(Presenter.NORMAL);
+	}
+	
+	
+	private void checkForActiveWindow() {
+		new Thread() {
+			@Override
+			public void run() {
+				String activeWindow = "";
+				do {
+					try {
+						String newActiveWindow = WindowHelper.getActiveWindowTitle();
+						if (!newActiveWindow.equals(activeWindow)) {
+							activeWindow = newActiveWindow;
+							logger.info("Active Window changed: " + activeWindow);
+							outputMan.clearWord();
+						}
+						Thread.sleep(500);
+					} catch (InterruptedException err) {
+						err.printStackTrace();
+					}
+				} while (true);
+			}
+		}.start();
 	}
 
 
