@@ -13,6 +13,7 @@ import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.net.URL;
 
 import javax.swing.JFrame;
@@ -82,6 +83,30 @@ public class Presenter extends JFrame {
 		
 		// glassPane = (JPanel) getGlassPane();
 		// glassPane.addMouseListener(new MouseListener() {
+		contentPane.addMouseMotionListener(new MouseMotionListener() {
+			
+			@Override
+			public void mouseMoved(MouseEvent e) {
+				// TODO Auto-generated method stub
+				// System.out.println(e.getLocationOnScreen());
+			}
+			
+			
+			@Override
+			public void mouseDragged(MouseEvent e) {
+				System.out.println("dragged");
+				Point newMousePos = e.getLocationOnScreen();
+				Point windowPos = getLocationOnScreen();
+				Point newWindowPos = new Point(windowPos.x + newMousePos.x - mousePos.x, windowPos.y + newMousePos.y
+						- mousePos.y);
+				if (newMousePos.x - mousePos.x >= 5 || newMousePos.y - mousePos.y >= 5) {
+					// System.out.println(windowPos);
+					// System.out.println(newWindowPos);
+					setLocation(newWindowPos);
+					// System.out.println(newMousePos);
+				}
+			}
+		});
 		contentPane.addMouseListener(new MouseListener() {
 			
 			@Override

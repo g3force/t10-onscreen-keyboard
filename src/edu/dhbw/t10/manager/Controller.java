@@ -165,20 +165,38 @@ public class Controller implements ActionListener, MouseListener {
 	}
 	
 	
+	/**
+	 * Toggling the status of the window between sizable or not
+	 * In Linux, the window will sometimes make strange movements...
+	 * For this reason, the old location will be saved and restored.
+	 * 
+	 * @author NicolaiO
+	 */
 	public void togglelockWindowSize() {
+		Point p = presenter.getLocationOnScreen();
 		if (presenter.isResizable()) {
-			Point p = presenter.getLocationOnScreen();
-			logger.info(p.toString());
-			logger.info(presenter.getLocation());
 			presenter.setResizable(false);
-			presenter.setLocation(p);
-			logger.info(presenter.getLocationOnScreen().toString());
 		} else {
 			presenter.setResizable(true);
 		}
+		// without sleep, setLocation is called to early and window might
+		// move to another location and won't move pack with the setLocation cmd
+		try {
+			Thread.sleep(20);
+		} catch (InterruptedException err) {
+			err.printStackTrace();
+		}
+		presenter.setLocation(p);
 	}
 	
 	
+	/**
+	 * Set if window is visible or not and restore it,
+	 * if it was minimized and should be visible
+	 * 
+	 * @param visible
+	 * @author NicolaiO
+	 */
 	public void setWindowVisible(boolean visible) {
 		presenter.setVisible(visible);
 		if (visible)
@@ -186,6 +204,13 @@ public class Controller implements ActionListener, MouseListener {
 	}
 	
 	
+	/**
+	 * Starts a thread that checks in an interval, if
+	 * the active window has changed.
+	 * If it has been changed, clear the currently typed word in outputManager
+	 * 
+	 * @author NicolaiO
+	 */
 	private void checkForActiveWindow() {
 		new Thread() {
 			@Override
