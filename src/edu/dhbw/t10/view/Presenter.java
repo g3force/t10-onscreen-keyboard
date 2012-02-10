@@ -14,6 +14,8 @@ import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowStateListener;
 import java.net.URL;
 
 import javax.swing.JFrame;
@@ -22,6 +24,7 @@ import javax.swing.JPanel;
 import org.apache.log4j.Logger;
 
 import edu.dhbw.t10.helper.Messages;
+import edu.dhbw.t10.manager.Controller;
 import edu.dhbw.t10.view.menus.MenuBar;
 import edu.dhbw.t10.view.menus.StatusPane;
 import edu.dhbw.t10.view.panels.MainPanel;
@@ -32,7 +35,7 @@ import edu.dhbw.t10.view.panels.MainPanel;
  * @author NicolaiO, DanielAl
  * 
  */
-public class Presenter extends JFrame {
+public class Presenter extends JFrame implements WindowStateListener {
 	// --------------------------------------------------------------------------
 	// --- variables and constants ----------------------------------------------
 	// --------------------------------------------------------------------------
@@ -63,6 +66,7 @@ public class Presenter extends JFrame {
 		// Window can't be focussed, so you can type at your current position with the On-Screen Keyboard
 		this.setFocusableWindowState(false);
 		this.setVisible(true);
+		this.addWindowStateListener(this);
 		
 		// add new MenuBar
 		logger.debug("add new MenuBar now"); //$NON-NLS-1$
@@ -159,6 +163,14 @@ public class Presenter extends JFrame {
 		pack();
 		
 		logger.debug("Initialized."); //$NON-NLS-1$
+	}
+	
+	
+	@Override
+	public void windowStateChanged(WindowEvent e) {
+		if (Controller.getInstance().isMaximizeWindowLocked() && e.getNewState() == JFrame.MAXIMIZED_BOTH) {
+			super.setExtendedState(JFrame.NORMAL);
+		}
 	}
 	
 	

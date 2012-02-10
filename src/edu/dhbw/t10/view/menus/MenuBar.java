@@ -77,6 +77,7 @@ public class MenuBar extends JMenuBar {
 		// View Menu
 		JMenu mView = new JMenu(Messages.getString("MenuBar.View"));
 		JMenuItem iLockSize = new JMenuItem(Messages.getString("MenuBar.LockSize"));
+		JMenuItem iLockMaximize = new JMenuItem(Messages.getString("MenuBar.LockMaximize"));
 
 		// add menus to GUI
 		add(mFile);
@@ -99,6 +100,7 @@ public class MenuBar extends JMenuBar {
 		}
 		mHelp.add(iAbout);
 		mView.add(iLockSize);
+		mView.add(iLockMaximize);
 		
 		
 		// Action Listener for menu items
@@ -216,6 +218,13 @@ public class MenuBar extends JMenuBar {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				Controller.getInstance().togglelockWindowSize();
+			}
+		});
+		
+		iLockMaximize.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				Controller.getInstance().toggleMaximizeWindowLock();
 			}
 		});
 	}

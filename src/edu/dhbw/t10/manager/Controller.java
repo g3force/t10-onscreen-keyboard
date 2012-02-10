@@ -72,6 +72,7 @@ public class Controller implements ActionListener, MouseListener {
 	
 	private boolean					readyForActionEvents	= false;
 	private boolean					resizeWindowLocked	= false;
+	private boolean					maximizeWindowLocked	= false;
 	
 
 	// --------------------------------------------------------------------------
@@ -204,6 +205,20 @@ public class Controller implements ActionListener, MouseListener {
 	}
 	
 	
+	/**
+	 * Toggle lock on maximizing window
+	 * 
+	 * @author NicolaiO
+	 */
+	public void toggleMaximizeWindowLock() {
+		if (maximizeWindowLocked) {
+			maximizeWindowLocked = false;
+		} else {
+			maximizeWindowLocked = true;
+		}
+	}
+
+
 	/**
 	 * Starts a thread that checks in an interval, if
 	 * the active window has changed.
@@ -589,5 +604,15 @@ public class Controller implements ActionListener, MouseListener {
 	
 	public boolean isReadyForActionEvents() {
 		return readyForActionEvents;
+	}
+	
+	
+	public boolean isMaximizeWindowLocked() {
+		return maximizeWindowLocked;
+	}
+	
+	
+	public void setMaximizeWindowLocked(boolean maximizeWindowLocked) {
+		this.maximizeWindowLocked = maximizeWindowLocked;
 	}
 }
