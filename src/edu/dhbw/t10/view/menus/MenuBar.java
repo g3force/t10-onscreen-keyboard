@@ -13,6 +13,7 @@ package edu.dhbw.t10.view.menus;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -40,8 +41,11 @@ public class MenuBar extends JMenuBar {
 	// --------------------------------------------------------------------------
 	private static final long			serialVersionUID	= -2903181098465204289L;
 	protected static final Object[]	eventCache			= null;
+	private JCheckBoxMenuItem			iLockSize;
+	private JCheckBoxMenuItem			iLockMaximize;
+	private JCheckBoxMenuItem			iActiveWindowWA;
 	
-	
+
 	// --------------------------------------------------------------------------
 	// --- constructors ---------------------------------------------------------
 	// --------------------------------------------------------------------------
@@ -69,20 +73,25 @@ public class MenuBar extends JMenuBar {
 		JMenuItem iClean = new JMenuItem(Messages.getString("MenuBar.9")); //$NON-NLS-1$
 		JMenuItem iDelete = new JMenuItem(Messages.getString("MenuBar.10")); //$NON-NLS-1$
 		
+		// View Menu
+		JMenu mView = new JMenu(Messages.getString("MenuBar.View"));
+		iLockSize = new JCheckBoxMenuItem(Messages.getString("MenuBar.LockSize"));
+		iLockMaximize = new JCheckBoxMenuItem(Messages.getString("MenuBar.LockMaximize"));
+		
+		// Debug Menu
+		JMenu mDebug = new JMenu("Debug");
+		iActiveWindowWA = new JCheckBoxMenuItem("Active Window Workaround");
+		
 		// Help Menu
 		JMenu mHelp = new JMenu(Messages.getString("MenuBar.11")); //$NON-NLS-1$
 		JMenuItem iUpdate = new JMenuItem(Messages.getString("MenuBar.15")); //$NON-NLS-1$
 		JMenuItem iAbout = new JMenuItem(Messages.getString("MenuBar.12")); //$NON-NLS-1$
 
-		// View Menu
-		JMenu mView = new JMenu(Messages.getString("MenuBar.View"));
-		JMenuItem iLockSize = new JMenuItem(Messages.getString("MenuBar.LockSize"));
-		JMenuItem iLockMaximize = new JMenuItem(Messages.getString("MenuBar.LockMaximize"));
-
 		// add menus to GUI
 		add(mFile);
 		add(mProfile);
 		add(mView);
+		add(mDebug);
 		add(mHelp);
 		mFile.add(iNewProfile);
 		mFile.add(iImport);
@@ -101,6 +110,7 @@ public class MenuBar extends JMenuBar {
 		mHelp.add(iAbout);
 		mView.add(iLockSize);
 		mView.add(iLockMaximize);
+		mDebug.add(iActiveWindowWA);
 		
 		
 		// Action Listener for menu items
@@ -225,6 +235,13 @@ public class MenuBar extends JMenuBar {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				Controller.getInstance().toggleMaximizeWindowLock();
+			}
+		});
+		
+		iActiveWindowWA.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				Controller.getInstance().toggleActiveWindowWA();
 			}
 		});
 	}

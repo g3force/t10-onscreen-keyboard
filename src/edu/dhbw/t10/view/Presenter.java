@@ -42,9 +42,10 @@ public class Presenter extends JFrame implements WindowStateListener {
 	private static final Logger	logger				= Logger.getLogger(Presenter.class);
 	private static final long		serialVersionUID	= 6217926957357225677L;
 	private JPanel						contentPane;
-	private JPanel						glassPane;
 	private Point						mousePos				= new Point();
+	private Presenter					me						= this;
 	
+
 	// --------------------------------------------------------------------------
 	// --- constructors ---------------------------------------------------------
 	// --------------------------------------------------------------------------
@@ -138,15 +139,27 @@ public class Presenter extends JFrame implements WindowStateListener {
 			
 			@Override
 			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
+				Point mouse = e.getLocationOnScreen();
+				Point windowlt = contentPane.getLocationOnScreen();
+				Point windowrb = new Point(windowlt.x + contentPane.getWidth(), windowlt.y + contentPane.getHeight());
+				int offset = 5;
+				if (!Controller.getInstance().isActiveWindowWA()
+						&& !inSquare(mouse, windowlt.x + offset, windowrb.x - offset, windowlt.y + offset, windowrb.y
+								- offset)) {
+					logger.debug("mouseExited");
+					me.setFocusableWindowState(true);
+				}
 			}
 			
 			
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
+				if (!Controller.getInstance().isActiveWindowWA() && eventInFrame(e)) {
+					logger.debug("mouseEntered");
+					me.setVisible(false);
+					me.setFocusableWindowState(false);
+					me.setVisible(true);
+				}
 			}
 			
 			
@@ -156,6 +169,7 @@ public class Presenter extends JFrame implements WindowStateListener {
 				
 			}
 		});
+
 		// glassPane.setVisible(true);
 
 		// build GUI
@@ -178,6 +192,40 @@ public class Presenter extends JFrame implements WindowStateListener {
 	// --- methods --------------------------------------------------------------
 	// --------------------------------------------------------------------------
 	
+	private boolean inSquare(Point p, int xl, int xr, int yt, int yb) {
+		if (p.x < xl)
+			return false;
+		if (p.x > xr)
+			return false;
+		if (p.y < yt)
+			return false;
+		if (p.y > yb)
+			return false;
+		
+		return true;
+	}
+	
+	
+	private boolean eventInFrame(MouseEvent e) {
+		Point mouse = e.getLocationOnScreen();
+		Point windowlt = contentPane.getLocationOnScreen();
+		Point windowrb = new Point(windowlt.x + contentPane.getWidth(), windowlt.y + contentPane.getHeight());
+		int offset = 20;
+		if (inSquare(mouse, windowlt.x, windowlt.x + offset, windowlt.y, windowrb.y))
+			return true; // left
+		if (inSquare(mouse, windowrb.x - offset, windowrb.x, windowlt.y, windowrb.y))
+			return true; // right
+		if (inSquare(mouse, windowlt.x, windowrb.x, windowlt.y, windowlt.y + offset))
+			return true; // top
+		if (inSquare(mouse, windowlt.x, windowrb.x, windowrb.y - offset, windowrb.y))
+			return true; // bottom
+			
+		// System.out.println("mouse=" + mouse);
+		// System.out.println("windowlt=" + windowlt);
+		// System.out.println("windowrb=" + windowrb);
+		return false;
+	}
+
 	// --------------------------------------------------------------------------
 	// --- getter/setter --------------------------------------------------------
 	// --------------------------------------------------------------------------

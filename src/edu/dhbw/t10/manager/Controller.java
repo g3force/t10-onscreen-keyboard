@@ -73,7 +73,9 @@ public class Controller implements ActionListener, MouseListener {
 	private boolean					readyForActionEvents	= false;
 	private boolean					resizeWindowLocked	= false;
 	private boolean					maximizeWindowLocked	= false;
+	private boolean					activeWindowWA			= false;
 	
+
 
 	// --------------------------------------------------------------------------
 	// --- constructors ---------------------------------------------------------
@@ -217,6 +219,23 @@ public class Controller implements ActionListener, MouseListener {
 			maximizeWindowLocked = true;
 		}
 	}
+	
+	
+	/**
+	 * 
+	 * TODO geforce, add comment!
+	 * 
+	 * @author geforce
+	 */
+	public void toggleActiveWindowWA() {
+		if (activeWindowWA) {
+			activeWindowWA = false;
+			presenter.setFocusableWindowState(false);
+		} else {
+			activeWindowWA = true;
+			presenter.setFocusableWindowState(true);
+		}
+	}
 
 
 	/**
@@ -246,6 +265,11 @@ public class Controller implements ActionListener, MouseListener {
 				} while (true);
 			}
 		}.start();
+	}
+	
+	
+	public void hideKeyboard(boolean bool) {
+		presenter.setVisible(!bool);
 	}
 
 
@@ -614,5 +638,21 @@ public class Controller implements ActionListener, MouseListener {
 	
 	public void setMaximizeWindowLocked(boolean maximizeWindowLocked) {
 		this.maximizeWindowLocked = maximizeWindowLocked;
+	}
+	
+	
+	/**
+	 * @return the activeWindowWA
+	 */
+	public boolean isActiveWindowWA() {
+		return activeWindowWA;
+	}
+	
+	
+	/**
+	 * @param activeWindowWA the activeWindowWA to set
+	 */
+	public void setActiveWindowWA(boolean activeWindowWA) {
+		this.activeWindowWA = activeWindowWA;
 	}
 }

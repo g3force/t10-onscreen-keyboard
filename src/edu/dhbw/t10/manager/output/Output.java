@@ -10,7 +10,6 @@
 package edu.dhbw.t10.manager.output;
 
 import java.awt.AWTException;
-import java.awt.Robot;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.lang.reflect.Field;
@@ -55,7 +54,7 @@ public class Output {
 	// Stack for Key combination. See Method: printCombi(Button b)
 	private Stack<Integer>			combi;
 	// Robot for sending Keys to the system - used in sendKey()
-	private Robot						keyRobot;
+	private T10Robot					keyRobot;
 	
 	
 	// --------------------------------------------------------------------------
@@ -89,7 +88,7 @@ public class Output {
 			throw new UnknownOSException(Messages.getString("Output.0") + osName); //$NON-NLS-1$
 		}
 		try {
-			keyRobot = new Robot();
+			keyRobot = new T10Robot();
 			logger.debug("Output: Robot initialized"); //$NON-NLS-1$
 		} catch (AWTException err) {
 			logger.error("sendKey: AWTException: " + err.getMessage()); //$NON-NLS-1$
