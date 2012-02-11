@@ -26,6 +26,7 @@ import org.apache.log4j.Logger;
 import edu.dhbw.t10.SuperFelix;
 import edu.dhbw.t10.Updater;
 import edu.dhbw.t10.helper.Messages;
+import edu.dhbw.t10.manager.Controller;
 
 
 /**
@@ -67,16 +68,19 @@ public class UpdateDlg extends JDialog {
 					if (files[i].getName().startsWith("t10-keyboard-updater") && files[i].getName().endsWith(".exe")) { //$NON-NLS-1$ //$NON-NLS-2$
 						// TODO NicolaiO deal with more than one file
 						exec = files[i];
+						logger.info("updater found:" + exec);
 						break;
 					}
 				}
 				if (exec == null) {
 					// no updater found, try downloading
+					logger.info("No updater found.");
 					String latestUpdaterVersion = Updater.getLatestVersion("latestupdaterversion"); //$NON-NLS-1$
 					String filename = "t10-keyboard-updater-" + latestUpdaterVersion + ".exe"; //$NON-NLS-1$ //$NON-NLS-2$
 					String filepath = System.getProperty("user.dir") + "/" + filename; //$NON-NLS-1$ //$NON-NLS-2$
 					try {
 						URL url = new URL("http://t10-onscreen-keyboard.googlecode.com/files/" + filename); //$NON-NLS-1$
+						logger.info("Try downloading it from " + url.toString());
 						Updater.downloadFile(url, filepath);
 						exec = new File(filepath);
 					} catch (MalformedURLException err) {
@@ -85,11 +89,13 @@ public class UpdateDlg extends JDialog {
 				}
 				if (exec.exists()) {
 					try {
-						new ProcessBuilder("javac.exe", "-jar", exec.getAbsolutePath(), "").start(); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+						logger.info("Starting Updater");
+						//Process pb = new ProcessBuilder("javac.exe", "-jar", exec.getAbsolutePath(), "").start(); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+						Process pb = new ProcessBuilder(exec.getAbsolutePath()).start();
 						// Runtime.getRuntime().exec(exec.getAbsolutePath());
-						System.exit(0);
+
+						Controller.getInstance().closeSuperFelix();
 					} catch (IOException err) {
-						// TODO Auto-generated catch block
 						err.printStackTrace();
 					}
 				} else {
@@ -112,10 +118,10 @@ public class UpdateDlg extends JDialog {
 		this.add(updateBtn, BorderLayout.SOUTH);
 		
 		
-		this.pack();
 		this.setResizable(false);
 		this.setAlwaysOnTop(true);
 		this.setVisible(true);
+		this.pack();
 		
 
 		new Thread() {

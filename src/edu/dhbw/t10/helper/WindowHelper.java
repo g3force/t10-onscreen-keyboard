@@ -120,7 +120,12 @@ public class WindowHelper {
 		// for (WindowInfo w : inflList) {
 		// System.out.println(w);
 		// }
-		return inflList.get(1).title;
+		if (inflList.get(1).title.indexOf(Messages.getString("Presenter.1")) != -1) {
+			return inflList.get(0).title;
+		} else {
+			return inflList.get(1).title;
+		}
+
 	}
 	
 	public static interface WndEnumProc extends StdCallLibrary.StdCallCallback {
