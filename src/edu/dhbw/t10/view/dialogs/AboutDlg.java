@@ -111,7 +111,7 @@ public class AboutDlg extends JDialog {
 	// --------------------------------------------------------------------------
 	// --- methods --------------------------------------------------------------
 	// --------------------------------------------------------------------------
-	private void openBrowser(String path) {
+	public static void openBrowser(String path) {
 		final String os = System.getProperty("os.name").toLowerCase(); //$NON-NLS-1$
 		try {
 			if (os.indexOf("mac") >= 0) { //$NON-NLS-1$
