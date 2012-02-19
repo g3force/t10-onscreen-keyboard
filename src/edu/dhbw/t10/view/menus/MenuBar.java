@@ -44,6 +44,7 @@ public class MenuBar extends JMenuBar {
 	private JCheckBoxMenuItem			iLockSize;
 	private JCheckBoxMenuItem			iLockMaximize;
 	private JCheckBoxMenuItem			iActiveWindowWA;
+	private JCheckBoxMenuItem			iDetectMouseLeavingWA;
 	
 
 	// --------------------------------------------------------------------------
@@ -81,6 +82,7 @@ public class MenuBar extends JMenuBar {
 		// Debug Menu
 		JMenu mDebug = new JMenu("Debug");
 		iActiveWindowWA = new JCheckBoxMenuItem("Active Window Workaround");
+		iDetectMouseLeavingWA = new JCheckBoxMenuItem("Detect Mouse leaving Workaround");
 		
 		// Help Menu
 		JMenu mHelp = new JMenu(Messages.getString("MenuBar.11")); //$NON-NLS-1$
@@ -111,6 +113,7 @@ public class MenuBar extends JMenuBar {
 		mView.add(iLockSize);
 		mView.add(iLockMaximize);
 		mDebug.add(iActiveWindowWA);
+		mDebug.add(iDetectMouseLeavingWA);
 		
 		
 		// Action Listener for menu items
@@ -242,6 +245,13 @@ public class MenuBar extends JMenuBar {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				Controller.getInstance().toggleActiveWindowWA();
+			}
+		});
+		
+		iDetectMouseLeavingWA.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				Controller.getInstance().toggleDetectMouseLeavingWA();
 			}
 		});
 	}

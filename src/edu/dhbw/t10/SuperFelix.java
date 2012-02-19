@@ -23,8 +23,10 @@ import java.util.Locale;
 import java.util.Scanner;
 
 import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.FileAppender;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.apache.log4j.PatternLayout;
 import org.apache.log4j.PropertyConfigurator;
 
 import edu.dhbw.t10.helper.Messages;
@@ -42,21 +44,53 @@ public class SuperFelix {
 	// --------------------------------------------------------------------------
 	// --- variables and constants ----------------------------------------------
 	// --------------------------------------------------------------------------
-	private static final Logger	logger	= Logger.getLogger(SuperFelix.class);
+	private static final Logger	logger					= Logger.getLogger(SuperFelix.class);
 	/**
 	 * For information:
 	 * Revision of Git Repository: Look in file .git/refs/heads/master
 	 * automatic: git shortlog | grep -E '^[ ]+\w+' | wc -l
 	 */
-	public static String				VERSION	= "unknown";									//$NON-NLS-1$
-	private static int				port		= 4242;
+	public static String				VERSION					= "unknown";									//$NON-NLS-1$
+	private static int				port						= 4242;
 	private static String			datapath;
+	private static String			alternativeLogfile	= "";
 
 
 	// --------------------------------------------------------------------------
 	// --- constructors ---------------------------------------------------------
 	// --------------------------------------------------------------------------
 	private SuperFelix(String[] args) {
+		
+		StringBuilder versionFile = new StringBuilder();
+		// String NL = System.getProperty("line.separator");
+		Scanner scanner = new Scanner(getClass().getResourceAsStream("/res/version"), "UTF-8");
+		try {
+			// while (scanner.hasNextLine()) {
+			versionFile.append(scanner.nextLine()); // + NL);
+			// }
+		} finally {
+			scanner.close();
+		}
+		
+		VERSION = versionFile.toString();
+		
+		if (args.length >= 1) {
+			if (args[0].equals("-v") || args[0].equals("--version")) { //$NON-NLS-1$ //$NON-NLS-2$
+				System.out.println(Messages.getString("SuperFelix.6") + VERSION); //$NON-NLS-1$
+				System.exit(0);
+			} else if ((args[0].equals("-l") || args[0].equals("--logfile")) && args.length >= 2) { //$NON-NLS-1$ //$NON-NLS-2$
+				alternativeLogfile = args[1];
+			} else { //if (args[0].equals("-h") || args[0].equals("--help")) { //$NON-NLS-1$ //$NON-NLS-2$
+				System.out.println(Messages.getString("SuperFelix.2")); //$NON-NLS-1$
+				System.out.println("-l (--logfile) LOGFILE"); //$NON-NLS-1$
+				System.out.println("-v (--version)"); //$NON-NLS-1$
+				System.out.println("-h (--help)"); //$NON-NLS-1$
+				System.out.println(Messages.getString("SuperFelix.5")); //$NON-NLS-1$
+				System.out.println(Messages.getString("SuperFelix.6") + VERSION); //$NON-NLS-1$
+				System.exit(0);
+			}
+		}
+
 		/*
 		 * initialize log4j, a logger from apache.
 		 * See http://logging.apache.org/log4j/1.2/manual.html for more details
@@ -65,13 +99,34 @@ public class SuperFelix {
 		 * configuration is stored in a config file. If it does not exist, use basic config
 		 */
 		URL logUrl = getClass().getResource("/res/log4j.conf"); //$NON-NLS-1$
-		
+		FileAppender fileAppender = null;
 		if (logUrl != null) {
 			PropertyConfigurator.configure(logUrl);
+			if (!alternativeLogfile.isEmpty()) {
+				try {
+					fileAppender = new FileAppender(new PatternLayout("%d{yyyyMMdd HH:mm:ss,SSS} %-5p %-30m - %c %t%n"),
+							alternativeLogfile);
+				} catch (IOException err) {
+					err.printStackTrace();
+				} catch (NullPointerException err) {
+					err.printStackTrace();
+				}
+			}
 		} else {
 			// basic config with only a console appender
 			BasicConfigurator.configure();
 			logger.setLevel(Level.ALL);
+			if (!alternativeLogfile.isEmpty()) {
+				try {
+					fileAppender = new FileAppender(new PatternLayout("%d{yyyyMMdd HH:mm:ss,SSS} %-5p %-30m - %c %t%n"),
+							alternativeLogfile);
+				} catch (IOException err) {
+					err.printStackTrace();
+				}
+			}
+		}
+		if (!alternativeLogfile.isEmpty()) {
+			Logger.getRootLogger().addAppender(fileAppender);
 		}
 		
 		// load datapath
@@ -90,34 +145,8 @@ public class SuperFelix {
 		}
 
 		singleInstance();
-
-		StringBuilder versionFile = new StringBuilder();
-		// String NL = System.getProperty("line.separator");
-		Scanner scanner = new Scanner(getClass().getResourceAsStream("/res/version"), "UTF-8");
-		try {
-			// while (scanner.hasNextLine()) {
-			versionFile.append(scanner.nextLine()); // + NL);
-			// }
-		} finally {
-			scanner.close();
-		}
 		
-		VERSION = versionFile.toString();
 
-		if (args.length >= 1) {
-			if (args[0].equals("-v") || args[0].equals("--version")) { //$NON-NLS-1$ //$NON-NLS-2$
-				System.out.println(Messages.getString("SuperFelix.6") + VERSION); //$NON-NLS-1$
-			} else { //if (args[0].equals("-h") || args[0].equals("--help")) { //$NON-NLS-1$ //$NON-NLS-2$
-				System.out.println(Messages.getString("SuperFelix.2")); //$NON-NLS-1$
-				System.out.println("-v (--version)"); //$NON-NLS-1$
-				System.out.println("-h (--help)"); //$NON-NLS-1$
-				System.out.println(Messages.getString("SuperFelix.5")); //$NON-NLS-1$
-				System.out.println(Messages.getString("SuperFelix.6") + VERSION); //$NON-NLS-1$
-			}
-			System.exit(0);
-		}
-
-		
 		// Locale.setDefault(new Locale("en", "EN"));
 		Locale.setDefault(new Locale("de", "DE")); //$NON-NLS-1$ //$NON-NLS-2$
 
@@ -194,6 +223,7 @@ public class SuperFelix {
 		} catch (IOException e) {
 			// no open socket
 			logger.info("I seem to be the first one :) no other instance detected");
+			logger.info("Will listen on port " + port + " for other instances");
 			return;
 		}
 		if (socket != null && os != null && is != null) {
@@ -210,7 +240,7 @@ public class SuperFelix {
 						break;
 					} else {
 						// wrong answer... Maybe not connected to keyboard?
-						logger.info("Found open socket, but did not receive correct answer");
+						logger.error("Found open socket, but did not receive correct answer");
 						return;
 					}
 				}
@@ -225,6 +255,7 @@ public class SuperFelix {
 			System.err.println("one of socket, os or is is null");
 		}
 	}
+
 
 	// --------------------------------------------------------------------------
 	// --- getter/setter --------------------------------------------------------

@@ -70,6 +70,8 @@ public class WindowHelper {
 						return line;
 					}
 				} else {
+					logger.error("There was a error running the command:");
+					logger.error(command[2]);
 					input = new BufferedReader(new InputStreamReader(pr.getErrorStream()));
 					while ((line = input.readLine()) != null) {
 						logger.error(line);

@@ -131,34 +131,38 @@ public class Presenter extends JFrame implements WindowStateListener {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				// TODO Auto-generated method stub
-				System.out.println("pressed");
-				mousePos = e.getLocationOnScreen();
-				System.out.println(mousePos);
+				// System.out.println("pressed");
+				// mousePos = e.getLocationOnScreen();
+				// System.out.println(mousePos);
 			}
 			
 			
 			@Override
 			public void mouseExited(MouseEvent e) {
-				Point mouse = e.getLocationOnScreen();
-				Point windowlt = contentPane.getLocationOnScreen();
-				Point windowrb = new Point(windowlt.x + contentPane.getWidth(), windowlt.y + contentPane.getHeight());
-				int offset = 5;
-				if (!Controller.getInstance().isActiveWindowWA()
-						&& !inSquare(mouse, windowlt.x + offset, windowrb.x - offset, windowlt.y + offset, windowrb.y
-								- offset)) {
-					logger.debug("mouseExited");
-					me.setFocusableWindowState(true);
+				if (Controller.getInstance().isDetectMouseLeavingWA()) {
+					Point mouse = e.getLocationOnScreen();
+					Point windowlt = contentPane.getLocationOnScreen();
+					Point windowrb = new Point(windowlt.x + contentPane.getWidth(), windowlt.y + contentPane.getHeight());
+					int offset = 5;
+					if (!Controller.getInstance().isActiveWindowWA()
+							&& !inSquare(mouse, windowlt.x + offset, windowrb.x - offset, windowlt.y + offset, windowrb.y
+									- offset)) {
+						logger.debug("mouseExited");
+						me.setFocusableWindowState(true);
+					}
 				}
 			}
 			
 			
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				if (!Controller.getInstance().isActiveWindowWA() && eventInFrame(e)) {
-					logger.debug("mouseEntered");
-					me.setVisible(false);
-					me.setFocusableWindowState(false);
-					me.setVisible(true);
+				if (Controller.getInstance().isDetectMouseLeavingWA()) {
+					if (!Controller.getInstance().isActiveWindowWA() && eventInFrame(e)) {
+						logger.debug("mouseEntered");
+						me.setVisible(false);
+						me.setFocusableWindowState(false);
+						me.setVisible(true);
+					}
 				}
 			}
 			

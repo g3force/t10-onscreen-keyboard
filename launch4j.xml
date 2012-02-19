@@ -1,8 +1,8 @@
 <launch4jConfig>
   <dontWrapJar>false</dontWrapJar>
   <headerType>gui</headerType>
-  <jar>build/t10-keyboard-v1.2-38-g580c78c.jar</jar>
-  <outfile>build/t10-keyboard-v1.2-38-g580c78c.exe</outfile>
+  <jar>build/t10-keyboard-v1.2-40-ga218b33.jar</jar>
+  <outfile>build/t10-keyboard-v1.2-40-ga218b33.exe</outfile>
   <errTitle></errTitle>
   <cmdLine></cmdLine>
   <chdir></chdir>
@@ -13,10 +13,6 @@
   <stayAlive>false</stayAlive>
   <manifest></manifest>
   <icon></icon>
-  <singleInstance>
-    <mutexName>t10-keyboard</mutexName>
-    <windowTitle>T10 Keyboard</windowTitle>
-  </singleInstance>
   <jre>
     <path></path>
     <minVersion>1.6.0</minVersion>

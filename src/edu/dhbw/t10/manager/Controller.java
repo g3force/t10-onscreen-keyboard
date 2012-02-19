@@ -73,7 +73,10 @@ public class Controller implements ActionListener, MouseListener {
 	private boolean					readyForActionEvents	= false;
 	private boolean					resizeWindowLocked	= false;
 	private boolean					maximizeWindowLocked	= false;
+	// only loose focus, if a key is pressed (so window will be active on mostly any time)
 	private boolean					activeWindowWA			= false;
+	// mouselistener, that tries to detect, when mouse is leaving and entering window
+	private boolean					detectMouseLeavingWA			= false;
 	
 
 
@@ -234,6 +237,21 @@ public class Controller implements ActionListener, MouseListener {
 		} else {
 			activeWindowWA = true;
 			presenter.setFocusableWindowState(true);
+		}
+	}
+	
+	
+	/**
+	 * 
+	 * TODO geforce, add comment!
+	 * 
+	 * @author geforce
+	 */
+	public void toggleDetectMouseLeavingWA() {
+		if (detectMouseLeavingWA) {
+			detectMouseLeavingWA = false;
+		} else {
+			detectMouseLeavingWA = true;
 		}
 	}
 
@@ -654,5 +672,15 @@ public class Controller implements ActionListener, MouseListener {
 	 */
 	public void setActiveWindowWA(boolean activeWindowWA) {
 		this.activeWindowWA = activeWindowWA;
+	}
+	
+	
+	public boolean isDetectMouseLeavingWA() {
+		return detectMouseLeavingWA;
+	}
+	
+	
+	public void setDetectMouseLeavingWA(boolean detectMouseLeavingWA) {
+		this.detectMouseLeavingWA = detectMouseLeavingWA;
 	}
 }
