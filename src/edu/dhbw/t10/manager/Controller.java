@@ -85,6 +85,7 @@ public class Controller implements ActionListener, MouseListener {
 	private boolean					detectMouseLeavingWA			= false;
 	
 	private final int					keyRepeatMs;
+	private final int					keyDelayMs;
 
 
 	// --------------------------------------------------------------------------
@@ -114,12 +115,19 @@ public class Controller implements ActionListener, MouseListener {
 		outputMan = new OutputManager();
 		
 		int tmpKeyRepeatMs = 100;
+		int tmpKeyDelayMs = 300;
 		try {
 			tmpKeyRepeatMs = Integer.valueOf(Config.getConf().getProperty("keyRepeatMs"));
 		} catch (NumberFormatException e) {
 			// use default value from above
 		}
+		try {
+			tmpKeyDelayMs = Integer.valueOf(Config.getConf().getProperty("keyDelayMs"));
+		} catch (NumberFormatException e) {
+			// use default value from above
+		}
 		keyRepeatMs = tmpKeyRepeatMs;
+		keyDelayMs = tmpKeyDelayMs;
 
 		// now, the Controller should be ready!
 		// hereafter, you should call methods, that need the controllers ActionEvents!
@@ -185,6 +193,16 @@ public class Controller implements ActionListener, MouseListener {
 		}
 	}
 	
+	
+	/**
+	 * update the GUI
+	 * 
+	 * @author Nicolai Ommer <nicolai.ommer@gmail.com>
+	 */
+	public void updateWindow() {
+		presenter.repaint();
+	}
+
 	
 	/**
 	 * Toggling the status of the window between sizable or not
@@ -669,7 +687,7 @@ public class Controller implements ActionListener, MouseListener {
 					}
 				};
 				
-				future = executor.scheduleAtFixedRate(runnable, keyRepeatMs, keyRepeatMs, TimeUnit.MILLISECONDS);
+				future = executor.scheduleAtFixedRate(runnable, keyDelayMs, keyRepeatMs, TimeUnit.MILLISECONDS);
 			}
 		}
 		

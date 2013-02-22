@@ -60,7 +60,7 @@
 				<attribute name="Implementation-Title" value="T10-OnScreen-Keyboard" />
 				<attribute name="Implementation-Version" value="${version}" />
 				<attribute name="Main-Class" value="org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader" />
-				<attribute name="Rsrc-Class-Path" value="./ log4j-1.2.16.jar" />
+				<attribute name="Rsrc-Class-Path" value="./ log4j-1.2.16.jar jna.jar platform.jar" />
 				<attribute name="Class-Path" value="." />
 				<attribute name="Rsrc-Main-Class" value="edu.dhbw.t10.SuperFelix" />
 			</manifest>

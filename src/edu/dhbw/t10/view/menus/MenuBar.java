@@ -17,6 +17,12 @@ import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JRadioButtonMenuItem;
+import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
+import javax.swing.UnsupportedLookAndFeelException;
+
+import org.apache.log4j.Logger;
 
 import edu.dhbw.t10.helper.Messages;
 import edu.dhbw.t10.manager.Controller;
@@ -41,6 +47,8 @@ public class MenuBar extends JMenuBar {
 	// --- variables and constants ----------------------------------------------
 	// --------------------------------------------------------------------------
 	private static final long			serialVersionUID	= -2903181098465204289L;
+	private static final Logger		logger				= Logger.getLogger(Controller.class);
+
 	protected static final Object[]	eventCache			= null;
 	private JCheckBoxMenuItem			iLockSize;
 	private JCheckBoxMenuItem			iLockMaximize;
@@ -91,7 +99,7 @@ public class MenuBar extends JMenuBar {
 		JMenu mHelp = new JMenu(Messages.getString("MenuBar.11")); //$NON-NLS-1$
 		JMenuItem iUpdate = new JMenuItem(Messages.getString("MenuBar.15")); //$NON-NLS-1$
 		JMenuItem iAbout = new JMenuItem(Messages.getString("MenuBar.12")); //$NON-NLS-1$
-
+		
 		// add menus to GUI
 		add(mFile);
 		add(mProfile);
@@ -117,6 +125,52 @@ public class MenuBar extends JMenuBar {
 		mHelp.add(iAbout);
 		mView.add(iLockSize);
 		mView.add(iLockMaximize);
+		
+		// look and feel menu
+		final JMenu lookAndFeelMenu = new JMenu("Design");
+		final LookAndFeelInfo[] lafs = UIManager.getInstalledLookAndFeels();
+		for (final LookAndFeelInfo info : lafs) {
+			final JRadioButtonMenuItem item = new JRadioButtonMenuItem(info.getName());
+			item.setActionCommand(info.getClassName());
+			item.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					for (final LookAndFeelInfo info : lafs)
+					{
+						if (info.getClassName().equals(item.getActionCommand()))
+						{
+							try {
+								UIManager.setLookAndFeel(info.getClassName());
+								for (int i = 0; i < lookAndFeelMenu.getItemCount(); i++) {
+									JMenuItem item = lookAndFeelMenu.getItem(i);
+									if (item.getActionCommand().equals(info.getClassName())) {
+										item.setSelected(true);
+									} else {
+										item.setSelected(false);
+									}
+								}
+								Controller.getInstance().updateWindow();
+							} catch (ClassNotFoundException err) {
+								logger.error("Could not set lookAndFeel", err);
+							} catch (InstantiationException err) {
+								logger.error("Could not set lookAndFeel", err);
+							} catch (IllegalAccessException err) {
+								logger.error("Could not set lookAndFeel", err);
+							} catch (UnsupportedLookAndFeelException err) {
+								logger.error("Could not set lookAndFeel", err);
+							}
+							break;
+						}
+					}
+				}
+			});
+			lookAndFeelMenu.add(item);
+			add(lookAndFeelMenu);
+			if (info.getClassName().equals(UIManager.getSystemLookAndFeelClassName())) {
+				item.setSelected(true);
+			}
+		}
 		
 		
 		// Action Listener for menu items
@@ -181,7 +235,7 @@ public class MenuBar extends JMenuBar {
 				new DialogContainer(EMenuItem.iT2D);
 			}
 		});
-
+		
 		iF2D.addActionListener(new ActionListener() {
 			
 			@Override
@@ -189,7 +243,7 @@ public class MenuBar extends JMenuBar {
 				new DialogContainer(EMenuItem.iF2D);
 			}
 		});
-
+		
 		iD2F.addActionListener(new ActionListener() {
 			
 			@Override
@@ -197,7 +251,7 @@ public class MenuBar extends JMenuBar {
 				new DialogContainer(EMenuItem.iD2F);
 			}
 		});
-
+		
 		iClean.addActionListener(new ActionListener() {
 			
 			@Override

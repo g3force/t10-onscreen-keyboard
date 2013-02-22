@@ -48,6 +48,7 @@ public class Config {
 	/**
 	 * loads the config file, fills the conf property attribute
 	 * @author dirk
+	 * @param datapath
 	 */
 	public static void loadConfig(String datapath) {
 		conf = new Properties();
@@ -73,6 +74,8 @@ public class Config {
 			conf.setProperty("singletonPort", "1440");
 		if (!conf.containsKey("keyRepeatMs")) //$NON-NLS-1$
 			conf.setProperty("keyRepeatMs", "100");
+		if (!conf.containsKey("keyDelayMs")) //$NON-NLS-1$
+			conf.setProperty("keyDelayMs", "300");
 		if (!conf.containsKey("debug")) //$NON-NLS-1$
 			conf.setProperty("debug", "false");
 	}
@@ -98,12 +101,18 @@ public class Config {
 	// --------------------------------------------------------------------------
 	// --- getter/setter --------------------------------------------------------
 	// --------------------------------------------------------------------------
+	/**
+	 * @return conf
+	 */
 	public static Properties getConf() {
 		return conf;
 	}
 	
 	
-	public static void setConf(Properties conf) {
+	/**
+	 * @param conf
+	 */
+	public static void setConf(final Properties conf) {
 		Config.conf = conf;
 	}
 

@@ -43,6 +43,7 @@ public class Presenter extends JFrame implements WindowStateListener {
 	private static final long		serialVersionUID	= 6217926957357225677L;
 	private JPanel						contentPane;
 	private Point						mousePos				= new Point();
+	private Point						windowPos			= new Point();
 	private Presenter					me						= this;
 	
 
@@ -64,7 +65,7 @@ public class Presenter extends JFrame implements WindowStateListener {
 		this.setLocationByPlatform(true);
 		this.setTitle(Messages.getString("Presenter.1")); //$NON-NLS-1$
 		this.setAlwaysOnTop(true);
-		// Window can't be focussed, so you can type at your current position with the On-Screen Keyboard
+		// Window can't be focused, so you can type at your current position with the On-Screen Keyboard
 		this.setFocusableWindowState(false);
 		this.setVisible(true);
 		this.addWindowStateListener(this);
@@ -86,54 +87,32 @@ public class Presenter extends JFrame implements WindowStateListener {
 		contentPane.add(mainPanel);
 		contentPane.add(statusPane, java.awt.BorderLayout.SOUTH);
 		
-		// glassPane = (JPanel) getGlassPane();
-		// glassPane.addMouseListener(new MouseListener() {
 		contentPane.addMouseMotionListener(new MouseMotionListener() {
 			
 			@Override
 			public void mouseMoved(MouseEvent e) {
-				// TODO Auto-generated method stub
-				// System.out.println(e.getLocationOnScreen());
 			}
 			
 			
 			@Override
 			public void mouseDragged(MouseEvent e) {
-				System.out.println("dragged");
 				Point newMousePos = e.getLocationOnScreen();
-				Point windowPos = getLocationOnScreen();
 				Point newWindowPos = new Point(windowPos.x + newMousePos.x - mousePos.x, windowPos.y + newMousePos.y
 						- mousePos.y);
-				if (newMousePos.x - mousePos.x >= 5 || newMousePos.y - mousePos.y >= 5) {
-					// System.out.println(windowPos);
-					// System.out.println(newWindowPos);
-					setLocation(newWindowPos);
-					// System.out.println(newMousePos);
-				}
+				setLocation(newWindowPos);
 			}
 		});
 		contentPane.addMouseListener(new MouseListener() {
 			
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
-				System.out.println("released");
-				Point newMousePos = e.getLocationOnScreen();
-				Point windowPos = getLocationOnScreen();
-				Point newWindowPos = new Point(windowPos.x + newMousePos.x - mousePos.x, windowPos.y + newMousePos.y
-						- mousePos.y);
-				System.out.println(newWindowPos);
-				setLocation(newWindowPos);
-				System.out.println(newMousePos);
 			}
 			
 			
 			@Override
 			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
-				// System.out.println("pressed");
-				// mousePos = e.getLocationOnScreen();
-				// System.out.println(mousePos);
+				mousePos = e.getLocationOnScreen();
+				windowPos = getLocationOnScreen();
 			}
 			
 			
@@ -169,12 +148,8 @@ public class Presenter extends JFrame implements WindowStateListener {
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				// TODO Auto-generated method stub
-				
 			}
 		});
-
-		// glassPane.setVisible(true);
 
 		// build GUI
 		logger.debug("pack() now"); //$NON-NLS-1$
