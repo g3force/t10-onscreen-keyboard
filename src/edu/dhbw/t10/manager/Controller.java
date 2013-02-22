@@ -19,6 +19,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 import java.util.zip.ZipException;
 
 import javax.swing.JFileChooser;
@@ -32,6 +36,7 @@ import edu.dhbw.t10.manager.output.Output;
 import edu.dhbw.t10.manager.output.OutputManager;
 import edu.dhbw.t10.manager.profile.ImportExportManager;
 import edu.dhbw.t10.manager.profile.ProfileManager;
+import edu.dhbw.t10.type.Config;
 import edu.dhbw.t10.type.keyboard.DropDownList;
 import edu.dhbw.t10.type.keyboard.KeyboardLayout;
 import edu.dhbw.t10.type.keyboard.key.Button;
@@ -69,15 +74,17 @@ public class Controller implements ActionListener, MouseListener {
 	private MainPanel					mainPanel;
 	private Presenter					presenter;
 	private StatusPane				statusPane;
+	private ButtonMouseListener	buttonMouseListener	= new ButtonMouseListener();
 	
 	private boolean					readyForActionEvents	= false;
 	private boolean					resizeWindowLocked	= false;
 	private boolean					maximizeWindowLocked	= false;
-	// only loose focus, if a key is pressed (so window will be active on mostly any time)
+	/** only loose focus, if a key is pressed (so window will be active on mostly any time) */
 	private boolean					activeWindowWA			= false;
-	// mouselistener, that tries to detect, when mouse is leaving and entering window
+	/** mouselistener, that tries to detect, when mouse is leaving and entering window */
 	private boolean					detectMouseLeavingWA			= false;
 	
+	private final int					keyRepeatMs;
 
 
 	// --------------------------------------------------------------------------
@@ -106,6 +113,14 @@ public class Controller implements ActionListener, MouseListener {
 		profileMan = new ProfileManager(mainPanel);
 		outputMan = new OutputManager();
 		
+		int tmpKeyRepeatMs = 100;
+		try {
+			tmpKeyRepeatMs = Integer.valueOf(Config.getConf().getProperty("keyRepeatMs"));
+		} catch (NumberFormatException e) {
+			// use default value from above
+		}
+		keyRepeatMs = tmpKeyRepeatMs;
+
 		// now, the Controller should be ready!
 		// hereafter, you should call methods, that need the controllers ActionEvents!
 		readyForActionEvents = true;
@@ -225,8 +240,7 @@ public class Controller implements ActionListener, MouseListener {
 	
 	
 	/**
-	 * 
-	 * TODO geforce, add comment!
+	 * Enable/Disable active window workaround
 	 * 
 	 * @author geforce
 	 */
@@ -242,8 +256,7 @@ public class Controller implements ActionListener, MouseListener {
 	
 	
 	/**
-	 * 
-	 * TODO geforce, add comment!
+	 * Enable/Disable detection of mouse leaving window workaround
 	 * 
 	 * @author geforce
 	 */
@@ -286,6 +299,11 @@ public class Controller implements ActionListener, MouseListener {
 	}
 	
 	
+	/**
+	 * Hide the keyboard
+	 * 
+	 * @param bool
+	 */
 	public void hideKeyboard(boolean bool) {
 		presenter.setVisible(!bool);
 	}
@@ -298,7 +316,7 @@ public class Controller implements ActionListener, MouseListener {
 	/**
 	 * Creates a profile by name.
 	 * 
-	 * @param String name
+	 * @param name
 	 * @author SebastianN
 	 */
 	public void addNewProfile(String name) {
@@ -626,6 +644,56 @@ public class Controller implements ActionListener, MouseListener {
 	}
 	
 	
+	private class ButtonMouseListener implements MouseListener {
+		private ScheduledExecutorService	executor	= Executors.newScheduledThreadPool(1);
+		private ScheduledFuture<?>			future;
+
+
+		@Override
+		public void mouseClicked(MouseEvent e) {
+		}
+		
+		
+		@Override
+		public void mousePressed(MouseEvent e) {
+			if (e.getSource() instanceof Button) {
+				final Button button = (Button) e.getSource();
+				
+				final Runnable runnable = new Runnable() {
+					@Override
+					public void run() {
+						final boolean autoCompleting = profileMan.getActive().isAutoCompleting();
+						profileMan.getActive().setAutoCompleting(false);
+						outputMan.buttonPressed(button, profileMan.getActive());
+						profileMan.getActive().setAutoCompleting(autoCompleting);
+					}
+				};
+				
+				future = executor.scheduleAtFixedRate(runnable, keyRepeatMs, keyRepeatMs, TimeUnit.MILLISECONDS);
+			}
+		}
+		
+		
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			if (future != null) {
+				future.cancel(true);
+			}
+		}
+		
+		
+		@Override
+		public void mouseEntered(MouseEvent e) {
+		}
+		
+		
+		@Override
+		public void mouseExited(MouseEvent e) {
+		}
+		
+	}
+
+
 	// --------------------------------------------------------------------------
 	// --- getter/setter --------------------------------------------------------
 	// --------------------------------------------------------------------------
@@ -644,17 +712,26 @@ public class Controller implements ActionListener, MouseListener {
 	}
 	
 	
+	/**
+	 * @return readyForActionEvents
+	 */
 	public boolean isReadyForActionEvents() {
 		return readyForActionEvents;
 	}
 	
 	
+	/**
+	 * @return maximizeWindowLocked
+	 */
 	public boolean isMaximizeWindowLocked() {
 		return maximizeWindowLocked;
 	}
 	
 	
-	public void setMaximizeWindowLocked(boolean maximizeWindowLocked) {
+	/**
+	 * @param maximizeWindowLocked
+	 */
+	public void setMaximizeWindowLocked(final boolean maximizeWindowLocked) {
 		this.maximizeWindowLocked = maximizeWindowLocked;
 	}
 	
@@ -675,12 +752,26 @@ public class Controller implements ActionListener, MouseListener {
 	}
 	
 	
+	/**
+	 * @return detectMouseLeavingWA
+	 */
 	public boolean isDetectMouseLeavingWA() {
 		return detectMouseLeavingWA;
 	}
 	
 	
-	public void setDetectMouseLeavingWA(boolean detectMouseLeavingWA) {
+	/**
+	 * @param detectMouseLeavingWA
+	 */
+	public void setDetectMouseLeavingWA(final boolean detectMouseLeavingWA) {
 		this.detectMouseLeavingWA = detectMouseLeavingWA;
+	}
+	
+	
+	/**
+	 * @return the buttonMouseListener
+	 */
+	public final ButtonMouseListener getButtonMouseListener() {
+		return buttonMouseListener;
 	}
 }

@@ -9,7 +9,6 @@
  */
 package edu.dhbw.t10.view.panels;
 
-import java.awt.Dimension;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 
@@ -18,10 +17,6 @@ import javax.swing.JPanel;
 import org.apache.log4j.Logger;
 
 import edu.dhbw.t10.manager.Controller;
-import edu.dhbw.t10.type.keyboard.DropDownList;
-import edu.dhbw.t10.type.keyboard.Image;
-import edu.dhbw.t10.type.keyboard.KeyboardLayout;
-import edu.dhbw.t10.type.keyboard.key.PhysicalButton;
 
 
 /**
@@ -61,30 +56,6 @@ public class MainPanel extends JPanel implements ComponentListener {
 	// --- methods --------------------------------------------------------------
 	// --------------------------------------------------------------------------
 	
-	/**
-	 * set KeyboardLayout for this Panel and add everything in the layout to itself
-	 * 
-	 * @param kbd
-	 * @author NicolaiO
-	 */
-	@Deprecated
-	public void setKbdLayout(KeyboardLayout kbd) {
-		logger.debug("adding Layout..."); //$NON-NLS-1$
-		this.setPreferredSize(new Dimension(kbd.getSize_x(), kbd.getSize_y()));
-		this.removeAll();
-		for (PhysicalButton button : kbd.getAllPhysicalButtons()) {
-			this.add(button);
-		}
-		for (DropDownList ddl : kbd.getDdls()) {
-			this.add(ddl);
-		}
-		for (Image img : kbd.getImages()) {
-			this.add(img);
-		}
-		logger.debug("Layout added."); //$NON-NLS-1$
-	}
-	
-
 	@Override
 	public void componentHidden(ComponentEvent e) {
 		

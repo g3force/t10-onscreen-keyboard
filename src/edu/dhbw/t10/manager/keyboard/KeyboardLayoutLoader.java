@@ -351,6 +351,7 @@ public class KeyboardLayoutLoader {
 				}
 				
 				button.addActionListener(Controller.getInstance()); // use EventCollector as listener
+				button.addMouseListener(Controller.getInstance().getButtonMouseListener());
 				buttons.add(button);
 				
 				// receive Modes

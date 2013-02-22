@@ -20,6 +20,7 @@ import javax.swing.JMenuItem;
 
 import edu.dhbw.t10.helper.Messages;
 import edu.dhbw.t10.manager.Controller;
+import edu.dhbw.t10.type.Config;
 import edu.dhbw.t10.view.dialogs.AboutDlg;
 import edu.dhbw.t10.view.dialogs.DialogContainer;
 import edu.dhbw.t10.view.dialogs.InputDlg;
@@ -83,6 +84,8 @@ public class MenuBar extends JMenuBar {
 		JMenu mDebug = new JMenu("Debug");
 		iActiveWindowWA = new JCheckBoxMenuItem("Active Window Workaround");
 		iDetectMouseLeavingWA = new JCheckBoxMenuItem("Detect Mouse leaving Workaround");
+		mDebug.add(iActiveWindowWA);
+		mDebug.add(iDetectMouseLeavingWA);
 		
 		// Help Menu
 		JMenu mHelp = new JMenu(Messages.getString("MenuBar.11")); //$NON-NLS-1$
@@ -93,7 +96,9 @@ public class MenuBar extends JMenuBar {
 		add(mFile);
 		add(mProfile);
 		add(mView);
-		add(mDebug);
+		if (Boolean.valueOf(Config.getConf().getProperty("debug"))) {
+			add(mDebug);
+		}
 		add(mHelp);
 		mFile.add(iNewProfile);
 		mFile.add(iImport);
@@ -112,8 +117,6 @@ public class MenuBar extends JMenuBar {
 		mHelp.add(iAbout);
 		mView.add(iLockSize);
 		mView.add(iLockMaximize);
-		mDebug.add(iActiveWindowWA);
-		mDebug.add(iDetectMouseLeavingWA);
 		
 		
 		// Action Listener for menu items

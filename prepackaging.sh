@@ -19,9 +19,24 @@ fi
 echo "build/$filename usr/share/t10-keyboard" >> debian/t10-keyboard.install
 cat debian/t10-keyboard.install
 
+###############################################################
 echo
 echo "update debian/t10-keyboard.sh:"
 echo "#!/bin/sh" > debian/t10-keyboard.sh
 echo "java -jar /usr/share/t10-keyboard/$filename \$@" >> debian/t10-keyboard.sh
 chmod +x debian/t10-keyboard.sh
 cat debian/t10-keyboard.sh
+
+###############################################################
+echo
+echo "update debian/t10-keyboard:"
+cat > /tmp/t10-keyboard <<EOF
+#!/bin/sh
+
+exec java -Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel -jar "\$0" "\$@"
+exit -1
+
+EOF
+cat /tmp/t10-keyboard "build/$filename" > debian/t10-keyboard
+chmod +x debian/t10-keyboard
+rm -f /tmp/t10-keyboard

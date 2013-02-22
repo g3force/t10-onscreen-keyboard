@@ -70,12 +70,13 @@ public class WindowHelper {
 						return line;
 					}
 				} else {
-					logger.error("There was a error running the command:");
-					logger.error(command[2]);
-					input = new BufferedReader(new InputStreamReader(pr.getErrorStream()));
-					while ((line = input.readLine()) != null) {
-						logger.error(line);
-					}
+					// following will produce lots of errors, if no window is active (yes, this IS possible...)
+					// logger.error("There was a error running the command:");
+					// logger.error(command[2]);
+					// input = new BufferedReader(new InputStreamReader(pr.getErrorStream()));
+					// while ((line = input.readLine()) != null) {
+					// logger.error(line);
+					// }
 				}
 			} catch (IOException err) {
 				err.printStackTrace();

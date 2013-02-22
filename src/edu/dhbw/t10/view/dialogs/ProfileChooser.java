@@ -123,7 +123,7 @@ public class ProfileChooser extends JFileChooser {
 	// --------------------------------------------------------------------------
 	
 	/**
-	 * 
+	 * @return type
 	 */
 	public EMenuItem getMenuType() {
 		return type;

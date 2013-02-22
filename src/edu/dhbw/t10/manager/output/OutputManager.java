@@ -76,7 +76,7 @@ public class OutputManager {
 	
 	/**
 	 * Calls Output.printChar(c)
-	 * @param Key c
+	 * @param c
 	 * @return boolean
 	 * 
 	 * @author DanielAl
@@ -90,7 +90,7 @@ public class OutputManager {
 	 * Deletes 'num' chars via sending so many Back_Spaces...
 	 * Implemented directly and not with printCombi...
 	 * 
-	 * @param int num
+	 * @param num
 	 * @return boolean
 	 * @author DanielAl
 	 */
@@ -111,7 +111,7 @@ public class OutputManager {
 	 * 
 	 * @author DanielAl
 	 * @return boolean
-	 * @param int num
+	 * @param num
 	 */
 	public boolean mark(int num) {
 		// Use a ArrayList to be able to use the printCombi
@@ -324,6 +324,7 @@ public class OutputManager {
 	 * 
 	 * @param button
 	 * @author DanielAl
+	 * @param activeProfile
 	 */
 	public void buttonPressed(Button button, Profile_V2 activeProfile) {
 		Key key = (Key) button.getPressedKey();
