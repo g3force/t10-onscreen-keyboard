@@ -78,6 +78,10 @@ public class Config {
 			conf.setProperty("keyDelayMs", "300");
 		if (!conf.containsKey("debug")) //$NON-NLS-1$
 			conf.setProperty("debug", "false");
+		if (!conf.containsKey("view.lockmaximize")) //$NON-NLS-1$
+			conf.setProperty("view.lockmaximize", "true");
+		if (!conf.containsKey("view.lockwindowsize")) //$NON-NLS-1$
+			conf.setProperty("view.lockwindowsize", "false");
 	}
 	
 	

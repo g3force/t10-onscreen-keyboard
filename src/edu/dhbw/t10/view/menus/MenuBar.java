@@ -87,6 +87,8 @@ public class MenuBar extends JMenuBar {
 		JMenu mView = new JMenu(Messages.getString("MenuBar.View"));
 		iLockSize = new JCheckBoxMenuItem(Messages.getString("MenuBar.LockSize"));
 		iLockMaximize = new JCheckBoxMenuItem(Messages.getString("MenuBar.LockMaximize"));
+		iLockSize.setSelected(Boolean.valueOf(Config.getConf().getProperty("view.lockwindowsize")));
+		iLockMaximize.setSelected(Boolean.valueOf(Config.getConf().getProperty("view.lockmaximize")));
 		
 		// Debug Menu
 		JMenu mDebug = new JMenu("Debug");
@@ -287,14 +289,20 @@ public class MenuBar extends JMenuBar {
 		iLockSize.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				Controller.getInstance().togglelockWindowSize();
+				if (arg0.getSource() instanceof JCheckBoxMenuItem) {
+					JCheckBoxMenuItem item = (JCheckBoxMenuItem) arg0.getSource();
+					Controller.getInstance().setlockWindowSize(item.isSelected());
+				}
 			}
 		});
 		
 		iLockMaximize.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				Controller.getInstance().toggleMaximizeWindowLock();
+				if (arg0.getSource() instanceof JCheckBoxMenuItem) {
+					JCheckBoxMenuItem item = (JCheckBoxMenuItem) arg0.getSource();
+					Controller.getInstance().setMaximizeWindowLock(item.isSelected());
+				}
 			}
 		});
 		

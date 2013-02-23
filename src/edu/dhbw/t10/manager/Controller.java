@@ -78,7 +78,7 @@ public class Controller implements ActionListener, MouseListener {
 	
 	private boolean					readyForActionEvents	= false;
 	private boolean					resizeWindowLocked	= false;
-	private boolean					maximizeWindowLocked	= false;
+	private boolean					maximizeWindowLocked;
 	/** only loose focus, if a key is pressed (so window will be active on mostly any time) */
 	private boolean					activeWindowWA			= false;
 	/** mouselistener, that tries to detect, when mouse is leaving and entering window */
@@ -100,11 +100,14 @@ public class Controller implements ActionListener, MouseListener {
 	private Controller() {
 		instance = this;
 		logger.debug("initializing..."); //$NON-NLS-1$
+		
+		maximizeWindowLocked = Boolean.valueOf(Config.getConf().getProperty("view.lockmaximize"));
 
 		// load GUI
 		mainPanel = new MainPanel();
 		statusPane = new StatusPane();
 		presenter = new Presenter(mainPanel, statusPane);
+		presenter.setResizable(!Boolean.valueOf(Config.getConf().getProperty("view.lockwindowsize")));
 
 		// This message is important! Otherwise, The StatusPane has a wrong height and the layout will be decreased
 		// meaning, it gets smaller with each start...
@@ -210,15 +213,12 @@ public class Controller implements ActionListener, MouseListener {
 	 * For this reason, the old location will be saved and restored.
 	 * 
 	 * @author NicolaiO
+	 * @param locked
 	 */
-	public void togglelockWindowSize() {
+	public void setlockWindowSize(boolean locked) {
 		Point p = presenter.getLocationOnScreen();
-		if (presenter.isResizable()) {
-			presenter.setResizable(false);
-		} else {
-			presenter.setResizable(true);
-		}
-		// without sleep, setLocation is called to early and window might
+		presenter.setResizable(!locked);
+		// without sleep, setLocation is called too early and window might
 		// move to another location and won't move pack with the setLocation cmd
 		try {
 			Thread.sleep(20);
@@ -226,6 +226,7 @@ public class Controller implements ActionListener, MouseListener {
 			err.printStackTrace();
 		}
 		presenter.setLocation(p);
+		Config.getConf().setProperty("view.lockwindowsize", String.valueOf(!presenter.isResizable()));
 	}
 	
 	
@@ -247,13 +248,12 @@ public class Controller implements ActionListener, MouseListener {
 	 * Toggle lock on maximizing window
 	 * 
 	 * @author NicolaiO
+	 * @param locked
 	 */
-	public void toggleMaximizeWindowLock() {
-		if (maximizeWindowLocked) {
-			maximizeWindowLocked = false;
-		} else {
-			maximizeWindowLocked = true;
-		}
+	public void setMaximizeWindowLock(boolean locked) {
+		maximizeWindowLocked = locked;
+		Config.getConf().setProperty("view.lockmaximize", String.valueOf(maximizeWindowLocked));
+		System.out.println(maximizeWindowLocked);
 	}
 	
 	
@@ -743,14 +743,6 @@ public class Controller implements ActionListener, MouseListener {
 	 */
 	public boolean isMaximizeWindowLocked() {
 		return maximizeWindowLocked;
-	}
-	
-	
-	/**
-	 * @param maximizeWindowLocked
-	 */
-	public void setMaximizeWindowLocked(final boolean maximizeWindowLocked) {
-		this.maximizeWindowLocked = maximizeWindowLocked;
 	}
 	
 	

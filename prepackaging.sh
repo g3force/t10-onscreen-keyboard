@@ -3,7 +3,7 @@
 echo "update debian/t10-keyboard.install"
 echo "debian/t10-keyboard.desktop /usr/share/applications
 debian/t10-keyboard_icon.png usr/share/t10-keyboard
-build/t10-keyboard usr/bin/t10-keyboard" > debian/t10-keyboard.install
+build/t10-keyboard usr/bin" > debian/t10-keyboard.install
 
 version="`cat src/res/version`"
 if [ -z "$version" ]; then
@@ -35,7 +35,7 @@ echo "update build/t10-keyboard"
 cat > /tmp/t10-keyboard <<EOF
 #!/bin/sh
 
-exec java -jar "\$0" "\$@"
+java -jar "\$0" "\$@"
 exit -1
 
 EOF
