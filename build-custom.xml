@@ -28,14 +28,14 @@
 			${updater.file.name}</echo>
 	</target>
 
-	<target name="upload-jar" depends="pack-jar" description="Define labels for a Featured release, call 'release'.">
+	<target name="upload-jar" depends="pack-jar" description="Define labels for a Featured release, calls 'release'.">
 		<property name="release.labels" value="Featured, Type-Executable, OpSys-All" />
 		<property name="release.file" value="${file.name}.jar" />
 		<property name="release.summary" value="System-independent java jar file" />
 		<antcall target="release" />
 	</target>
 
-	<target name="upload-exe" depends="pack-exe" description="Define labels for a Featured release, call 'release'.">
+	<target name="upload-exe" depends="pack-exe" description="Define labels for a Featured release, calls 'release'.">
 		<property name="release.labels" value="Featured, Type-Executable, OpSys-Windows" />
 		<property name="release.file" value="${file.name}.exe" />
 		<property name="release.summary" value="Windows executable" />

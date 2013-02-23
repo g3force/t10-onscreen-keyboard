@@ -1,8 +1,7 @@
 #!/bin/sh
 
 echo "update debian/t10-keyboard.install"
-echo "debian/t10-keyboard.sh usr/share/t10-keyboard/
-debian/t10-keyboard.desktop /usr/share/applications
+echo "debian/t10-keyboard.desktop /usr/share/applications
 debian/t10-keyboard_icon.png usr/share/t10-keyboard
 build/t10-keyboard usr/bin/t10-keyboard" > debian/t10-keyboard.install
 
