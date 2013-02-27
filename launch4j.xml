@@ -1,8 +1,8 @@
 <launch4jConfig>
   <dontWrapJar>false</dontWrapJar>
   <headerType>gui</headerType>
-  <jar>build/t10-keyboard-v1.2-41-g578e22c.jar</jar>
-  <outfile>build/t10-keyboard-v1.2-41-g578e22c.exe</outfile>
+  <jar>build/t10-keyboard-v1.3-3-g857f451.jar</jar>
+  <outfile>build/t10-keyboard-v1.3-3-g857f451.exe</outfile>
   <errTitle></errTitle>
   <cmdLine></cmdLine>
   <chdir></chdir>

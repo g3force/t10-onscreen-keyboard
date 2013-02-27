@@ -36,7 +36,7 @@ cat > /tmp/t10-keyboard <<EOF
 #!/bin/sh
 
 java -jar "\$0" "\$@"
-exit -1
+exit 0
 
 EOF
 cat /tmp/t10-keyboard "build/$filename" > build/t10-keyboard
